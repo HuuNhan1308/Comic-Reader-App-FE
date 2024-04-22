@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const BASE_URL = 
+const BASE_URL = "https://comic.pantech.vn";
 
 const httpRequest = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: BASE_URL,
 });
 
 export const get = async (path, options = {}) => {
