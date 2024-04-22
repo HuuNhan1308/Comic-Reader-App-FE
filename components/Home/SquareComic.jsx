@@ -36,7 +36,6 @@ const SquareComic = ({
               size={16}
               color="black"
               onPress={onPressIcon}
-              style={({ pressed }) => [pressed ? styles.bgNone : null]}
               suppressHighlighting={true}
             />
           </View>
@@ -74,8 +73,5 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.5,
-  },
-  bgNone: {
-    backgroundColor: "transparent",
   },
 });
