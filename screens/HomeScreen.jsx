@@ -1,8 +1,16 @@
-import { ScrollView, StyleSheet, Image, View, FlatList } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Image,
+  View,
+  FlatList,
+  ImageBackground,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import Header from "../components/Home/Header";
 import SquareComic from "../components/Home/SquareComic";
 import { getAllComics } from "../services/comicServices";
+import RectangleCategory from "../components/Home/RectangleCategory";
 
 const DATA = [{ id: 1 }, { id: 2 }, { id: 3 }];
 const RECOMMENED_DATA = [
@@ -111,6 +119,41 @@ const HomeScreen = () => {
           contentContainerStyle={styles.listComicsContainer}
         />
       </View>
+
+      {/* Category block */}
+      <View>
+        <Header
+          title={"Categories"}
+          textButton={"See all"}
+          onPress={() => {
+            console.log("see all");
+          }}
+        />
+
+        {/* Categories */}
+        <View style={styles.categoriesListContainer}>
+          <RectangleCategory
+            category={"Romance"}
+            imageSrc={require("../assets/test1.jpg")}
+            containerStyle={styles.categoryContainer}
+          />
+          <RectangleCategory
+            category={"Romance"}
+            imageSrc={require("../assets/test1.jpg")}
+            containerStyle={styles.categoryContainer}
+          />
+          <RectangleCategory
+            category={"Romance"}
+            imageSrc={require("../assets/test1.jpg")}
+            containerStyle={styles.categoryContainer}
+          />
+          <RectangleCategory
+            category={"Romance"}
+            imageSrc={require("../assets/test1.jpg")}
+            containerStyle={styles.categoryContainer}
+          />
+        </View>
+      </View>
     </ScrollView>
   );
 };
@@ -141,6 +184,16 @@ const styles = StyleSheet.create({
   },
   comicBookmarkIcon: {
     backgroundColor: "white",
-    borderRadius: 100,
+    borderRadius: 10000,
+  },
+  categoriesListContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    marginHorizontal: -20,
+  },
+  categoryContainer: {
+    paddingHorizontal: 20,
+    marginBottom: 18,
   },
 });
