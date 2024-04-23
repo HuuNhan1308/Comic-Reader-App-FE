@@ -38,7 +38,7 @@ const RectangleCategory = ({
             end={{ x: 0, y: 0 }}
             style={{ flex: 1 }}
           >
-            <Text>{category}</Text>
+            <Text style={styles.category}>{category}</Text>
           </LinearGradient>
         </ImageBackground>
       </Pressable>
@@ -60,4 +60,5 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.5,
   },
+  category: { position: "absolute" },
 });

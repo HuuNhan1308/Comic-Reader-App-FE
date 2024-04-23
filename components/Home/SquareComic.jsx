@@ -42,7 +42,9 @@ const SquareComic = ({
         </ImageBackground>
 
         <View style={styles.contentContainer}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title} numberOfLines={1}>
+            {title}
+          </Text>
           <Text style={styles.chapter}>{chapter}</Text>
         </View>
       </Pressable>
@@ -73,5 +75,11 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.5,
+  },
+  title: {
+    textAlign: "center",
+  },
+  chapter: {
+    textAlign: "center",
   },
 });

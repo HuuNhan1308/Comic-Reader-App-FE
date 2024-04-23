@@ -1,11 +1,4 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Image,
-  View,
-  FlatList,
-  ImageBackground,
-} from "react-native";
+import { ScrollView, StyleSheet, Image, View, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 import Header from "../components/Home/Header";
 import SquareComic from "../components/Home/SquareComic";
@@ -33,7 +26,7 @@ const HomeScreen = () => {
     };
 
     fetchApi();
-    // console.log(comics[0].thumbnailUrl);
+    console.log(comics);
   }, []);
 
   return (
@@ -68,14 +61,16 @@ const HomeScreen = () => {
             <SquareComic
               imageSrc={
                 comics.length > 0
-                  ? { uri: comics[0].thumbnailUrl }
+                  ? {
+                      uri: comics[3].thumbnailUrl + "?time=" + new Date(),
+                    }
                   : require("../assets/book-icon.png")
               }
               containerStyle={styles.comicContainer}
               iconStyle={styles.comicBookmarkIcon}
               onPressIcon={() => console.log("pressicon")}
               onPressComic={() => console.log("presscomic")}
-              title={`Comic ${item.id}`}
+              title={comics[3].name}
               chapter={`Chapter ${item.id}`}
             />
           )}
@@ -103,14 +98,14 @@ const HomeScreen = () => {
             <SquareComic
               imageSrc={
                 comics.length > 0
-                  ? { uri: comics[0].thumbnailUrl }
+                  ? { uri: comics[0].thumbnailUrl + "?time=" + new Date() }
                   : require("../assets/book-icon.png")
               }
               containerStyle={styles.comicContainer}
               iconStyle={styles.comicBookmarkIcon}
               onPressIcon={() => console.log("pressicon")}
               onPressComic={() => console.log("presscomic")}
-              title={`Comic ${item.id}`}
+              title={comics[0].name}
               chapter={`Chapter ${item.id}`}
             />
           )}
