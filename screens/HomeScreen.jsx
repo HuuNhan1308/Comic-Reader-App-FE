@@ -1,24 +1,23 @@
-import { ScrollView, StyleSheet, Image, View, FlatList } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Image,
+  View,
+  FlatList,
+  Button,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import Header from "../components/Home/Header";
 import SquareComic from "../components/Home/SquareComic";
 import { getAllComics } from "../services/comicServices";
 import RectangleCategory from "../components/Home/RectangleCategory";
-
-const DATA = [{ id: 1 }, { id: 2 }, { id: 3 }];
-const RECOMMENED_DATA = [
-  { id: 1 },
-  { id: 2 },
-  { id: 3 },
-  { id: 4 },
-  { id: 5 },
-  { id: 6 },
-];
+import RowComic from "../components/Home/RowComic";
 
 const HomeScreen = () => {
   const [comics, setComics] = useState([]);
   const [newComics, setNewComics] = useState([]);
   const [recommendedComics, setRecommendedComics] = useState([]);
+  const [hotComics, setHotComics] = useState([]);
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -27,6 +26,7 @@ const HomeScreen = () => {
       setComics(result.result);
       setNewComics(result.result.slice(0, 3));
       setRecommendedComics(result.result.slice(0, 6));
+      setHotComics(result.result.slice(0, 8));
     };
 
     fetchApi();
@@ -60,7 +60,7 @@ const HomeScreen = () => {
         <FlatList
           data={newComics}
           keyExtractor={(item) => item.id}
-          renderItem={({ item, index }) => (
+          renderItem={({ item }) => (
             <SquareComic
               imageSrc={
                 comics.length > 0
@@ -151,6 +151,34 @@ const HomeScreen = () => {
             containerStyle={styles.categoryContainer}
           />
         </View>
+      </View>
+
+      {/* Recommended Comics block */}
+      <View>
+        <Header
+          title={"Hot ranking"}
+          textButton={"See all"}
+          onPress={() => {
+            console.log("see all");
+          }}
+        />
+
+        {/* Render Row comic */}
+        <FlatList
+          data={hotComics}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item, index }) => (
+            <RowComic
+              imageSrc={{ uri: item.thumbnailUrl }}
+              comicName={item.name}
+              comicChapter={`Chapter ${item.id}`}
+              comicLastestUpdate={"1 day ago"}
+              onPress={() => console.log("presscomic")}
+            />
+          )}
+          scrollEnabled={false}
+          contentContainerStyle={styles.listComicsContainer}
+        />
       </View>
     </ScrollView>
   );
