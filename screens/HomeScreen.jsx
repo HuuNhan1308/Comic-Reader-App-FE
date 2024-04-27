@@ -17,16 +17,19 @@ const RECOMMENED_DATA = [
 
 const HomeScreen = () => {
   const [comics, setComics] = useState([]);
+  const [newComics, setNewComics] = useState([]);
+  const [recommendedComics, setRecommendedComics] = useState([]);
 
   useEffect(() => {
     const fetchApi = async () => {
       const result = await getAllComics();
 
       setComics(result.result);
+      setNewComics(result.result.slice(0, 3));
+      setRecommendedComics(result.result.slice(0, 6));
     };
 
     fetchApi();
-    console.log(comics);
   }, []);
 
   return (
@@ -55,14 +58,14 @@ const HomeScreen = () => {
 
         {/* Render comic */}
         <FlatList
-          data={DATA}
+          data={newComics}
           keyExtractor={(item) => item.id}
           renderItem={({ item, index }) => (
             <SquareComic
               imageSrc={
                 comics.length > 0
                   ? {
-                      uri: comics[3].thumbnailUrl + "?time=" + new Date(),
+                      uri: item.thumbnailUrl + "?time=" + new Date(),
                     }
                   : require("../assets/book-icon.png")
               }
@@ -70,7 +73,7 @@ const HomeScreen = () => {
               iconStyle={styles.comicBookmarkIcon}
               onPressIcon={() => console.log("pressicon")}
               onPressComic={() => console.log("presscomic")}
-              title={comics[3].name}
+              title={item.name ? item.name : "fallback"}
               chapter={`Chapter ${item.id}`}
             />
           )}
@@ -92,20 +95,20 @@ const HomeScreen = () => {
 
         {/* Render comic */}
         <FlatList
-          data={RECOMMENED_DATA}
+          data={recommendedComics}
           keyExtractor={(item) => item.id}
           renderItem={({ item, index }) => (
             <SquareComic
               imageSrc={
                 comics.length > 0
-                  ? { uri: comics[0].thumbnailUrl + "?time=" + new Date() }
+                  ? { uri: item.thumbnailUrl + "?time=" + new Date() }
                   : require("../assets/book-icon.png")
               }
               containerStyle={styles.comicContainer}
               iconStyle={styles.comicBookmarkIcon}
               onPressIcon={() => console.log("pressicon")}
               onPressComic={() => console.log("presscomic")}
-              title={comics[0].name}
+              title={item.name ? item.name : "fallbacks"}
               chapter={`Chapter ${item.id}`}
             />
           )}

@@ -27,7 +27,7 @@ const SquareComic = ({
       >
         <ImageBackground
           source={imageSrc}
-          resizeMode="contain"
+          resizeMode="cover"
           style={[styles.comicImageBackground, imageStyle ?? null]}
         >
           <View style={[styles.comicBookmarkIcon, iconStyle ?? null]}>

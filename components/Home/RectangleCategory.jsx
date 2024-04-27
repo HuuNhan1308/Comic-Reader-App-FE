@@ -36,7 +36,7 @@ const RectangleCategory = ({
             locations={[0.1, 0.4, 0.9]}
             start={{ x: 1, y: 1 }}
             end={{ x: 0, y: 0 }}
-            style={{ flex: 1 }}
+            style={{ flex: 1, justifyContent: "center" }}
           >
             <Text style={styles.category}>{category}</Text>
           </LinearGradient>
@@ -60,5 +60,11 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.5,
   },
-  category: { position: "absolute" },
+  category: {
+    position: "absolute",
+    right: 6,
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 20,
+  },
 });
