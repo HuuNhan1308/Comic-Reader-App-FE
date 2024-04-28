@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const BASE_URL = "https://comic.pantech.vn";
-const BASE_URL = "http://192.168.21.140:8080";
+const BASE_URL = "https://comic.pantech.vn";
+// const BASE_URL = "http://192.168.21.140:8080";
 
 const httpRequest = axios.create({
   baseURL: BASE_URL,
@@ -14,7 +14,10 @@ export const get = async (path, options = {}) => {
   //   " with data ",
   //   options
   // );
-  const response = await httpRequest.get(path, options);
+
+  const response = await httpRequest.get(path, {
+    ...options,
+  });
   return response.data;
 };
 
