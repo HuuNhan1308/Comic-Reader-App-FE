@@ -4,7 +4,7 @@ import React from "react";
 import colors from "../variables/colors/colors";
 
 const IconInput = ({
-  onChange,
+  onChangeText,
   value,
   placeholder,
   icon,
@@ -17,7 +17,7 @@ const IconInput = ({
       <TextInput
         style={[styles.input, inputStyle]}
         value={value}
-        onChange={onChange}
+        onChangeText={onChangeText}
         placeholder={placeholder ?? ""}
         secureTextEntry={secureTextEntry}
       />

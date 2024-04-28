@@ -6,10 +6,10 @@ import {
   FlatList,
   Button,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import Header from "../components/Home/Header";
 import SquareComic from "../components/Home/SquareComic";
-import { getAllComics } from "../services/comicServices";
+import { getAllComics } from "../services/ComicServices";
 import RectangleCategory from "../components/Home/RectangleCategory";
 import RowComic from "../components/Home/RowComic";
 
@@ -74,7 +74,7 @@ const HomeScreen = () => {
               onPressIcon={() => console.log("pressicon")}
               onPressComic={() => console.log("presscomic")}
               title={item.name ? item.name : "fallback"}
-              chapter={`Chapter ${item.id}`}
+              chapter={`Chapter ${item.lastestChapter.chapterNumber}`}
             />
           )}
           numColumns={3}
@@ -109,7 +109,7 @@ const HomeScreen = () => {
               onPressIcon={() => console.log("pressicon")}
               onPressComic={() => console.log("presscomic")}
               title={item.name ? item.name : "fallbacks"}
-              chapter={`Chapter ${item.id}`}
+              chapter={`Chapter ${item.lastestChapter.chapterNumber}`}
             />
           )}
           numColumns={3}
@@ -171,7 +171,7 @@ const HomeScreen = () => {
             <RowComic
               imageSrc={{ uri: item.thumbnailUrl }}
               comicName={item.name}
-              comicChapter={`Chapter ${item.id}`}
+              comicChapter={`Chapter ${item.lastestChapter.chapterNumber}`}
               comicLastestUpdate={"1 day ago"}
               onPress={() => console.log("presscomic")}
             />

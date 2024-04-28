@@ -6,22 +6,44 @@ import {
   Pressable,
   KeyboardAvoidingView,
   ScrollView,
+  Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import IconInput from "../components/IconInput";
 import { AntDesign } from "@expo/vector-icons";
 import colors from "../variables/colors/colors";
+import { login } from "../services/LoginServices";
+import { AuthContext } from "../store/AuthContext";
 
 const LoginScreen = ({ navigation, route }) => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  function handleChangeEmail(event) {
-    setEmail(event.target.value);
+  const authCtx = useContext(AuthContext);
+
+  function handleChangeUsername(username) {
+    setUsername(username);
   }
 
-  function handleChangePassword(event) {
-    setPassword(event.target.value);
+  function handleChangePassword(password) {
+    setPassword(password);
+  }
+
+  async function handleLogin() {
+    try {
+      const response = await login(username, password);
+
+      if (response.code === 4000) {
+        Alert.alert("Failed", `Login failed, ${response.message}`);
+        return;
+      }
+
+      const authObj = response.result;
+      authCtx.authenticate(authObj.token, JSON.stringify(authObj.id));
+      navigation.navigate("Main");
+    } catch (error) {
+      console.log("Fetc failed ", error);
+    }
   }
 
   return (
@@ -31,6 +53,7 @@ const LoginScreen = ({ navigation, route }) => {
         style={styles.screen}
         contentContainerStyle={styles.rootContainer}
       >
+        {/* Logo */}
         <View style={styles.imageContainer}>
           <Image
             source={require("../assets/book-icon.png")}
@@ -39,21 +62,23 @@ const LoginScreen = ({ navigation, route }) => {
           />
         </View>
 
+        {/* Header */}
         <View style={styles.textContainer}>
           <Text style={styles.title}>LOGIN</Text>
           <Text style={styles.description}>Sign in to continue</Text>
         </View>
 
+        {/* Form */}
         <IconInput
-          value={email}
-          onChange={handleChangeEmail}
-          placeholder={"Email"}
+          value={username}
+          onChangeText={handleChangeUsername}
+          placeholder={"Username"}
           icon={<AntDesign name="user" size={24} color="black" />}
         />
 
         <IconInput
           value={password}
-          onChange={handleChangePassword}
+          onChangeText={handleChangePassword}
           placeholder={"Password"}
           icon={<AntDesign name="key" size={24} color="black" />}
           secureTextEntry={true}
@@ -61,9 +86,7 @@ const LoginScreen = ({ navigation, route }) => {
 
         <View>
           <Pressable
-            onPress={() => {
-              console.log("Press");
-            }}
+            onPress={handleLogin}
             style={({ pressed }) => [
               styles.button,
               pressed ? styles.buttonPressed : null,
