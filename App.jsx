@@ -7,6 +7,7 @@ import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { jwtDecode } from "jwt-decode";
 
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
@@ -16,6 +17,8 @@ import BookmarkScreen from "./screens/BookmarkScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import AuthContextProvider, { AuthContext } from "./store/AuthContext";
 import IconButton from "./components/IconButton";
+import { checkExpiredToken } from "./utils/TokenUtil";
+import { refreshToken } from "./services/TokenServices";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -102,6 +105,16 @@ function Root() {
         const storedToken = await AsyncStorage.getItem("token");
 
         if (storedToken) {
+          //If token is not expired then refresh the token
+          if (checkExpiredToken(storedToken) === false) {
+            console.log("Old token: ", storedToken);
+            const response = await refreshToken(storedToken);
+            console.log("New token: ", response.result.token);
+            authCtx.authenticate(response.result.token);
+
+            return;
+          } else authCtx.logout();
+
           authCtx.authenticate(storedToken);
         } else console.log("No token in local device");
       } catch (err) {
