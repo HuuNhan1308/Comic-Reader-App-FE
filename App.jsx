@@ -17,7 +17,7 @@ import BookmarkScreen from "./screens/BookmarkScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import AuthContextProvider, { AuthContext } from "./store/AuthContext";
 import IconButton from "./components/IconButton";
-import { checkExpiredToken } from "./utils/TokenUtil";
+import { checkExpiredToken, checkNearExpiredToken } from "./utils/TokenUtil";
 import { refreshToken } from "./services/TokenServices";
 
 const Stack = createNativeStackNavigator();
@@ -100,21 +100,32 @@ function Root() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    /**
+     * Fetches the token from AsyncStorage and performs necessary actions based on the token's validity.
+     * If the token is expired, it logs out the user.
+     * If the token is near expiration, it refreshes the token.
+     * If the token is valid, it authenticates the user.
+     */
     async function fetchToken() {
       try {
         const storedToken = await AsyncStorage.getItem("token");
 
         if (storedToken) {
-          //If token is not expired then refresh the token
-          if (checkExpiredToken(storedToken) === false) {
-            console.log("Old token: ", storedToken);
-            const response = await refreshToken(storedToken);
-            console.log("New token: ", response.result.token);
-            authCtx.authenticate(response.result.token);
-
+          // If token is expired then logout
+          if (checkExpiredToken(storedToken) === true) {
+            console.log("Token is expired!!");
+            authCtx.logout();
             return;
-          } else authCtx.logout();
+          }
 
+          // If token is near expired then refresh the token
+          if (checkNearExpiredToken(storedToken, 3600) === true) {
+            const response = await refreshToken(storedToken);
+            authCtx.authenticate(response.result.token);
+            return;
+          }
+
+          // If token is valid then authenticate the user
           authCtx.authenticate(storedToken);
         } else console.log("No token in local device");
       } catch (err) {
