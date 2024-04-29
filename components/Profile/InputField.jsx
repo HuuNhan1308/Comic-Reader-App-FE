@@ -7,7 +7,7 @@ import colors from "../../variables/colors/colors";
 const InputField = ({
   title,
   icon,
-  secureTextEntry,
+  secureTextEntry = false,
   onPressIcon,
   value,
   onChangeText,
@@ -24,13 +24,15 @@ const InputField = ({
           onChangeText={onChangeText}
         />
 
-        <Feather
-          name={icon}
-          size={24}
-          color="white"
-          style={styles.icon}
-          onPress={onPressIcon}
-        />
+        {icon && (
+          <Feather
+            name={icon}
+            size={24}
+            color="white"
+            style={styles.icon}
+            onPress={onPressIcon}
+          />
+        )}
       </View>
     </View>
   );
@@ -42,7 +44,7 @@ const styles = StyleSheet.create({
   inputFieldContainer: { paddingHorizontal: 30 },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: "600",
     color: colors.white,
     marginBottom: 10,
     letterSpacing: 1.8,

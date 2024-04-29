@@ -23,7 +23,7 @@ const ProfileScreen = ({ route, navigation }) => {
     <View style={styles.root}>
       {/* User infor block */}
       <View style={styles.profileContainer}>
-        <Text style={styles.userName}>{userState.fullname}</Text>
+        <Text style={styles.userName}>{userState.fullName}</Text>
         <Text style={styles.userEmail}>{userState.email}</Text>
 
         <IconTextButton
@@ -68,7 +68,14 @@ const ProfileScreen = ({ route, navigation }) => {
         />
         <IconTextButton
           title={"Logout"}
-          icon={<Ionicons name="exit" size={24} color="black" />}
+          icon={
+            <Ionicons
+              name="exit"
+              size={24}
+              color="black"
+              style={{ transform: [{ translateX: 2.5 }] }}
+            />
+          }
           rootStyle={styles.IconTextButtonRoot}
           onPress={handleLogout}
         />
@@ -120,4 +127,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     marginTop: 20,
   },
+  icon: {},
 });

@@ -11,3 +11,13 @@ export const refreshToken = async (token) => {
     console.log("Error at getMyInformation Service: ", e);
   }
 };
+
+export const checkValidToken = async (token) => {
+  try {
+    const res = await http.post("/api/auth/introspect", { token: token });
+
+    return res;
+  } catch (e) {
+    console.log("Error at checkValidToken Service: ", e);
+  }
+};

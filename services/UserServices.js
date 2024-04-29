@@ -16,7 +16,7 @@ export const getMyInformation = async (token) => {
   }
 };
 
-export const changePasword = async (token, oldPassword, newPassword) => {
+export const changePassword = async (token, oldPassword, newPassword) => {
   const headers = {
     headers: {
       Authorization: "Bearer " + token,
@@ -36,5 +36,21 @@ export const changePasword = async (token, oldPassword, newPassword) => {
     return res;
   } catch (e) {
     console.log("Error at getMyInformation Service: ", e);
+  }
+};
+
+export const changeUserProfile = async (token, data) => {
+  const headers = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
+
+  try {
+    const res = await http.post("/api/user/changeInformation", data, headers);
+
+    return res;
+  } catch (e) {
+    console.log("Error at changeUserProfile Service: ", e);
   }
 };

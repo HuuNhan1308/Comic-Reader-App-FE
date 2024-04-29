@@ -55,7 +55,7 @@ const LoginScreen = ({ navigation, route }) => {
         type: SET_ALL,
         payload: {
           id: myInformationResponse.result.id,
-          fullname: myInformationResponse.result.fullName,
+          fullName: myInformationResponse.result.fullName,
           email: myInformationResponse.result.email,
           dateOfBirth: myInformationResponse.result.dateOfBirth,
           isMale: myInformationResponse.result.male,

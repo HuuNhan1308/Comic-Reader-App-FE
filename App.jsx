@@ -5,13 +5,14 @@ import { StatusBar } from "expo-status-bar";
 import { ActivityIndicator, StyleSheet } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import "expo-dev-client";
 
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import AppScreenNavigator from "./routes/AppScreenNavigator";
 import AuthContextProvider, { AuthContext } from "./store/AuthContext";
 import { checkExpiredToken, checkNearExpiredToken } from "./utils/TokenUtil";
-import { refreshToken } from "./services/TokenServices";
+import { checkValidToken, refreshToken } from "./services/TokenServices";
 import UserContextProvider, { UserContext } from "./store/UserContext";
 import { getMyInformation } from "./services/UserServices";
 import { SET_ALL } from "./store/UserReducer/constants";
@@ -38,8 +39,12 @@ function Root() {
 
         if (storedToken) {
           // If token is expired then logout
-          if (checkExpiredToken(storedToken) === true) {
-            console.log("Token is expired!!");
+          // If token is not valid anymore
+          if (
+            checkExpiredToken(storedToken) === true ||
+            checkValidToken(storedToken) === false
+          ) {
+            console.log("Token is expired or not valid anymore!!");
             authCtx.logout();
             return;
           }
@@ -57,7 +62,7 @@ function Root() {
             type: SET_ALL,
             payload: {
               id: res.result.id,
-              fullname: res.result.fullName,
+              fullName: res.result.fullName,
               email: res.result.email,
               dateOfBirth: res.result.dateOfBirth,
               isMale: res.result.male,

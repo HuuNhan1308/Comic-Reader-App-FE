@@ -1,5 +1,6 @@
 import { decode as atob, encode as btoa } from "base-64";
 import { jwtDecode } from "jwt-decode";
+import { checkValidToken } from "../services/TokenServices";
 
 if (!global.btoa) {
   global.btoa = btoa;
@@ -23,4 +24,15 @@ export const checkNearExpiredToken = (token, duration) => {
 
   if (timeRemaining < duration) return true;
   else return false;
+};
+
+export const isTokenValid = async (token) => {
+  try {
+    const res = await checkValidToken(token);
+
+    return res.result.valid;
+  } catch (e) {
+    console.log("Error at isTokenValid Service: ", e);
+    return false;
+  }
 };

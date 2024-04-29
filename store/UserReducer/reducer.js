@@ -5,11 +5,12 @@ import {
   SET_DATE_OF_BIRTH,
   SET_IS_MALE,
   CLEAR_ALL,
+  SET_ALL_EXCEPT_EMAIL,
 } from "./constants";
 
 export const initUserState = {
   id: null,
-  fullname: null,
+  fullName: null,
   email: null,
   dateOfBirth: null,
   isMale: null,
@@ -20,7 +21,7 @@ const UserReducer = (state, action) => {
     case SET_FULLNAME:
       return {
         ...state,
-        fullname: action.payload,
+        fullName: action.payload,
       };
     case SET_EMAIL:
       return {

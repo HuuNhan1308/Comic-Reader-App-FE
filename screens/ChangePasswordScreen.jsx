@@ -2,7 +2,6 @@ import {
   StyleSheet,
   Text,
   Pressable,
-  View,
   Alert,
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -11,7 +10,7 @@ import {
 import React, { useContext, useState } from "react";
 import colors from "../variables/colors/colors";
 import InputField from "../components/Profile/InputField";
-import { changePasword } from "../services/UserServices";
+import { changePassword } from "../services/UserServices";
 import { AuthContext } from "../store/AuthContext";
 
 const ChangePasswordScreen = ({ route, navigation }) => {
@@ -72,7 +71,7 @@ const ChangePasswordScreen = ({ route, navigation }) => {
       }
 
       //call api
-      const res = await changePasword(
+      const res = await changePassword(
         authCtx.token,
         currentPassword,
         newPassword
@@ -96,8 +95,6 @@ const ChangePasswordScreen = ({ route, navigation }) => {
     } finally {
       setIsLoading(false);
     }
-
-    //send to server
   }
 
   if (isLoading) {
@@ -164,7 +161,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.darkgrey,
     paddingHorizontal: 30,
     justifyContent: "center",
-    height: "100%",
   },
   button: {
     marginTop: 100,
