@@ -39,9 +39,9 @@ const LoginScreen = ({ navigation, route }) => {
       }
 
       const authObj = response.result;
-      console.log("new Token: ", authObj.token);
+      // console.log("new Token: ", authObj.token);
       authCtx.authenticate(authObj.token);
-      navigation.navigate("Main");
+      navigation.navigate("Main", { screen: "Home" });
     } catch (error) {
       console.log("Fetc failed ", error);
     }

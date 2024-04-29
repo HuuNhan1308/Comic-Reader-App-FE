@@ -9,4 +9,6 @@ export default Colors = {
   red700: "#661919",
   red800: "#5b1616",
   red900: "#511414",
+  darkgrey: "#231f20",
+  lightgrey: "#333333",
 };

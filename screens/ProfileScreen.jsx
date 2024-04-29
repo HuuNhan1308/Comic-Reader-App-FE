@@ -2,58 +2,36 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 import { getMyInformation } from "../services/UserServices";
 import { AuthContext } from "../store/AuthContext";
+import { UserContext } from "../store/UserContext";
 import colors from "../variables/colors/colors";
 import IconTextButton from "../components/Profile/IconTextButton";
 
 const ProfileScreen = ({ route, navigation }) => {
   const authCtx = useContext(AuthContext);
-  const [userInfor, setUserInfor] = useState({ fullName: "", email: "" });
-  // navigaiton.setOptions({ headerStyle: { backgroundColor: "red" } });
+  const { userState } = useContext(UserContext);
 
-  useEffect(() => {
-    async function getMyInfo() {
-      try {
-        const res = await getMyInformation(authCtx.token);
-
-        setUserInfor({
-          ...userInfor,
-          fullname: res.result.fullName,
-          email: res.result.email,
-        });
-        console.log(res.result.fullName, res.result.email);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-
-    getMyInfo();
-  }, [navigation]);
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerStyle: {
-        backgroundColor: colors.red700,
-      },
-      headerTintColor: "white",
-    });
-  }, [navigation]);
+  function handleLogout() {
+    authCtx.logout();
+    navigation.navigate("Login");
+  }
 
   return (
     <View style={styles.root}>
       {/* User infor block */}
       <View style={styles.profileContainer}>
-        <Text style={styles.userName}>{userInfor.fullname}</Text>
-        <Text style={styles.userEmail}>{userInfor.email}</Text>
+        <Text style={styles.userName}>{userState.fullname}</Text>
+        <Text style={styles.userEmail}>{userState.email}</Text>
 
         <IconTextButton
           title={"Profile & Security"}
           icon={<AntDesign name="user" size={24} color="black" />}
           rootStyle={styles.IconTextButtonRoot}
           onPress={() => {
-            console.log("Navigate to profile screen");
+            navigation.navigate("ProfileDetail");
           }}
         />
       </View>
@@ -87,6 +65,12 @@ const ProfileScreen = ({ route, navigation }) => {
           onPress={() => {
             console.log("Navigate to profile screen");
           }}
+        />
+        <IconTextButton
+          title={"Logout"}
+          icon={<Ionicons name="exit" size={24} color="black" />}
+          rootStyle={styles.IconTextButtonRoot}
+          onPress={handleLogout}
         />
       </View>
     </View>

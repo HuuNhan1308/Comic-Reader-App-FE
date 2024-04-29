@@ -35,6 +35,7 @@ const AuthContextProvider = ({ children }) => {
     logout,
     authenticate,
   };
+
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

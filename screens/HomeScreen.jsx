@@ -1,12 +1,5 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Image,
-  View,
-  FlatList,
-  Button,
-} from "react-native";
-import React, {useEffect, useState } from "react";
+import { ScrollView, StyleSheet, Image, View, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
 import Header from "../components/Home/Header";
 import SquareComic from "../components/Home/SquareComic";
 import { getAllComics } from "../services/ComicServices";
