@@ -16,7 +16,7 @@ const ProfileScreen = ({ route, navigation }) => {
 
   function handleLogout() {
     authCtx.logout();
-    navigation.navigate("Login");
+    navigation.replace("Login");
   }
 
   return (

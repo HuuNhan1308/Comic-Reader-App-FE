@@ -8,6 +8,10 @@ import { AntDesign } from "@expo/vector-icons";
 const ProfileDetailScreen = ({ route, navigation }) => {
   const { userState } = useContext(UserContext);
 
+  function navigateToChangePassword() {
+    navigation.navigate("ChangePassword");
+  }
+
   return (
     <View style={styles.root}>
       <RowText title={"Full Name"} value={userState.fullname} />
@@ -20,9 +24,8 @@ const ProfileDetailScreen = ({ route, navigation }) => {
           styles.button,
           pressed ? styles.pressed : null,
         ]}
-        onPress={() => {
-          console.log("navigate to change pw screen");
-        }}
+        android_ripple={{ color: "#555" }}
+        onPress={navigateToChangePassword}
       >
         <Text style={styles.buttonTitle}>Change password</Text>
         <AntDesign

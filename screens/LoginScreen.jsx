@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useContext } from "react";
 import IconInput from "../components/IconInput";
@@ -14,12 +15,17 @@ import { AntDesign } from "@expo/vector-icons";
 import colors from "../variables/colors/colors";
 import { login } from "../services/LoginServices";
 import { AuthContext } from "../store/AuthContext";
+import { UserContext } from "../store/UserContext";
+import { SET_ALL } from "../store/UserReducer/constants";
+import { getMyInformation } from "../services/UserServices";
 
 const LoginScreen = ({ navigation, route }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isTryingLogin, setIsTryingLogin] = useState(false);
 
   const authCtx = useContext(AuthContext);
+  const { userDispatch } = useContext(UserContext);
 
   function handleChangeUsername(username) {
     setUsername(username);
@@ -31,20 +37,41 @@ const LoginScreen = ({ navigation, route }) => {
 
   async function handleLogin() {
     try {
-      const response = await login(username, password);
+      setIsTryingLogin(true);
+      const loginResponse = await login(username, password);
 
-      if (response.code === 4000) {
-        Alert.alert("Failed", `Login failed, ${response.message}`);
+      if (loginResponse.code === 4000) {
+        Alert.alert("Failed", `Login failed, ${loginResponse.message}`);
         return;
       }
 
-      const authObj = response.result;
-      // console.log("new Token: ", authObj.token);
+      //store token to context
+      const authObj = loginResponse.result;
       authCtx.authenticate(authObj.token);
-      navigation.navigate("Main", { screen: "Home" });
+
+      //store user information to context + reducer
+      const myInformationResponse = await getMyInformation(authObj.token);
+      userDispatch({
+        type: SET_ALL,
+        payload: {
+          id: myInformationResponse.result.id,
+          fullname: myInformationResponse.result.fullName,
+          email: myInformationResponse.result.email,
+          dateOfBirth: myInformationResponse.result.dateOfBirth,
+          isMale: myInformationResponse.result.male,
+        },
+      });
+      navigation.replace("App", { screen: "Home" });
+      setIsTryingLogin(false);
     } catch (error) {
       console.log("Fetc failed ", error);
+    } finally {
+      setIsTryingLogin(false);
     }
+  }
+
+  if (isTryingLogin === true) {
+    return <ActivityIndicator size="large" color="black" style={{ flex: 1 }} />;
   }
 
   return (

@@ -7,7 +7,7 @@ const httpRequest = axios.create({
   baseURL: BASE_URL,
 });
 
-export const get = async (path, options = {}) => {
+export const get = async (path, config = {}) => {
   // console.log(
   //   "Start get at url ",
   //   httpRequest.getUri() + path,
@@ -15,20 +15,18 @@ export const get = async (path, options = {}) => {
   //   options
   // );
 
-  const response = await httpRequest.get(path, {
-    ...options,
-  });
+  const response = await httpRequest.get(path, config);
   return response.data;
 };
 
-export const post = async (path, option = {}) => {
+export const post = async (path, data, config = {}) => {
   // console.log(
   //   "Start post at url ",
   //   httpRequest.getUri() + path,
   //   " with data ",
   //   option
   // );
-  const response = await httpRequest.post(path, option);
+  const response = await httpRequest.post(path, data, config);
   return response.data;
 };
 

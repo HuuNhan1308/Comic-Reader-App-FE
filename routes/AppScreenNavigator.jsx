@@ -22,6 +22,7 @@ const AppScreenNavigator = () => {
           fontWeight: "600",
           letterSpacing: 1.5,
         },
+        headerBackTitleVisible: false,
       }}
     >
       <Stack.Screen
@@ -34,7 +35,11 @@ const AppScreenNavigator = () => {
         name="ProfileDetail"
         options={{ title: "Profile & Security" }}
       />
-      <Stack.Screen component={ChangePasswordScreen} name="Change Password" />
+      <Stack.Screen
+        component={ChangePasswordScreen}
+        name="ChangePassword"
+        options={{ title: "Change Password" }}
+      />
     </Stack.Navigator>
   );
 };

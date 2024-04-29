@@ -25,6 +25,12 @@ function Root() {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  /**
+   * Fetches the token from AsyncStorage and performs authentication and user information retrieval.
+   * If the token is expired, it logs out the user.
+   * If the token is near expiration, it refreshes the token.
+   * If the token is valid, it authenticates the user and sets the userContext.
+   */
   useEffect(() => {
     async function fetchToken() {
       try {
@@ -69,9 +75,7 @@ function Root() {
   }, []);
 
   if (isLoading) {
-    return (
-      <ActivityIndicator size="large" color="#0000ff" style={{ flex: 1 }} />
-    );
+    return <ActivityIndicator size="large" color="grey" style={{ flex: 1 }} />;
   }
 
   return (
