@@ -7,18 +7,19 @@ import {
   Image,
   Pressable,
   ScrollView,
+  FlatList,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import colors from "../variables/colors/colors";
 import { getComicChapterById } from "../services/ComicServices";
 import ChapterHeader from "../components/Comics/ChapterHeader";
+import ComicInfor from "../components/Comics/ComicInfor";
 
 const ComicDetailScreen = ({ route, navigation }) => {
   const { comicId } = route.params;
 
   const [isLoading, setIsLoading] = useState(false);
-  const [showMore, setShowMore] = useState(false);
   const [comic, setComic] = useState({
     id: 0,
     name: "",
@@ -52,82 +53,102 @@ const ComicDetailScreen = ({ route, navigation }) => {
     navigation.goBack();
   }
 
-  function handleShowMore() {
-    setShowMore((prev) => !prev);
-  }
-
   if (isLoading) {
     return <ActivityIndicator size="large" color="black" style={{ flex: 1 }} />;
   }
 
   return (
-    <ScrollView contentContainerStyle={{ flex: 1 }}>
-      <SafeAreaView style={styles.root}>
-        <AntDesign
-          name="arrowleft"
-          size={24}
-          color="black"
-          style={styles.backIcon}
-          onPress={handleGoBack}
+    <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.root}>
+      <AntDesign
+        name="arrowleft"
+        size={24}
+        color="black"
+        style={styles.backIcon}
+        onPress={handleGoBack}
+      />
+      {/* Background image */}
+      <Image
+        source={
+          comic.thumbnailUrl
+            ? { uri: comic.thumbnailUrl }
+            : require("../assets/book-icon.png")
+        }
+        style={styles.comicThumpnail}
+      />
+
+      {/* Show infor block */}
+      <View style={styles.comicContainer}>
+        {/* Comic Information  */}
+        <ComicInfor
+          name={comic.name}
+          view={comic.view}
+          author={comic.author}
+          description={comic.description}
+          genres={["Genre 1"]}
         />
-        {/* Background image */}
-        <Image
-          source={
-            comic.thumbnailUrl
-              ? { uri: comic.thumbnailUrl }
-              : require("../assets/book-icon.png")
-          }
-          style={styles.comicThumpnail}
-        />
 
-        {/* Show infor block */}
-        <View style={styles.comicContainer}>
-          {/* Comic Information  */}
-          <View style={styles.comicInforContainer}>
-            <Text style={[styles.comicName, styles.title]}>{comic.name}</Text>
-            <Text style={styles.comicText}>Author: {comic.author}</Text>
-            <Text style={styles.comicText}>View: {comic.view}</Text>
-            {/* Genre Container */}
-            <View style={styles.genreContainer}>
-              {/* Map genre and render */}
-              <Text style={styles.genre}>Map genre and render</Text>
-            </View>
-            <Text
-              style={styles.comicText}
-              numberOfLines={showMore ? 0 : 2}
-              ellipsizeMode="tail"
-            >
-              Description: {comic.description}
-            </Text>
+        {/* Comic chapters */}
+        <View style={styles.chapterContainer}>
+          {/* Map chapter and render */}
+          <ChapterHeader />
 
-            {/* Show less or more  */}
-            <View style={styles.comicSeeMoreButtonContainer}>
-              <Pressable
-                onPress={handleShowMore}
-                style={({ pressed }) => [
-                  styles.comicSeeMoreButton,
-                  pressed ? styles.pressed : null,
-                ]}
-              >
-                {!showMore ? (
-                  <Text style={styles.comicSeeMoreButtonText}>See more</Text>
-                ) : (
-                  <Text style={styles.comicSeeMoreButtonText}>Show less</Text>
-                )}
-              </Pressable>
-            </View>
-          </View>
+          <FlatList
+            data={comic.chapters}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item, index }) => (
+              <>
+                <View style={styles.chapterItem}>
+                  <Pressable>
+                    <Text style={styles.chapterItemText}>
+                      Chapter: {item.chapterNumber}
+                    </Text>
+                    <Text style={styles.chapterItemText}>
+                      Title: {item.title}
+                    </Text>
+                  </Pressable>
+                </View>
 
-          {/* Comic chapters */}
-          <View style={styles.ChapterContainer}>
-            <ChapterHeader />
+                <View style={styles.chapterItem}>
+                  <Pressable>
+                    <Text style={styles.chapterItemText}>
+                      Chapter: {item.chapterNumber}
+                    </Text>
+                    <Text style={styles.chapterItemText}>
+                      Title: {item.title}
+                    </Text>
+                  </Pressable>
+                </View>
 
-            {/* Map chapter and render */}
-          </View>
+                <View style={styles.chapterItem}>
+                  <Pressable>
+                    <Text style={styles.chapterItemText}>
+                      Chapter: {item.chapterNumber}
+                    </Text>
+                    <Text style={styles.chapterItemText}>
+                      Title: {item.title}
+                    </Text>
+                  </Pressable>
+                </View>
+
+                <View style={styles.chapterItem}>
+                  <Pressable>
+                    <Text style={styles.chapterItemText}>
+                      Chapter: {item.chapterNumber}
+                    </Text>
+                    <Text style={styles.chapterItemText}>
+                      Title: {item.title}
+                    </Text>
+                  </Pressable>
+                </View>
+              </>
+            )}
+            scrollEnabled={false}
+            contentContainerStyle={styles.listComicsContainer}
+          />
         </View>
+      </View>
 
-        {/* Map comic chapters and render */}
-      </SafeAreaView>
+      {/* Map comic chapters and render */}
     </ScrollView>
   );
 };
@@ -194,5 +215,16 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.7,
+  },
+  chapterItem: {
+    backgroundColor: "#707070",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    marginVertical: 6,
+  },
+  chapterItemText: {
+    color: colors.white,
+    fontWeight: "600",
   },
 });
