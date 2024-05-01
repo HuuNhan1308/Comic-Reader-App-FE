@@ -6,6 +6,7 @@ import MainScreenNavigator from "./MainScreenNavigator";
 import colors from "../variables/colors/colors";
 import ChangeProfileScreen from "../screens/ChangeProfileScreen";
 import ComicDetailScreen from "../screens/ComicDetailScreen";
+import ReadComicScreen from "../screens/ReadComicScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +53,7 @@ const AppScreenNavigator = () => {
         name="ComicDetail"
         options={{ headerShown: false }}
       />
+      <Stack.Screen component={ReadComicScreen} name="ReadComicScreen" />
     </Stack.Navigator>
   );
 };

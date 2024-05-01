@@ -80,102 +80,98 @@ const ComicsScreen = () => {
   }
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "height" : "position"}
-        style={{ flex: 1, paddingHorizontal: 30 }}
-      >
-        {/* Search */}
-        <View style={styles.searchContainer}>
-          <InputField
-            value={searchValue}
-            onChangeText={(e) => setSearchValue(e)}
-            placeholder="Search here..."
-            icon={"search"}
-            rootStyle={styles.searchInputRoot}
-            inputStyle={styles.searchInput}
-            iconStyle={{ color: "#0f090b" }}
-          />
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingHorizontal: 20 }}
+    >
+      {/* Search */}
+      <View style={styles.searchContainer}>
+        <InputField
+          value={searchValue}
+          onChangeText={(e) => setSearchValue(e)}
+          placeholder="Search here..."
+          icon={"search"}
+          rootStyle={styles.searchInputRoot}
+          inputStyle={styles.searchInput}
+          iconStyle={{ color: "#0f090b" }}
+        />
 
-          <Pressable
-            onPress={() => {
-              console.log("Navigate to filter screen");
-            }}
-            style={({ pressed }) => [
-              styles.settingIcon,
-              pressed ? styles.pressed : null,
-            ]}
-          >
-            <Feather name="settings" size={30} color="black" />
-          </Pressable>
-        </View>
+        <Pressable
+          onPress={() => {
+            console.log("Navigate to filter screen");
+          }}
+          style={({ pressed }) => [
+            styles.settingIcon,
+            pressed ? styles.pressed : null,
+          ]}
+        >
+          <Feather name="settings" size={30} color="black" />
+        </Pressable>
+      </View>
 
-        {/* Filter by progress */}
-        <View style={styles.filterProgressContainer}>
-          <OutlineButton
-            title={"All"}
-            onPress={handleSetActiveFilter}
-            icon={
-              <Feather
-                name="list"
-                size={20}
-                color="black"
-                style={styles.filterProgressIcon}
-              />
-            }
-            value={FILTER_PROGRESS.ALL}
-            textStyle={styles.filterProgressText}
-            isActive={activeFilter === FILTER_PROGRESS.ALL}
-          />
-
-          <OutlineButton
-            title={"Completed"}
-            onPress={handleSetActiveFilter}
-            isActive={activeFilter === FILTER_PROGRESS.COMPLETE}
-            value={FILTER_PROGRESS.COMPLETE}
-          />
-
-          <OutlineButton
-            title={"In progress"}
-            onPress={handleSetActiveFilter}
-            value={FILTER_PROGRESS.IN_PROGRESS}
-            isActive={activeFilter === FILTER_PROGRESS.IN_PROGRESS}
-          />
-        </View>
-
-        {/* Result of comics */}
-        <View style={styles.comicsContainer}>
-          <Header
-            title={"New comics"}
-            onPress={() => {
-              console.log("see all");
-            }}
-          />
-
-          {/* Render comic */}
-          {showComics.length > 0 ? (
-            <FlatList
-              data={showComics}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item, index }) => (
-                <RowComic
-                  imageSrc={{ uri: item.thumbnailUrl }}
-                  comicName={item.name}
-                  comicChapter={`Chapter ${item.lastestChapter.chapterNumber}`}
-                  comicLastestUpdate={"1 day ago"}
-                  onPress={() => console.log("presscomic")}
-                />
-              )}
-              scrollEnabled={false}
-              contentContainerStyle={styles.listComicsContainer}
+      {/* Filter by progress */}
+      <View style={styles.filterProgressContainer}>
+        <OutlineButton
+          title={"All"}
+          onPress={handleSetActiveFilter}
+          icon={
+            <Feather
+              name="list"
+              size={20}
+              color="black"
+              style={styles.filterProgressIcon}
             />
-          ) : (
-            <Text style={{ flex: 1, alignSelf: "center" }}>
-              No comics found
-            </Text>
-          )}
-        </View>
-      </KeyboardAvoidingView>
+          }
+          value={FILTER_PROGRESS.ALL}
+          textStyle={styles.filterProgressText}
+          isActive={activeFilter === FILTER_PROGRESS.ALL}
+        />
+
+        <OutlineButton
+          title={"Completed"}
+          onPress={handleSetActiveFilter}
+          isActive={activeFilter === FILTER_PROGRESS.COMPLETE}
+          value={FILTER_PROGRESS.COMPLETE}
+        />
+
+        <OutlineButton
+          title={"In progress"}
+          onPress={handleSetActiveFilter}
+          value={FILTER_PROGRESS.IN_PROGRESS}
+          isActive={activeFilter === FILTER_PROGRESS.IN_PROGRESS}
+        />
+      </View>
+
+      {/* Result of comics */}
+      <View style={styles.comicsContainer}>
+        <Header
+          title={"New comics"}
+          onPress={() => {
+            console.log("see all");
+          }}
+        />
+
+        {/* Render comic */}
+        {showComics.length > 0 ? (
+          <FlatList
+            data={showComics}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item, index }) => (
+              <RowComic
+                imageSrc={{ uri: item.thumbnailUrl }}
+                comicName={item.name}
+                comicChapter={`Chapter ${item.lastestChapter.chapterNumber}`}
+                comicLastestUpdate={"1 day ago"}
+                onPress={() => console.log("presscomic")}
+              />
+            )}
+            scrollEnabled={false}
+            contentContainerStyle={styles.listComicsContainer}
+          />
+        ) : (
+          <Text style={{ flex: 1, alignSelf: "center" }}>No comics found</Text>
+        )}
+      </View>
     </ScrollView>
   );
 };

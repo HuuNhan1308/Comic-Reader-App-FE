@@ -1,6 +1,5 @@
 import {
   ActivityIndicator,
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
@@ -8,6 +7,7 @@ import {
   Pressable,
   ScrollView,
   FlatList,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
@@ -53,32 +53,41 @@ const ComicDetailScreen = ({ route, navigation }) => {
     navigation.goBack();
   }
 
+  function handleNavigateToReadComicScreen(chapterNumber) {
+    navigation.navigate("ReadComicScreen", { comicId, chapterNumber: 1 });
+  }
+
   if (isLoading) {
     return <ActivityIndicator size="large" color="black" style={{ flex: 1 }} />;
   }
 
   return (
-    <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.root}>
+    <ScrollView
+      style={{ backgroundColor: colors.lightgrey }}
+      contentContainerStyle={{ backgroundColor: colors.darkgrey }}
+    >
       <AntDesign
         name="arrowleft"
         size={24}
-        color="black"
+        color="white"
         style={styles.backIcon}
         onPress={handleGoBack}
       />
+
       {/* Background image */}
-      <Image
-        source={
-          comic.thumbnailUrl
-            ? { uri: comic.thumbnailUrl }
-            : require("../assets/book-icon.png")
-        }
-        style={styles.comicThumpnail}
-      />
+      <View>
+        <Image
+          source={
+            comic.thumbnailUrl
+              ? { uri: comic.thumbnailUrl }
+              : require("../assets/book-icon.png")
+          }
+          style={styles.comicThumpnail}
+        />
+      </View>
 
       {/* Show infor block */}
       <View style={styles.comicContainer}>
-        {/* Comic Information  */}
         <ComicInfor
           name={comic.name}
           view={comic.view}
@@ -87,68 +96,36 @@ const ComicDetailScreen = ({ route, navigation }) => {
           genres={["Genre 1"]}
         />
 
-        {/* Comic chapters */}
         <View style={styles.chapterContainer}>
-          {/* Map chapter and render */}
           <ChapterHeader />
 
           <FlatList
             data={comic.chapters}
             keyExtractor={(item) => item.id}
-            renderItem={({ item, index }) => (
-              <>
-                <View style={styles.chapterItem}>
-                  <Pressable>
-                    <Text style={styles.chapterItemText}>
-                      Chapter: {item.chapterNumber}
-                    </Text>
-                    <Text style={styles.chapterItemText}>
-                      Title: {item.title}
-                    </Text>
-                  </Pressable>
-                </View>
-
-                <View style={styles.chapterItem}>
-                  <Pressable>
-                    <Text style={styles.chapterItemText}>
-                      Chapter: {item.chapterNumber}
-                    </Text>
-                    <Text style={styles.chapterItemText}>
-                      Title: {item.title}
-                    </Text>
-                  </Pressable>
-                </View>
-
-                <View style={styles.chapterItem}>
-                  <Pressable>
-                    <Text style={styles.chapterItemText}>
-                      Chapter: {item.chapterNumber}
-                    </Text>
-                    <Text style={styles.chapterItemText}>
-                      Title: {item.title}
-                    </Text>
-                  </Pressable>
-                </View>
-
-                <View style={styles.chapterItem}>
-                  <Pressable>
-                    <Text style={styles.chapterItemText}>
-                      Chapter: {item.chapterNumber}
-                    </Text>
-                    <Text style={styles.chapterItemText}>
-                      Title: {item.title}
-                    </Text>
-                  </Pressable>
-                </View>
-              </>
-            )}
             scrollEnabled={false}
+            renderItem={({ item, index }) => (
+              <View style={styles.chapterItemContainer}>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.chapterItem,
+                    pressed ? styles.pressed : null,
+                  ]}
+                  android_ripple={{ color: "#8D8D8D" }}
+                  onPress={() => handleNavigateToReadComicScreen()}
+                >
+                  <Text style={styles.chapterItemText}>
+                    Chapter: {item.chapterNumber}
+                  </Text>
+                  <Text style={styles.chapterItemText}>
+                    Title: {item.title}
+                  </Text>
+                </Pressable>
+              </View>
+            )}
             contentContainerStyle={styles.listComicsContainer}
           />
         </View>
       </View>
-
-      {/* Map comic chapters and render */}
     </ScrollView>
   );
 };
@@ -165,13 +142,13 @@ const styles = StyleSheet.create({
   backIcon: {
     position: "absolute",
     left: 20,
-    top: 20,
+    top: Platform.OS === "ios" ? 50 : 20,
     padding: 8,
     zIndex: 100,
   },
   comicThumpnail: {
     width: "100%",
-    height: "25%",
+    height: 250,
     objectFit: "fill",
     opacity: 0.6,
     backgroundColor: "black",
@@ -180,6 +157,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     backgroundColor: colors.lightgrey,
+    flex: 1,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
@@ -216,12 +194,15 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.7,
   },
+  chapterItemContainer: {
+    marginVertical: 6,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
   chapterItem: {
     backgroundColor: "#707070",
-    borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 4,
-    marginVertical: 6,
   },
   chapterItemText: {
     color: colors.white,
