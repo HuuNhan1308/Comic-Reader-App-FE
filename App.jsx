@@ -5,7 +5,6 @@ import { StatusBar } from "expo-status-bar";
 import { ActivityIndicator, StyleSheet } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import "expo-dev-client";
 
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
@@ -39,12 +38,15 @@ function Root() {
 
         if (storedToken) {
           // If token is expired then logout
+          if (checkExpiredToken(storedToken) === true) {
+            console.log("Token is expired!!");
+            authCtx.logout();
+            return;
+          }
+
           // If token is not valid anymore
-          if (
-            checkExpiredToken(storedToken) === true ||
-            checkValidToken(storedToken) === false
-          ) {
-            console.log("Token is expired or not valid anymore!!");
+          if (checkValidToken(storedToken) === false) {
+            console.log("Token is invalid!!");
             authCtx.logout();
             return;
           }

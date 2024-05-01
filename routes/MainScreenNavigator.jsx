@@ -53,6 +53,7 @@ const MainScreenNavigator = () => {
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="search1" size={size - 4} color={color} />
           ),
+          headerShown: false,
         }}
       />
       <Tab.Screen

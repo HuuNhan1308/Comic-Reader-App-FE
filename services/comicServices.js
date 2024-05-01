@@ -8,3 +8,5 @@ export const getAllComics = async () => {
     console.log(e);
   }
 };
+
+//get comic by search value

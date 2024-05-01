@@ -11,17 +11,23 @@ const InputField = ({
   onPressIcon,
   value,
   onChangeText,
+  rootStyle,
+  inputContainerStyle,
+  inputStyle,
+  iconStyle,
+  placeholder = "",
 }) => {
   return (
-    <View style={styles.inputFieldContainer}>
-      <Text style={styles.title}>{title}</Text>
+    <View style={[styles.inputFieldContainer, rootStyle]}>
+      {title && <Text style={styles.title}>{title}</Text>}
 
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, inputContainerStyle]}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, inputStyle]}
           secureTextEntry={secureTextEntry}
           value={value}
           onChangeText={onChangeText}
+          placeholder={placeholder}
         />
 
         {icon && (
@@ -29,7 +35,7 @@ const InputField = ({
             name={icon}
             size={24}
             color="white"
-            style={styles.icon}
+            style={[styles.icon, iconStyle]}
             onPress={onPressIcon}
           />
         )}
