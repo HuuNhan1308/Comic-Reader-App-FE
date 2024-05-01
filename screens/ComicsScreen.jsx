@@ -8,8 +8,9 @@ import {
   Pressable,
   FlatList,
   Platform,
+  ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import InputField from "../components/Profile/InputField";
 import colors from "../variables/colors/colors";
 import { Feather } from "@expo/vector-icons";
@@ -17,99 +18,144 @@ import OutlineButton from "../components/ui/OutlineButton";
 import Header from "../components/Home/Header";
 import { getAllComics } from "../services/ComicServices";
 import RowComic from "../components/Home/RowComic";
+import { FILTER_PROGRESS } from "../variables/filters/filter_progress";
+import useDebounce from "../hooks/useDebounce";
 
 const ComicsScreen = () => {
+  const [activeFilter, setActiveFilter] = useState(FILTER_PROGRESS.ALL);
   const [searchValue, setSearchValue] = useState("");
+  const debouncedValue = useDebounce(searchValue, 300);
   const [searchComics, setSearchComics] = useState([]);
+  const [showComics, setShowComics] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  function handleSetActiveFilter(filter) {
+    setActiveFilter(filter);
+
+    if (filter === FILTER_PROGRESS.ALL) {
+      setShowComics(searchComics);
+    } else if (filter === FILTER_PROGRESS.COMPLETE) {
+      setShowComics(searchComics.filter((comic) => comic.finished));
+    } else if (filter === FILTER_PROGRESS.IN_PROGRESS) {
+      setShowComics(searchComics.filter((comic) => !comic.finished));
+    }
+  }
 
   useEffect(() => {
-    async function fetchAllComics(query) {
+    async function fetchAllComics() {
       try {
-        const comicsResponse = await getAllComics();
-        setSearchComics(comicsResponse.result);
+        setIsLoading(true);
+        let comicsResponse;
+
+        if (!debouncedValue.trim()) {
+          comicsResponse = await getAllComics();
+          console.log(comicsResponse);
+          setSearchComics(comicsResponse.result);
+          setShowComics(comicsResponse.result);
+        } else {
+          // call api search by debounced value
+          console.log("fetch api search comic and set to searchComics");
+          comicsResponse = await getAllComics();
+          setSearchComics(comicsResponse.result);
+          setShowComics(comicsResponse.result);
+        }
       } catch (e) {
         console.log(e);
+      } finally {
+        setIsLoading(false);
       }
     }
 
     fetchAllComics();
-  }, []);
+  }, [debouncedValue]); // Wrap debouncedValue in an array
+
+  if (isLoading) {
+    return (
+      <ActivityIndicator
+        size="large"
+        color={colors.darkgrey}
+        style={styles.root}
+      />
+    );
+  }
 
   return (
-    <ScrollView style={styles.screen}>
-      <KeyboardAvoidingView behavior="position">
-        <SafeAreaView style={styles.container}>
-          {/* Search */}
-          <View style={styles.searchContainer}>
-            <InputField
-              value={searchValue}
-              onChangeText={(e) => console.log(e)}
-              placeholder="Search here..."
-              icon={"search"}
-              rootStyle={styles.searchInputRoot}
-              inputStyle={styles.searchInput}
-              iconStyle={{ color: "#0f090b" }}
-            />
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "height" : "position"}
+        style={{ flex: 1, paddingHorizontal: 30 }}
+      >
+        {/* Search */}
+        <View style={styles.searchContainer}>
+          <InputField
+            value={searchValue}
+            onChangeText={(e) => setSearchValue(e)}
+            placeholder="Search here..."
+            icon={"search"}
+            rootStyle={styles.searchInputRoot}
+            inputStyle={styles.searchInput}
+            iconStyle={{ color: "#0f090b" }}
+          />
 
-            <Pressable
-              onPress={() => {
-                console.log("Navigate to filter screen");
-              }}
-              style={({ pressed }) => [
-                styles.settingIcon,
-                pressed ? styles.pressed : null,
-              ]}
-            >
-              <Feather name="settings" size={30} color="black" />
-            </Pressable>
-          </View>
+          <Pressable
+            onPress={() => {
+              console.log("Navigate to filter screen");
+            }}
+            style={({ pressed }) => [
+              styles.settingIcon,
+              pressed ? styles.pressed : null,
+            ]}
+          >
+            <Feather name="settings" size={30} color="black" />
+          </Pressable>
+        </View>
 
-          {/* Filter by progress */}
-          <View style={styles.filterProgressContainer}>
-            <OutlineButton
-              title={"All"}
-              onPress={() => {
-                console.log("set filter");
-              }}
-              icon={
-                <Feather
-                  name="list"
-                  size={20}
-                  color="black"
-                  style={styles.filterProgressIcon}
-                />
-              }
-              textStyle={styles.filterProgressText}
-            />
+        {/* Filter by progress */}
+        <View style={styles.filterProgressContainer}>
+          <OutlineButton
+            title={"All"}
+            onPress={handleSetActiveFilter}
+            icon={
+              <Feather
+                name="list"
+                size={20}
+                color="black"
+                style={styles.filterProgressIcon}
+              />
+            }
+            value={FILTER_PROGRESS.ALL}
+            textStyle={styles.filterProgressText}
+            isActive={activeFilter === FILTER_PROGRESS.ALL}
+          />
 
-            <OutlineButton
-              title={"Completed"}
-              onPress={() => {
-                console.log("set filter");
-              }}
-              isActive={true}
-            />
+          <OutlineButton
+            title={"Completed"}
+            onPress={handleSetActiveFilter}
+            isActive={activeFilter === FILTER_PROGRESS.COMPLETE}
+            value={FILTER_PROGRESS.COMPLETE}
+          />
 
-            <OutlineButton
-              title={"In progress"}
-              onPress={() => {
-                console.log("set filter");
-              }}
-            />
-          </View>
+          <OutlineButton
+            title={"In progress"}
+            onPress={handleSetActiveFilter}
+            value={FILTER_PROGRESS.IN_PROGRESS}
+            isActive={activeFilter === FILTER_PROGRESS.IN_PROGRESS}
+          />
+        </View>
 
-          {/* Result of comics */}
-          <View style={styles.comicsContainer}>
-            <Header
-              title={"New comics"}
-              onPress={() => {
-                console.log("see all");
-              }}
-            />
+        {/* Result of comics */}
+        <View style={styles.comicsContainer}>
+          <Header
+            title={"New comics"}
+            onPress={() => {
+              console.log("see all");
+            }}
+          />
 
-            {/* Render comic */}
+          {/* Render comic */}
+          {showComics.length > 0 ? (
             <FlatList
-              data={searchComics}
+              data={showComics}
               keyExtractor={(item) => item.id}
               renderItem={({ item, index }) => (
                 <RowComic
@@ -123,8 +169,12 @@ const ComicsScreen = () => {
               scrollEnabled={false}
               contentContainerStyle={styles.listComicsContainer}
             />
-          </View>
-        </SafeAreaView>
+          ) : (
+            <Text style={{ flex: 1, alignSelf: "center" }}>
+              No comics found
+            </Text>
+          )}
+        </View>
       </KeyboardAvoidingView>
     </ScrollView>
   );
@@ -133,18 +183,20 @@ const ComicsScreen = () => {
 export default ComicsScreen;
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, paddingHorizontal: Platform.OS === "ios" && 20 },
-  container: {
+  root: {
     flex: 1,
-    marginTop: 40,
-    paddingHorizontal: 30,
+    justifyContent: "center",
   },
-  searchContainer: { flexDirection: "row" },
+  searchContainer: {
+    flexDirection: "row",
+    marginTop: Platform.OS === "android" ? 40 : 60,
+  },
   searchInputRoot: { flex: 1, paddingHorizontal: 0, marginRight: 8 },
   searchInput: {
     backgroundColor: colors.grey100,
     borderRadius: 8,
     borderWidth: 0,
+    color: colors.darkgrey,
   },
   settingIcon: {
     borderWidth: 2,
@@ -164,5 +216,5 @@ const styles = StyleSheet.create({
   },
   filterProgressIcon: { position: "absolute", left: 10 },
   filterProgressText: { marginLeft: 12 },
-  comicsContainer: { marginTop: 20 },
+  comicsContainer: { marginTop: 20, paddingBottom: 40 },
 });

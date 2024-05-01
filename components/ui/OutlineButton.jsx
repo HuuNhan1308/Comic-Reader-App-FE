@@ -2,10 +2,17 @@ import { StyleSheet, Text, Pressable } from "react-native";
 import React from "react";
 import colors from "../../variables/colors/colors";
 
-const OutlineButton = ({ title, icon, isActive, onPress, textStyle }) => {
+const OutlineButton = ({
+  title,
+  icon,
+  isActive,
+  onPress,
+  textStyle,
+  value,
+}) => {
   return (
     <Pressable
-      onPress={onPress}
+      onPress={() => onPress(value)}
       style={({ pressed }) => [
         styles.filterProgressButton,
         isActive ? styles.filterProgressButton__active : null,
