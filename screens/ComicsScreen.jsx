@@ -10,7 +10,7 @@ import {
   Platform,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputField from "../components/Profile/InputField";
 import colors from "../variables/colors/colors";
 import { Feather } from "@expo/vector-icons";
@@ -21,13 +21,17 @@ import RowComic from "../components/Home/RowComic";
 import { FILTER_PROGRESS } from "../variables/filters/filter_progress";
 import useDebounce from "../hooks/useDebounce";
 
-const ComicsScreen = () => {
+const ComicsScreen = ({ navigation, route }) => {
   const [activeFilter, setActiveFilter] = useState(FILTER_PROGRESS.ALL);
   const [searchValue, setSearchValue] = useState("");
   const debouncedValue = useDebounce(searchValue, 300);
   const [searchComics, setSearchComics] = useState([]);
   const [showComics, setShowComics] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  function handleNavigateToComicDetail(comicId) {
+    navigation.navigate("ComicDetail", { comicId });
+  }
 
   function handleSetActiveFilter(filter) {
     setActiveFilter(filter);
@@ -144,12 +148,7 @@ const ComicsScreen = () => {
 
       {/* Result of comics */}
       <View style={styles.comicsContainer}>
-        <Header
-          title={"New comics"}
-          onPress={() => {
-            console.log("see all");
-          }}
-        />
+        <Header title={"New comics"} />
 
         {/* Render comic */}
         {showComics.length > 0 ? (
@@ -162,7 +161,7 @@ const ComicsScreen = () => {
                 comicName={item.name}
                 comicChapter={`Chapter ${item.lastestChapter.chapterNumber}`}
                 comicLastestUpdate={"1 day ago"}
-                onPress={() => console.log("presscomic")}
+                onPress={() => handleNavigateToComicDetail(item.id)}
               />
             )}
             scrollEnabled={false}

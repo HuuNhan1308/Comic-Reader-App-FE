@@ -23,3 +23,15 @@ export const getComicChapterById = async (comicId) => {
     console.log("Error: " + e);
   }
 };
+
+// get comic IMGs by comic Id and chapter Number
+export const getComicIMGs = async (comicId, chapterNumber) => {
+  try {
+    const res = await httpRequest.get(
+      "/api/image/getChapterImageUrls/" + comicId
+    );
+    return res;
+  } catch (e) {
+    console.log("Error: " + e);
+  }
+};

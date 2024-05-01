@@ -54,7 +54,10 @@ const ComicDetailScreen = ({ route, navigation }) => {
   }
 
   function handleNavigateToReadComicScreen(chapterNumber) {
-    navigation.navigate("ReadComicScreen", { comicId, chapterNumber: 1 });
+    navigation.navigate("ReadComicScreen", {
+      comicId,
+      chapterNumber: chapterNumber,
+    });
   }
 
   if (isLoading) {
@@ -111,7 +114,9 @@ const ComicDetailScreen = ({ route, navigation }) => {
                     pressed ? styles.pressed : null,
                   ]}
                   android_ripple={{ color: "#8D8D8D" }}
-                  onPress={() => handleNavigateToReadComicScreen()}
+                  onPress={() =>
+                    handleNavigateToReadComicScreen(item.chapterNumber)
+                  }
                 >
                   <Text style={styles.chapterItemText}>
                     Chapter: {item.chapterNumber}
