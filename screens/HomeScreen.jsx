@@ -6,11 +6,15 @@ import { getAllComics } from "../services/ComicServices";
 import RectangleCategory from "../components/Home/RectangleCategory";
 import RowComic from "../components/Home/RowComic";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation, route }) => {
   const [comics, setComics] = useState([]);
   const [newComics, setNewComics] = useState([]);
   const [recommendedComics, setRecommendedComics] = useState([]);
   const [hotComics, setHotComics] = useState([]);
+
+  function handleNavigateToComicDetail(comicId) {
+    navigation.navigate("ComicDetail", { comicId });
+  }
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -65,7 +69,7 @@ const HomeScreen = () => {
               containerStyle={styles.comicContainer}
               iconStyle={styles.comicBookmarkIcon}
               onPressIcon={() => console.log("pressicon")}
-              onPressComic={() => console.log("presscomic")}
+              onPressComic={() => handleNavigateToComicDetail(item.id)}
               title={item.name ? item.name : "fallback"}
               chapter={`Chapter ${item.lastestChapter.chapterNumber}`}
             />
@@ -100,7 +104,7 @@ const HomeScreen = () => {
               containerStyle={styles.comicContainer}
               iconStyle={styles.comicBookmarkIcon}
               onPressIcon={() => console.log("pressicon")}
-              onPressComic={() => console.log("presscomic")}
+              onPressComic={() => handleNavigateToComicDetail(item.id)}
               title={item.name ? item.name : "fallbacks"}
               chapter={`Chapter ${item.lastestChapter.chapterNumber}`}
             />
@@ -166,7 +170,7 @@ const HomeScreen = () => {
               comicName={item.name}
               comicChapter={`Chapter ${item.lastestChapter.chapterNumber}`}
               comicLastestUpdate={"1 day ago"}
-              onPress={() => console.log("presscomic")}
+              onPress={() => handleNavigateToComicDetail(item.id)}
             />
           )}
           scrollEnabled={false}

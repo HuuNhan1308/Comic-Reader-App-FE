@@ -5,6 +5,7 @@ import ChangePasswordScreen from "../screens/ChangePasswordScreen";
 import MainScreenNavigator from "./MainScreenNavigator";
 import colors from "../variables/colors/colors";
 import ChangeProfileScreen from "../screens/ChangeProfileScreen";
+import ComicDetailScreen from "../screens/ComicDetailScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -45,6 +46,11 @@ const AppScreenNavigator = () => {
         component={ChangeProfileScreen}
         name="ChangeProfile"
         options={{ title: "Change Profile" }}
+      />
+      <Stack.Screen
+        component={ComicDetailScreen}
+        name="ComicDetail"
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
