@@ -40,9 +40,10 @@ const RowComic = ({
 
           {/* Genre Container */}
           <View style={[styles.row, styles.genreContainer]}>
-            {genres.map((genre) => (
-              <Genre genreName={genre} key={genre} />
-            ))}
+            {genres &&
+              genres.map((genre) => (
+                <Genre genreName={genre.name} key={genre.id} />
+              ))}
           </View>
 
           {/* Detail Container */}
@@ -71,6 +72,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
+    flexWrap: "wrap",
   },
   chapterContainer: {},
   comicChapter: { fontSize: 12 },

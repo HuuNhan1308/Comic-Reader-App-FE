@@ -3,44 +3,29 @@ import React, { useState } from "react";
 import { FILTER_CHAPTER } from "../../variables/filters/filter_chapter";
 import colors from "../../variables/colors/colors";
 
-const ChapterHeader = () => {
-  const [filterChapter, setFilterChapter] = useState(FILTER_CHAPTER.NEWEST);
-
+const ChapterHeader = ({ tilte, activeButton, buttons, onPressButton }) => {
   return (
     <View style={styles.root}>
-      <Text style={[styles.title]}>Chapters</Text>
+      <Text style={[styles.title]}>{tilte}</Text>
 
       {/* Filter container */}
       <View style={styles.chapterFilterContainer}>
-        <Pressable
-          onPress={() => setFilterChapter(FILTER_CHAPTER.NEWEST)}
-          style={({ pressed }) => [pressed ? styles.pressed : null]}
-        >
-          <Text
-            style={[
-              styles.chapterFilterText,
-              filterChapter === FILTER_CHAPTER.NEWEST &&
-                styles.chapterFilterText__active,
-            ]}
+        {buttons.map((button) => (
+          <Pressable
+            key={button}
+            onPress={() => onPressButton(button)}
+            style={({ pressed }) => [pressed ? styles.pressed : null]}
           >
-            {FILTER_CHAPTER.NEWEST}
-          </Text>
-        </Pressable>
-
-        <Pressable
-          onPress={() => setFilterChapter(FILTER_CHAPTER.OLDEST)}
-          style={({ pressed }) => [pressed ? styles.pressed : null]}
-        >
-          <Text
-            style={[
-              styles.chapterFilterText,
-              filterChapter === FILTER_CHAPTER.OLDEST &&
-                styles.chapterFilterText__active,
-            ]}
-          >
-            {FILTER_CHAPTER.OLDEST}
-          </Text>
-        </Pressable>
+            <Text
+              style={[
+                styles.chapterFilterText,
+                activeButton === button && styles.chapterFilterText__active,
+              ]}
+            >
+              {button}
+            </Text>
+          </Pressable>
+        ))}
       </View>
     </View>
   );

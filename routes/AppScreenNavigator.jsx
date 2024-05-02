@@ -53,7 +53,11 @@ const AppScreenNavigator = () => {
         name="ComicDetail"
         options={{ headerShown: false }}
       />
-      <Stack.Screen component={ReadComicScreen} name="ReadComicScreen" />
+      <Stack.Screen
+        component={ReadComicScreen}
+        name="ReadComicScreen"
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };

@@ -170,6 +170,7 @@ const HomeScreen = ({ navigation, route }) => {
               comicName={item.name}
               comicChapter={`Chapter ${item.lastestChapter.chapterNumber}`}
               comicLastestUpdate={"1 day ago"}
+              genres={item.genres}
               onPress={() => handleNavigateToComicDetail(item.id)}
             />
           )}

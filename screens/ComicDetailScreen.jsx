@@ -12,13 +12,18 @@ import {
 import React, { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import colors from "../variables/colors/colors";
-import { getComicChapterById } from "../services/ComicServices";
+import {
+  getComicChapterById,
+  getComicInformation,
+} from "../services/ComicServices";
 import ChapterHeader from "../components/Comics/ChapterHeader";
 import ComicInfor from "../components/Comics/ComicInfor";
+import { FILTER_CHAPTER } from "../variables/filters/filter_chapter";
 
 const ComicDetailScreen = ({ route, navigation }) => {
   const { comicId } = route.params;
 
+  const [filterChapter, setFilterChapter] = useState(FILTER_CHAPTER.OLDEST);
   const [isLoading, setIsLoading] = useState(false);
   const [comic, setComic] = useState({
     id: 0,
@@ -37,8 +42,14 @@ const ComicDetailScreen = ({ route, navigation }) => {
     async function fetchComicChapters(comicId) {
       try {
         setIsLoading(true);
-        const ComicChapterResponse = await getComicChapterById(comicId);
-        setComic(ComicChapterResponse.result);
+
+        const chaptersResponse = await getComicChapterById(comicId);
+        const comicResponse = await getComicInformation(comicId);
+
+        setComic({
+          ...comicResponse.result,
+          chapters: chaptersResponse.result,
+        });
       } catch (e) {
         console.log(e);
       } finally {
@@ -53,11 +64,40 @@ const ComicDetailScreen = ({ route, navigation }) => {
     navigation.goBack();
   }
 
-  function handleNavigateToReadComicScreen(chapterNumber) {
+  function handleNavigateToReadComicScreen(
+    chapterId,
+    chapterTitle,
+    chapterNumber
+  ) {
     navigation.navigate("ReadComicScreen", {
-      comicId,
-      chapterNumber: chapterNumber,
+      chapterId,
+      chapterTitle,
+      chapterNumber,
     });
+  }
+
+  function handleFilterChapter(filterType) {
+    if (filterType === FILTER_CHAPTER.NEWEST) {
+      setFilterChapter(FILTER_CHAPTER.NEWEST);
+      setComic((prev) => {
+        return {
+          ...prev,
+          chapters: prev.chapters.sort(
+            (a, b) => b.chapterNumber - a.chapterNumber
+          ),
+        };
+      });
+    } else if (filterType === FILTER_CHAPTER.OLDEST) {
+      setFilterChapter(FILTER_CHAPTER.OLDEST);
+      setComic((prev) => {
+        return {
+          ...prev,
+          chapters: prev.chapters.sort(
+            (a, b) => a.chapterNumber - b.chapterNumber
+          ),
+        };
+      });
+    }
   }
 
   if (isLoading) {
@@ -100,7 +140,12 @@ const ComicDetailScreen = ({ route, navigation }) => {
         />
 
         <View style={styles.chapterContainer}>
-          <ChapterHeader />
+          <ChapterHeader
+            tilte={"Chapters"}
+            buttons={[FILTER_CHAPTER.NEWEST, FILTER_CHAPTER.OLDEST]}
+            activeButton={filterChapter}
+            onPressButton={(filterType) => handleFilterChapter(filterType)}
+          />
 
           <FlatList
             data={comic.chapters}
@@ -114,9 +159,13 @@ const ComicDetailScreen = ({ route, navigation }) => {
                     pressed ? styles.pressed : null,
                   ]}
                   android_ripple={{ color: "#8D8D8D" }}
-                  onPress={() =>
-                    handleNavigateToReadComicScreen(item.chapterNumber)
-                  }
+                  onPress={() => {
+                    handleNavigateToReadComicScreen(
+                      item.id,
+                      item.title,
+                      item.chapterNumber
+                    );
+                  }}
                 >
                   <Text style={styles.chapterItemText}>
                     Chapter: {item.chapterNumber}
@@ -150,6 +199,8 @@ const styles = StyleSheet.create({
     top: Platform.OS === "ios" ? 50 : 20,
     padding: 8,
     zIndex: 100,
+    backgroundColor: "#53535396",
+    borderRadius: 100,
   },
   comicThumpnail: {
     width: "100%",

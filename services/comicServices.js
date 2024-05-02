@@ -9,7 +9,30 @@ export const getAllComics = async () => {
   }
 };
 
+//get comic informmation
+
+export const getComicInformation = async (comicId) => {
+  try {
+    const res = await httpRequest.get(
+      "/api/comic/getComicInformation/" + comicId
+    );
+
+    return res;
+  } catch (e) {
+    console.log("Error: " + e);
+  }
+};
+
 //get comic by search value
+export const searchComics = async (searchValue) => {
+  try {
+    const res = await httpRequest.get("/api/comic/searchComics/" + searchValue);
+
+    return res;
+  } catch (e) {
+    console.log("Error: " + e);
+  }
+};
 
 //get comic chapter by Id
 export const getComicChapterById = async (comicId) => {
@@ -25,10 +48,10 @@ export const getComicChapterById = async (comicId) => {
 };
 
 // get comic IMGs by comic Id and chapter Number
-export const getComicIMGs = async (comicId, chapterNumber) => {
+export const getComicIMGs = async (chapterId) => {
   try {
     const res = await httpRequest.get(
-      "/api/image/getChapterImageUrls/" + comicId
+      "/api/image/getChapterImageUrls/" + chapterId
     );
     return res;
   } catch (e) {

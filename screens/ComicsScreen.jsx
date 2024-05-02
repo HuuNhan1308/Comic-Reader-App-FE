@@ -16,18 +16,23 @@ import colors from "../variables/colors/colors";
 import { Feather } from "@expo/vector-icons";
 import OutlineButton from "../components/ui/OutlineButton";
 import Header from "../components/Home/Header";
-import { getAllComics } from "../services/ComicServices";
+import { getAllComics, searchComics } from "../services/ComicServices";
 import RowComic from "../components/Home/RowComic";
 import { FILTER_PROGRESS } from "../variables/filters/filter_progress";
 import useDebounce from "../hooks/useDebounce";
+
+const ErrorMessage = ({ message }) => {
+  return <Text style={{ flex: 1, alignSelf: "center" }}>{message}</Text>;
+};
 
 const ComicsScreen = ({ navigation, route }) => {
   const [activeFilter, setActiveFilter] = useState(FILTER_PROGRESS.ALL);
   const [searchValue, setSearchValue] = useState("");
   const debouncedValue = useDebounce(searchValue, 300);
-  const [searchComics, setSearchComics] = useState([]);
+  const [comics, setComics] = useState([]);
   const [showComics, setShowComics] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   function handleNavigateToComicDetail(comicId) {
     navigation.navigate("ComicDetail", { comicId });
@@ -35,15 +40,17 @@ const ComicsScreen = ({ navigation, route }) => {
 
   function handleSetActiveFilter(filter) {
     setActiveFilter(filter);
-
-    if (filter === FILTER_PROGRESS.ALL) {
-      setShowComics(searchComics);
-    } else if (filter === FILTER_PROGRESS.COMPLETE) {
-      setShowComics(searchComics.filter((comic) => comic.finished));
-    } else if (filter === FILTER_PROGRESS.IN_PROGRESS) {
-      setShowComics(searchComics.filter((comic) => !comic.finished));
-    }
   }
+
+  const filteredComics = comics.filter((comic) => {
+    if (activeFilter === FILTER_PROGRESS.ALL) {
+      return true;
+    } else if (activeFilter === FILTER_PROGRESS.COMPLETE) {
+      return comic.finished;
+    } else if (activeFilter === FILTER_PROGRESS.IN_PROGRESS) {
+      return !comic.finished;
+    }
+  });
 
   useEffect(() => {
     async function fetchAllComics() {
@@ -53,15 +60,24 @@ const ComicsScreen = ({ navigation, route }) => {
 
         if (!debouncedValue.trim()) {
           comicsResponse = await getAllComics();
-          console.log(comicsResponse);
-          setSearchComics(comicsResponse.result);
-          setShowComics(comicsResponse.result);
+          setComics(comicsResponse.result);
         } else {
           // call api search by debounced value
-          console.log("fetch api search comic and set to searchComics");
-          comicsResponse = await getAllComics();
-          setSearchComics(comicsResponse.result);
-          setShowComics(comicsResponse.result);
+          comicsResponse = await searchComics(debouncedValue);
+          if (comicsResponse.code === 4002) {
+            setErrorMessage(comicsResponse.message);
+            setComics([]);
+            return;
+          }
+
+          if (comicsResponse.code === 4004) {
+            setErrorMessage(comicsResponse.message);
+            setComics([]);
+            return;
+          }
+
+          setComics(comicsResponse.result);
+          setErrorMessage("");
         }
       } catch (e) {
         console.log(e);
@@ -71,17 +87,13 @@ const ComicsScreen = ({ navigation, route }) => {
     }
 
     fetchAllComics();
-  }, [debouncedValue]); // Wrap debouncedValue in an array
+  }, [debouncedValue]);
 
-  if (isLoading) {
-    return (
-      <ActivityIndicator
-        size="large"
-        color={colors.darkgrey}
-        style={styles.root}
-      />
-    );
-  }
+  useEffect(() => {
+    if (filteredComics.length === 0 && !errorMessage) {
+      setErrorMessage("Comic not found");
+    }
+  }, [filteredComics, errorMessage]);
 
   return (
     <ScrollView
@@ -151,16 +163,27 @@ const ComicsScreen = ({ navigation, route }) => {
         <Header title={"New comics"} />
 
         {/* Render comic */}
-        {showComics.length > 0 ? (
+        {isLoading ? (
+          <ActivityIndicator
+            size="large"
+            color={colors.darkgrey}
+            style={styles.root}
+          />
+        ) : filteredComics.length > 0 ? (
           <FlatList
-            data={showComics}
+            data={filteredComics}
             keyExtractor={(item) => item.id}
             renderItem={({ item, index }) => (
               <RowComic
-                imageSrc={{ uri: item.thumbnailUrl }}
+                imageSrc={
+                  item.thumbnailUrl
+                    ? { uri: item.thumbnailUrl }
+                    : require("../assets/book-icon.png")
+                }
                 comicName={item.name}
                 comicChapter={`Chapter ${item.lastestChapter.chapterNumber}`}
                 comicLastestUpdate={"1 day ago"}
+                genres={item.genres}
                 onPress={() => handleNavigateToComicDetail(item.id)}
               />
             )}
@@ -168,7 +191,7 @@ const ComicsScreen = ({ navigation, route }) => {
             contentContainerStyle={styles.listComicsContainer}
           />
         ) : (
-          <Text style={{ flex: 1, alignSelf: "center" }}>No comics found</Text>
+          <ErrorMessage message={errorMessage} />
         )}
       </View>
     </ScrollView>
@@ -179,8 +202,8 @@ export default ComicsScreen;
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
     justifyContent: "center",
+    marginTop: 100,
   },
   searchContainer: {
     flexDirection: "row",
