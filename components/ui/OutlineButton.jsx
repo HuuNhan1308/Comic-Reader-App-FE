@@ -8,6 +8,7 @@ const OutlineButton = ({
   isActive,
   onPress,
   textStyle,
+  containerStyle,
   value,
 }) => {
   return (
@@ -15,6 +16,7 @@ const OutlineButton = ({
       onPress={() => onPress(value)}
       style={({ pressed }) => [
         styles.filterProgressButton,
+        containerStyle,
         isActive ? styles.filterProgressButton__active : null,
         pressed ? styles.pressed : null,
       ]}
@@ -38,7 +40,6 @@ const styles = StyleSheet.create({
     borderColor: colors.grey100,
     borderRadius: 8,
     paddingVertical: 2,
-
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

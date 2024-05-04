@@ -1,6 +1,4 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import React, { useState } from "react";
-import { FILTER_CHAPTER } from "../../variables/filters/filter_chapter";
 import colors from "../../variables/colors/colors";
 
 const ChapterHeader = ({ tilte, activeButton, buttons, onPressButton }) => {

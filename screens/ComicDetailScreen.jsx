@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import colors from "../variables/colors/colors";
 import {
-  getComicChapterById,
+  getComicChaptersById,
   getComicInformation,
 } from "../services/ComicServices";
 import ChapterHeader from "../components/Comics/ChapterHeader";
@@ -33,6 +33,7 @@ const ComicDetailScreen = ({ route, navigation }) => {
     thumbnailUrl: "",
     view: 0,
     lastestChapter: 0,
+    genres: [],
     chapters: [],
     deleted: false,
     finished: false,
@@ -43,7 +44,7 @@ const ComicDetailScreen = ({ route, navigation }) => {
       try {
         setIsLoading(true);
 
-        const chaptersResponse = await getComicChapterById(comicId);
+        const chaptersResponse = await getComicChaptersById(comicId);
         const comicResponse = await getComicInformation(comicId);
 
         setComic({
@@ -64,15 +65,10 @@ const ComicDetailScreen = ({ route, navigation }) => {
     navigation.goBack();
   }
 
-  function handleNavigateToReadComicScreen(
-    chapterId,
-    chapterTitle,
-    chapterNumber
-  ) {
-    navigation.navigate("ReadComicScreen", {
+  function handleNavigateToReadComicScreen(chapterId) {
+    navigation.navigate("ReadComic", {
       chapterId,
-      chapterTitle,
-      chapterNumber,
+      comicId: comicId,
     });
   }
 
@@ -136,7 +132,7 @@ const ComicDetailScreen = ({ route, navigation }) => {
           view={comic.view}
           author={comic.author}
           description={comic.description}
-          genres={["Genre 1"]}
+          genres={comic.genres}
         />
 
         <View style={styles.chapterContainer}>
@@ -160,18 +156,11 @@ const ComicDetailScreen = ({ route, navigation }) => {
                   ]}
                   android_ripple={{ color: "#8D8D8D" }}
                   onPress={() => {
-                    handleNavigateToReadComicScreen(
-                      item.id,
-                      item.title,
-                      item.chapterNumber
-                    );
+                    handleNavigateToReadComicScreen(item.id);
                   }}
                 >
-                  <Text style={styles.chapterItemText}>
-                    Chapter: {item.chapterNumber}
-                  </Text>
-                  <Text style={styles.chapterItemText}>
-                    Title: {item.title}
+                  <Text style={styles.chapterItemText} numberOfLines={1}>
+                    Chapter {item.chapterNumber}: {item.title}
                   </Text>
                 </Pressable>
               </View>
@@ -199,7 +188,7 @@ const styles = StyleSheet.create({
     top: Platform.OS === "ios" ? 50 : 20,
     padding: 8,
     zIndex: 100,
-    backgroundColor: "#53535396",
+    backgroundColor: Platform.OS === "android" ? "#53535396" : undefined,
     borderRadius: 100,
   },
   comicThumpnail: {
@@ -263,5 +252,7 @@ const styles = StyleSheet.create({
   chapterItemText: {
     color: colors.white,
     fontWeight: "600",
+    fontSize: 16,
+    paddingVertical: 4,
   },
 });

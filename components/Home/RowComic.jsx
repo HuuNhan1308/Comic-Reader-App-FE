@@ -41,9 +41,11 @@ const RowComic = ({
           {/* Genre Container */}
           <View style={[styles.row, styles.genreContainer]}>
             {genres &&
-              genres.map((genre) => (
-                <Genre genreName={genre.name} key={genre.id} />
-              ))}
+              genres
+                .splice(0, 3)
+                .map((genre) => (
+                  <Genre genreName={genre.name} key={genre.id} />
+                ))}
           </View>
 
           {/* Detail Container */}

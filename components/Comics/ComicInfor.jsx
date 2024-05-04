@@ -19,8 +19,8 @@ const ComicInfor = ({ name, author, view, genres, description }) => {
       <View style={styles.genreContainer}>
         {/* Map genre and render */}
         {genres.map((genre) => (
-          <Text style={styles.genre} key={genre}>
-            {genre}
+          <Text style={styles.genre} key={genre.id}>
+            {genre.name}
           </Text>
         ))}
       </View>

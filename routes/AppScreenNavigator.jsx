@@ -7,13 +7,14 @@ import colors from "../variables/colors/colors";
 import ChangeProfileScreen from "../screens/ChangeProfileScreen";
 import ComicDetailScreen from "../screens/ComicDetailScreen";
 import ReadComicScreen from "../screens/ReadComicScreen";
+import ChooseChaptersScreen from "../screens/ChooseChaptersScreen";
 
 const Stack = createNativeStackNavigator();
 
 const AppScreenNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Profile"
+      initialRouteName="Main"
       screenOptions={{
         headerTitleAlign: "center",
         headerStyle: {
@@ -28,36 +29,45 @@ const AppScreenNavigator = () => {
         headerBackTitleVisible: false,
       }}
     >
-      <Stack.Screen
-        component={MainScreenNavigator}
-        name="Main"
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        component={ProfileDetailScreen}
-        name="ProfileDetail"
-        options={{ title: "Profile & Security" }}
-      />
-      <Stack.Screen
-        component={ChangePasswordScreen}
-        name="ChangePassword"
-        options={{ title: "Change Password" }}
-      />
-      <Stack.Screen
-        component={ChangeProfileScreen}
-        name="ChangeProfile"
-        options={{ title: "Change Profile" }}
-      />
-      <Stack.Screen
-        component={ComicDetailScreen}
-        name="ComicDetail"
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        component={ReadComicScreen}
-        name="ReadComicScreen"
-        options={{ headerShown: false }}
-      />
+      <Stack.Group>
+        <Stack.Screen
+          component={MainScreenNavigator}
+          name="Main"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          component={ProfileDetailScreen}
+          name="ProfileDetail"
+          options={{ title: "Profile & Security" }}
+        />
+        <Stack.Screen
+          component={ChangePasswordScreen}
+          name="ChangePassword"
+          options={{ title: "Change Password" }}
+        />
+        <Stack.Screen
+          component={ChangeProfileScreen}
+          name="ChangeProfile"
+          options={{ title: "Change Profile" }}
+        />
+        <Stack.Screen
+          component={ComicDetailScreen}
+          name="ComicDetail"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          component={ReadComicScreen}
+          name="ReadComic"
+          options={{ headerShown: false }}
+        />
+      </Stack.Group>
+      <Stack.Group screenOptions={{ presentation: "modal" }}>
+        <Stack.Screen
+          name="ChooseChapter"
+          component={ChooseChaptersScreen}
+          options={{ title: "List chapters" }}
+        />
+      </Stack.Group>
     </Stack.Navigator>
   );
 };

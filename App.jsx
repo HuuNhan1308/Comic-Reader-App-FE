@@ -58,6 +58,7 @@ function Root() {
           }
 
           // If token is valid then authenticate the user and set userContext
+          console.log(storedToken);
           authCtx.authenticate(storedToken);
           const res = await getMyInformation(storedToken);
           userDispatch({
