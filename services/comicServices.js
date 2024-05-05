@@ -47,12 +47,4 @@ export const getComicChaptersById = async (comicId) => {
   }
 };
 
-// get comic IMGs by comic Id and chapter Number
-export const getComicChapter = async (chapterId) => {
-  try {
-    const res = await httpRequest.get("/api/chapter/getChapter/" + chapterId);
-    return res;
-  } catch (e) {
-    console.log("Error: " + e);
-  }
-};
+

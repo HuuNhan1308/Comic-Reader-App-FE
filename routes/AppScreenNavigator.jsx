@@ -8,13 +8,14 @@ import ChangeProfileScreen from "../screens/ChangeProfileScreen";
 import ComicDetailScreen from "../screens/ComicDetailScreen";
 import ReadComicScreen from "../screens/ReadComicScreen";
 import ChooseChaptersScreen from "../screens/ChooseChaptersScreen";
+import CommentsScreen from "../screens/CommentsScreen";
 
 const Stack = createNativeStackNavigator();
 
 const AppScreenNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Main"
+      // initialRouteName="Comments"
       screenOptions={{
         headerTitleAlign: "center",
         headerStyle: {
@@ -61,11 +62,17 @@ const AppScreenNavigator = () => {
           options={{ headerShown: false }}
         />
       </Stack.Group>
+
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen
           name="ChooseChapter"
           component={ChooseChaptersScreen}
           options={{ title: "List chapters" }}
+        />
+        <Stack.Screen
+          name="Comments"
+          component={CommentsScreen}
+          options={{ title: "Comments" }}
         />
       </Stack.Group>
     </Stack.Navigator>

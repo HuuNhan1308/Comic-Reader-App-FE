@@ -7,18 +7,22 @@ import {
   ActivityIndicator,
   Platform,
   Alert,
+  Dimensions,
 } from "react-native";
 import React, { useState, useLayoutEffect } from "react";
-import {
-  getComicChapter,
-  getComicChaptersById,
-} from "../services/ComicServices";
+import { StatusBar } from "expo-status-bar";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
+
+import { getComicChaptersById } from "../services/ComicServices";
+import { getComicChapter } from "../services/ChapterServices";
 import colors from "../variables/colors/colors";
 import IconButton from "../components/ui/IconButton";
-import { StatusBar } from "expo-status-bar";
+import ComicImage from "../components/ui/ComicImage";
+
+const windowDimension = Dimensions.get("window");
+const screenDimension = Dimensions.get("screen");
 
 const ReadComicScreen = ({ route, navigation }) => {
   const { comicId, chapterId } = route.params;
@@ -84,6 +88,13 @@ const ReadComicScreen = ({ route, navigation }) => {
     });
   }
 
+  function handleShowComments() {
+    navigation.navigate("Comments", {
+      chapterId: chapterId,
+    });
+  }
+
+  //get chatper list
   useLayoutEffect(() => {
     async function fetchComicChapter() {
       try {
@@ -97,6 +108,7 @@ const ReadComicScreen = ({ route, navigation }) => {
     fetchComicChapter();
   }, []);
 
+  //get chapter images
   useLayoutEffect(() => {
     async function fetchComicChapterIMGs() {
       try {
@@ -140,7 +152,7 @@ const ReadComicScreen = ({ route, navigation }) => {
             data={chapter.imageUrls}
             keyExtractor={(item, index) => index}
             renderItem={({ item, index }) => (
-              <Image source={{ uri: item }} style={styles.comicIMG} />
+              <ComicImage uri={item} width={windowDimension.width} />
             )}
           />
         )}
@@ -169,6 +181,7 @@ const ReadComicScreen = ({ route, navigation }) => {
                 style={styles.bottomControllersIcon}
               />
             }
+            onPress={handleShowComments}
           />
 
           <IconButton
@@ -201,10 +214,7 @@ const styles = StyleSheet.create({
     paddingBottom: Platform.OS === "android" ? 15 : 15,
     paddingHorizontal: 60,
   },
-  comicIMG: {
-    height: 600,
-    resizeMode: "contain",
-  },
+  comicIMG: { width: windowDimension.width },
   backIcon: {
     position: "absolute",
     left: 14,

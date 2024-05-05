@@ -16,6 +16,7 @@ const InputField = ({
   inputStyle,
   iconStyle,
   placeholder = "",
+  placeholderTextColor,
 }) => {
   return (
     <View style={[styles.inputFieldContainer, rootStyle]}>
@@ -28,6 +29,7 @@ const InputField = ({
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
+          placeholderTextColor={placeholderTextColor}
         />
 
         {icon && (
