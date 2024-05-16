@@ -22,7 +22,6 @@ import IconButton from "../components/ui/IconButton";
 import ComicImage from "../components/ui/ComicImage";
 
 const windowDimension = Dimensions.get("window");
-const screenDimension = Dimensions.get("screen");
 
 const ReadComicScreen = ({ route, navigation }) => {
   const { comicId, chapterId } = route.params;
@@ -214,7 +213,6 @@ const styles = StyleSheet.create({
     paddingBottom: Platform.OS === "android" ? 15 : 15,
     paddingHorizontal: 60,
   },
-  comicIMG: { width: windowDimension.width },
   backIcon: {
     position: "absolute",
     left: 14,

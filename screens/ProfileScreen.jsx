@@ -23,17 +23,32 @@ const ProfileScreen = ({ route, navigation }) => {
     <View style={styles.root}>
       {/* User infor block */}
       <View style={styles.profileContainer}>
-        <Text style={styles.userName}>{userState.fullName}</Text>
-        <Text style={styles.userEmail}>{userState.email}</Text>
-
-        <IconTextButton
-          title={"Profile & Security"}
-          icon={<AntDesign name="user" size={24} color="black" />}
-          rootStyle={styles.IconTextButtonRoot}
-          onPress={() => {
-            navigation.navigate("ProfileDetail");
-          }}
-        />
+        {userState.id !== null ? (
+          <>
+            <Text style={styles.userName}>{userState.fullName}</Text>
+            <Text style={styles.userEmail}>{userState.email}</Text>
+            <IconTextButton
+              title={"Profile & Security"}
+              icon={<AntDesign name="user" size={24} color="black" />}
+              rootStyle={styles.IconTextButtonRoot}
+              onPress={() => {
+                navigation.navigate("ProfileDetail");
+              }}
+            />
+          </>
+        ) : (
+          <>
+            <Text style={styles.userName}>GUESS</Text>
+            <IconTextButton
+              title={"Login"}
+              icon={<AntDesign name="user" size={24} color="black" />}
+              rootStyle={styles.IconTextButtonRoot}
+              onPress={() => {
+                navigation.navigate("Login");
+              }}
+            />
+          </>
+        )}
       </View>
 
       {/* Other controllers block */}
@@ -66,19 +81,22 @@ const ProfileScreen = ({ route, navigation }) => {
             console.log("Navigate to profile screen");
           }}
         />
-        <IconTextButton
-          title={"Logout"}
-          icon={
-            <Ionicons
-              name="exit"
-              size={24}
-              color="black"
-              style={{ transform: [{ translateX: 2.5 }] }}
-            />
-          }
-          rootStyle={styles.IconTextButtonRoot}
-          onPress={handleLogout}
-        />
+
+        {userState.id !== null && (
+          <IconTextButton
+            title={"Logout"}
+            icon={
+              <Ionicons
+                name="exit"
+                size={24}
+                color="black"
+                style={{ transform: [{ translateX: 2.5 }] }}
+              />
+            }
+            rootStyle={styles.IconTextButtonRoot}
+            onPress={handleLogout}
+          />
+        ) }
       </View>
     </View>
   );

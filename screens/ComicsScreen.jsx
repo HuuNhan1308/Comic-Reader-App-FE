@@ -20,17 +20,13 @@ import { getAllComics, searchComics } from "../services/ComicServices";
 import RowComic from "../components/Home/RowComic";
 import { FILTER_PROGRESS } from "../variables/filters/filter_progress";
 import useDebounce from "../hooks/useDebounce";
-
-const ErrorMessage = ({ message }) => {
-  return <Text style={{ flex: 1, alignSelf: "center" }}>{message}</Text>;
-};
+import ErrorMessage from "../components/ui/ErrorMessage";
 
 const ComicsScreen = ({ navigation, route }) => {
   const [activeFilter, setActiveFilter] = useState(FILTER_PROGRESS.ALL);
   const [searchValue, setSearchValue] = useState("");
   const debouncedValue = useDebounce(searchValue, 300);
   const [comics, setComics] = useState([]);
-  const [showComics, setShowComics] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -181,8 +177,10 @@ const ComicsScreen = ({ navigation, route }) => {
                     : require("../assets/book-icon.png")
                 }
                 comicName={item.name}
-                comicChapter={`Chapter ${item.lastestChapter.chapterNumber}`}
-                comicLastestUpdate={"1 day ago"}
+                comicChapter={`Chapter ${
+                  item.lastChapter?.chapterNumber || "N/A"
+                }`}
+                comicLastestUpdate={item.lastChapter?.createdAt || "N/A"}
                 genres={item.genres}
                 onPress={() => handleNavigateToComicDetail(item.id)}
               />

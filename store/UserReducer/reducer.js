@@ -6,6 +6,7 @@ import {
   SET_IS_MALE,
   CLEAR_ALL,
   SET_ALL_EXCEPT_EMAIL,
+  SET_BOOKMARKS,
 } from "./constants";
 
 export const initUserState = {
@@ -14,6 +15,7 @@ export const initUserState = {
   email: null,
   dateOfBirth: null,
   isMale: null,
+  bookmarks: [],
 };
 
 const UserReducer = (state, action) => {
@@ -42,6 +44,18 @@ const UserReducer = (state, action) => {
       return {
         ...state,
         ...action.payload,
+      };
+    case SET_ALL_EXCEPT_EMAIL:
+      return {
+        ...state,
+        fullName: action.payload.fullName,
+        dateOfBirth: action.payload.dateOfBirth,
+        isMale: action.payload.isMale,
+      };
+    case SET_BOOKMARKS:
+      return {
+        ...state,
+        bookmarks: action.payload,
       };
     case CLEAR_ALL:
       return { ...initUserState };

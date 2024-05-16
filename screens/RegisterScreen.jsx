@@ -27,7 +27,7 @@ const RegisterScreen = ({ navigation, route }) => {
   }
 
   return (
-    <ScrollView style={styles.screen}>
+    <ScrollView>
       <KeyboardAvoidingView
         behavior="position"
         style={styles.screen}
@@ -108,7 +108,7 @@ const RegisterScreen = ({ navigation, route }) => {
               pressed ? styles.buttonPressed : null,
             ]}
           >
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>Register</Text>
           </Pressable>
         </View>
       </KeyboardAvoidingView>
@@ -119,10 +119,7 @@ const RegisterScreen = ({ navigation, route }) => {
 export default RegisterScreen;
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-  },
-  rootContainer: { flex: 1, alignItems: "center" },
+  rootContainer: { alignItems: "center" },
   imageContainer: {
     marginTop: 40,
     alignItems: "center",

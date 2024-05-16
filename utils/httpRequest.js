@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://comic.pantech.vn";
+const BASE_URL = "http://comic.pantech.vn:8080";
 // const BASE_URL = "http://192.168.21.140:8080";
 
 const httpRequest = axios.create({

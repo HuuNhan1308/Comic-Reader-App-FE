@@ -8,8 +8,9 @@ import {
   ScrollView,
   FlatList,
   Platform,
+  Alert,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import colors from "../variables/colors/colors";
 import {
@@ -19,12 +20,17 @@ import {
 import ChapterHeader from "../components/Comics/ChapterHeader";
 import ComicInfor from "../components/Comics/ComicInfor";
 import { FILTER_CHAPTER } from "../variables/filters/filter_chapter";
+import { UserContext } from "../store/UserContext";
+import { bookmarkComic, getMyBookmakrs } from "../services/BookmarkServices";
+import { AuthContext } from "../store/AuthContext";
+import { SET_BOOKMARKS } from "../store/UserReducer/constants";
 
 const ComicDetailScreen = ({ route, navigation }) => {
   const { comicId } = route.params;
 
   const [filterChapter, setFilterChapter] = useState(FILTER_CHAPTER.OLDEST);
   const [isLoading, setIsLoading] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const [comic, setComic] = useState({
     id: 0,
     name: "",
@@ -39,6 +45,10 @@ const ComicDetailScreen = ({ route, navigation }) => {
     finished: false,
   });
 
+  const { userState, userDispatch } = useContext(UserContext);
+  const authCtx = useContext(AuthContext);
+
+  // Fetch comic chapter
   useEffect(() => {
     async function fetchComicChapters(comicId) {
       try {
@@ -59,6 +69,9 @@ const ComicDetailScreen = ({ route, navigation }) => {
     }
 
     fetchComicChapters(comicId);
+    setIsBookmarked(
+      userState.bookmarks.some((bookmark) => bookmark.comicId === comicId)
+    );
   }, []);
 
   function handleGoBack() {
@@ -93,6 +106,25 @@ const ComicDetailScreen = ({ route, navigation }) => {
           ),
         };
       });
+    }
+  }
+
+  async function handleToggleBookmark() {
+    try {
+      if (userState.id === null) {
+        Alert.alert("Failed", "You need to login to bookmark this comic");
+        return;
+      }
+
+      setIsBookmarked(!isBookmarked);
+      await bookmarkComic(comicId, authCtx.token);
+      const myBookmarksResponse = await getMyBookmakrs(authCtx.token);
+      userDispatch({
+        type: SET_BOOKMARKS,
+        payload: myBookmarksResponse.result,
+      });
+    } catch (e) {
+      console.log("handle toggle bookmark error: ", e);
     }
   }
 
@@ -133,6 +165,8 @@ const ComicDetailScreen = ({ route, navigation }) => {
           author={comic.author}
           description={comic.description}
           genres={comic.genres}
+          onPressIcon={handleToggleBookmark}
+          isBookmarked={isBookmarked}
         />
 
         <View style={styles.chapterContainer}>

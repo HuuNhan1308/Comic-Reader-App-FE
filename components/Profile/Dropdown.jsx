@@ -15,7 +15,6 @@ const Dropdown = ({
   title,
   onSelect,
   showsVerticalScrollIndicator = false,
-  dropdownStyle = {},
   gender,
   data,
 }) => {

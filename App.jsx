@@ -15,6 +15,7 @@ import { checkValidToken, refreshToken } from "./services/TokenServices";
 import UserContextProvider, { UserContext } from "./store/UserContext";
 import { getMyInformation } from "./services/UserServices";
 import { SET_ALL } from "./store/UserReducer/constants";
+import { getMyBookmakrs } from "./services/BookmarkServices";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -55,20 +56,23 @@ function Root() {
           if (checkNearExpiredToken(storedToken, 3600) === true) {
             const response = await refreshToken(storedToken);
             storedToken = response.result.token;
+            
           }
 
           // If token is valid then authenticate the user and set userContext
           console.log(storedToken);
           authCtx.authenticate(storedToken);
-          const res = await getMyInformation(storedToken);
+          const myInformationResponse = await getMyInformation(storedToken);
+          const myBookmarksResponse = await getMyBookmakrs(storedToken);
           userDispatch({
             type: SET_ALL,
             payload: {
-              id: res.result.id,
-              fullName: res.result.fullName,
-              email: res.result.email,
-              dateOfBirth: res.result.dateOfBirth,
-              isMale: res.result.male,
+              id: myInformationResponse.result.id,
+              fullName: myInformationResponse.result.fullName,
+              email: myInformationResponse.result.email,
+              dateOfBirth: myInformationResponse.result.dateOfBirth,
+              isMale: myInformationResponse.result.male,
+              bookmarks: myBookmarksResponse.result,
             },
           });
         } else console.log("No token in local device");

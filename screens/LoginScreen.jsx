@@ -18,6 +18,7 @@ import { AuthContext } from "../store/AuthContext";
 import { UserContext } from "../store/UserContext";
 import { SET_ALL } from "../store/UserReducer/constants";
 import { getMyInformation } from "../services/UserServices";
+import { getMyBookmakrs } from "../services/BookmarkServices";
 
 const LoginScreen = ({ navigation, route }) => {
   const [username, setUsername] = useState("");
@@ -33,6 +34,10 @@ const LoginScreen = ({ navigation, route }) => {
 
   function handleChangePassword(password) {
     setPassword(password);
+  }
+
+  function handleNavigateToHome() {
+    navigation.replace("App", { screen: "Home" });
   }
 
   async function handleLogin() {
@@ -51,6 +56,7 @@ const LoginScreen = ({ navigation, route }) => {
 
       //store user information to context + reducer
       const myInformationResponse = await getMyInformation(authObj.token);
+      const myBookmarksResponse = await getMyBookmakrs(authObj.token);
       userDispatch({
         type: SET_ALL,
         payload: {
@@ -59,11 +65,13 @@ const LoginScreen = ({ navigation, route }) => {
           email: myInformationResponse.result.email,
           dateOfBirth: myInformationResponse.result.dateOfBirth,
           isMale: myInformationResponse.result.male,
+          bookmarks: myBookmarksResponse.result,
         },
       });
-      navigation.replace("App", { screen: "Home" });
+      handleNavigateToHome();
       setIsTryingLogin(false);
     } catch (error) {
+      Alert.alert("Failed", `Login failed with error ${error}`);
       console.log("Fetc failed ", error);
     } finally {
       setIsTryingLogin(false);
@@ -81,6 +89,16 @@ const LoginScreen = ({ navigation, route }) => {
         style={styles.screen}
         contentContainerStyle={styles.rootContainer}
       >
+        <Pressable
+          style={({ pressed }) => [
+            styles.skipButton,
+            pressed ? styles.pressed : null,
+          ]}
+          onPress={handleNavigateToHome}
+        >
+          <Text style={{ fontSize: 20, fontWeight: "600" }}>Skip</Text>
+        </Pressable>
+
         {/* Logo */}
         <View style={styles.imageContainer}>
           <Image
@@ -199,5 +217,13 @@ const styles = StyleSheet.create({
     color: "#877099",
     fontWeight: "600",
     paddingVertical: 4,
+  },
+  skipButton: {
+    position: "absolute",
+    top: 60,
+    right: 40,
+  },
+  pressed: {
+    opacity: 0.5,
   },
 });

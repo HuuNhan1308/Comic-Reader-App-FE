@@ -10,15 +10,8 @@ const RowComic = ({
   comicName,
   comicChapter,
   comicLastestUpdate,
-  genres = ["genre1", "genre2"],
+  genres = [],
   onPress,
-  containerStyle,
-  imageStyle,
-  iconStyle,
-  onPressIcon,
-  onPressComic,
-  title,
-  chapter,
 }) => {
   return (
     <View>
@@ -42,7 +35,7 @@ const RowComic = ({
           <View style={[styles.row, styles.genreContainer]}>
             {genres &&
               genres
-                .splice(0, 3)
+                .slice(0, 3)
                 .map((genre) => (
                   <Genre genreName={genre.name} key={genre.id} />
                 ))}

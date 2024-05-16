@@ -1,8 +1,17 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import React, { useState } from "react";
 import colors from "../../variables/colors/colors";
+import { AntDesign } from "@expo/vector-icons";
 
-const ComicInfor = ({ name, author, view, genres, description }) => {
+const ComicInfor = ({
+  name,
+  author,
+  view,
+  genres,
+  description,
+  onPressIcon,
+  isBookmarked,
+}) => {
   const [showMore, setShowMore] = useState(false);
 
   function handleShowMore() {
@@ -11,7 +20,28 @@ const ComicInfor = ({ name, author, view, genres, description }) => {
 
   return (
     <View style={styles.comicInforContainer}>
-      <Text style={[styles.comicName, styles.title]}>{name}</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Text style={[styles.comicName, styles.title]}>{name}</Text>
+
+        <AntDesign
+          name="hearto"
+          size={20}
+          color="black"
+          onPress={onPressIcon}
+          suppressHighlighting={true}
+          style={{
+            padding: 6,
+            backgroundColor: isBookmarked ? "#F0B357" : "white",
+            borderRadius: 100,
+          }}
+        />
+      </View>
       <Text style={styles.comicText}>Author: {author}</Text>
       <Text style={styles.comicText}>View: {view}</Text>
 

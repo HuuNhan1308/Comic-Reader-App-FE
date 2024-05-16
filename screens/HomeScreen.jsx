@@ -1,16 +1,25 @@
-import { ScrollView, StyleSheet, Image, View, FlatList } from "react-native";
-import React, { useEffect, useState } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Image,
+  View,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
+import React, { useContext, useEffect, useState } from "react";
 import Header from "../components/Home/Header";
 import SquareComic from "../components/Home/SquareComic";
 import { getAllComics } from "../services/ComicServices";
 import RectangleCategory from "../components/Home/RectangleCategory";
 import RowComic from "../components/Home/RowComic";
+import { UserContext } from "../store/UserContext";
 
 const HomeScreen = ({ navigation, route }) => {
   const [comics, setComics] = useState([]);
   const [newComics, setNewComics] = useState([]);
   const [recommendedComics, setRecommendedComics] = useState([]);
   const [hotComics, setHotComics] = useState([]);
+  const { userState } = useContext(UserContext);
 
   function handleNavigateToComicDetail(comicId) {
     navigation.navigate("ComicDetail", { comicId });
@@ -27,7 +36,7 @@ const HomeScreen = ({ navigation, route }) => {
     };
 
     fetchApi();
-  }, []);
+  }, [userState.bookmarks]);
 
   return (
     <ScrollView
@@ -54,30 +63,36 @@ const HomeScreen = ({ navigation, route }) => {
         />
 
         {/* Render comic */}
-        <FlatList
-          data={newComics}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <SquareComic
-              imageSrc={
-                comics.length > 0
-                  ? {
-                      uri: item.thumbnailUrl + "?time=" + new Date(),
-                    }
-                  : require("../assets/book-icon.png")
-              }
-              containerStyle={styles.comicContainer}
-              iconStyle={styles.comicBookmarkIcon}
-              onPressIcon={() => console.log("pressicon")}
-              onPressComic={() => handleNavigateToComicDetail(item.id)}
-              title={item.name ? item.name : "fallback"}
-              chapter={`Chapter ${item.lastestChapter.chapterNumber}`}
-            />
-          )}
-          numColumns={3}
-          scrollEnabled={false}
-          contentContainerStyle={styles.listComicsContainer}
-        />
+        {newComics.length ? (
+          <FlatList
+            data={newComics}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <SquareComic
+                imageSrc={
+                  comics.length > 0
+                    ? {
+                        uri: item.thumbnailUrl + "?time=" + new Date(),
+                      }
+                    : require("../assets/book-icon.png")
+                }
+                containerStyle={styles.comicContainer}
+                onPressIcon={() => console.log("pressicon")}
+                onPressComic={() => handleNavigateToComicDetail(item.id)}
+                title={item.name ? item.name : "fallback"}
+                chapter={`Chapter ${item.lastChapter?.chapterNumber}`}
+                isBookmarked={userState.bookmarks.some(
+                  (bookmark) => bookmark.comicId === item.id
+                )}
+              />
+            )}
+            numColumns={3}
+            scrollEnabled={false}
+            contentContainerStyle={styles.listComicsContainer}
+          />
+        ) : (
+          <ActivityIndicator size="large" color="grey" />
+        )}
       </View>
 
       {/* Recommended Comics block */}
@@ -91,28 +106,34 @@ const HomeScreen = ({ navigation, route }) => {
         />
 
         {/* Render comic */}
-        <FlatList
-          data={recommendedComics}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item, index }) => (
-            <SquareComic
-              imageSrc={
-                comics.length > 0
-                  ? { uri: item.thumbnailUrl + "?time=" + new Date() }
-                  : require("../assets/book-icon.png")
-              }
-              containerStyle={styles.comicContainer}
-              iconStyle={styles.comicBookmarkIcon}
-              onPressIcon={() => console.log("pressicon")}
-              onPressComic={() => handleNavigateToComicDetail(item.id)}
-              title={item.name ? item.name : "fallbacks"}
-              chapter={`Chapter ${item.lastestChapter.chapterNumber}`}
-            />
-          )}
-          numColumns={3}
-          scrollEnabled={false}
-          contentContainerStyle={styles.listComicsContainer}
-        />
+        {recommendedComics.length ? (
+          <FlatList
+            data={recommendedComics}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item, index }) => (
+              <SquareComic
+                imageSrc={
+                  comics.length > 0
+                    ? { uri: item.thumbnailUrl + "?time=" + new Date() }
+                    : require("../assets/book-icon.png")
+                }
+                containerStyle={styles.comicContainer}
+                onPressIcon={() => console.log("pressicon")}
+                onPressComic={() => handleNavigateToComicDetail(item.id)}
+                title={item.name ? item.name : "fallbacks"}
+                chapter={`Chapter ${item.lastChapter?.chapterNumber}`}
+                isBookmarked={userState.bookmarks.some(
+                  (bookmark) => bookmark.comicId === item.id
+                )}
+              />
+            )}
+            numColumns={3}
+            scrollEnabled={false}
+            contentContainerStyle={styles.listComicsContainer}
+          />
+        ) : (
+          <ActivityIndicator size="large" color="grey" />
+        )}
       </View>
 
       {/* Category block */}
@@ -161,22 +182,28 @@ const HomeScreen = ({ navigation, route }) => {
         />
 
         {/* Render Row comic */}
-        <FlatList
-          data={hotComics}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item, index }) => (
-            <RowComic
-              imageSrc={{ uri: item.thumbnailUrl }}
-              comicName={item.name}
-              comicChapter={`Chapter ${item.lastestChapter.chapterNumber}`}
-              comicLastestUpdate={"1 day ago"}
-              genres={item.genres}
-              onPress={() => handleNavigateToComicDetail(item.id)}
-            />
-          )}
-          scrollEnabled={false}
-          contentContainerStyle={styles.listComicsContainer}
-        />
+        {comics.length >= 0 ? (
+          <FlatList
+            data={hotComics}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item, index }) => (
+              <RowComic
+                imageSrc={{ uri: item.thumbnailUrl }}
+                comicName={item.name}
+                comicChapter={`Chapter ${item.lastChapter?.chapterNumber}`}
+                genres={item.genres}
+                comicLastestUpdate={
+                  item.lastChapter ? item.lastChapter.createdAt : "N/A"
+                }
+                onPress={() => handleNavigateToComicDetail(item.id)}
+              />
+            )}
+            scrollEnabled={false}
+            contentContainerStyle={styles.listComicsContainer}
+          />
+        ) : (
+          <ActivityIndicator size="large" color="grey" />
+        )}
       </View>
     </ScrollView>
   );

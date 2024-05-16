@@ -17,6 +17,7 @@ const SquareComic = ({
   onPressComic,
   title,
   chapter,
+  isBookmarked,
 }) => {
   return (
     <View style={[styles.comicContainer, containerStyle ?? null]}>
@@ -37,6 +38,11 @@ const SquareComic = ({
               color="black"
               onPress={onPressIcon}
               suppressHighlighting={true}
+              style={{
+                padding: 4,
+                backgroundColor: isBookmarked ? "#F0B357" : "white",
+                borderRadius: 100,
+              }}
             />
           </View>
         </ImageBackground>
