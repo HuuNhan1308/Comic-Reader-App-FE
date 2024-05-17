@@ -14,6 +14,7 @@ import React, { useEffect, useState } from "react";
 import InputField from "../components/Profile/InputField";
 import colors from "../variables/colors/colors";
 import { Feather } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import OutlineButton from "../components/ui/OutlineButton";
 import Header from "../components/Home/Header";
 import { getAllComics, searchComics } from "../services/ComicServices";
@@ -29,6 +30,10 @@ const ComicsScreen = ({ navigation, route }) => {
   const [comics, setComics] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  function handleNavigateToChatScreen() {
+    navigation.navigate("ChatGPT");
+  }
 
   function handleNavigateToFilter() {
     navigation.navigate("Filter");
@@ -120,6 +125,17 @@ const ComicsScreen = ({ navigation, route }) => {
           ]}
         >
           <Feather name="settings" size={30} color="black" />
+        </Pressable>
+
+        <Pressable
+          onPress={handleNavigateToChatScreen}
+          style={({ pressed }) => [
+            styles.settingIcon,
+            { marginLeft: 4 },
+            pressed ? styles.pressed : null,
+          ]}
+        >
+          <AntDesign name="wechat" size={30} color="#4A6358" />
         </Pressable>
       </View>
 
