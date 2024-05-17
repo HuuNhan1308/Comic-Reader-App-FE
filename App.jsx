@@ -56,7 +56,6 @@ function Root() {
           if (checkNearExpiredToken(storedToken, 3600) === true) {
             const response = await refreshToken(storedToken);
             storedToken = response.result.token;
-            
           }
 
           // If token is valid then authenticate the user and set userContext
@@ -93,7 +92,8 @@ function Root() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={authCtx.isAuthenticated ? "App" : "Login"}
+        // initialRouteName={authCtx.isAuthenticated ? "App" : "Login"}
+        // initialRouteName="Register"
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Login" component={LoginScreen} />

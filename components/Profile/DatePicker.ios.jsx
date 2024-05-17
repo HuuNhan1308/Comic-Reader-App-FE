@@ -13,7 +13,7 @@ import colors from "../../variables/colors/colors";
 import { formatDate } from "../../utils/DateUtil";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-const DatePicker = ({ title, value, onConfirm }) => {
+const DatePicker = ({ title, value, onConfirm, inputStyle }) => {
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date(value));
 

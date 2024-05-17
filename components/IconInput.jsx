@@ -10,17 +10,21 @@ const IconInput = ({
   icon,
   secureTextEntry = false,
   inputStyle = null,
+  customeInput = null,
 }) => {
   return (
     <View style={styles.inputContainer}>
       <View style={styles.iconContainer}>{icon ?? <></>}</View>
-      <TextInput
-        style={[styles.input, inputStyle]}
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder ?? ""}
-        secureTextEntry={secureTextEntry}
-      />
+
+      {customeInput || (
+        <TextInput
+          style={[styles.input, inputStyle]}
+          value={value}
+          onChangeText={onChangeText}
+          placeholder={placeholder ?? ""}
+          secureTextEntry={secureTextEntry}
+        />
+      )}
     </View>
   );
 };
@@ -31,8 +35,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginTop: Platform.OS === "android" ? 20 : 30,
     flexDirection: "row",
-    width: "80%",
     alignItems: "center",
+    flex: 1,
   },
   iconContainer: {
     borderRadius: 100,

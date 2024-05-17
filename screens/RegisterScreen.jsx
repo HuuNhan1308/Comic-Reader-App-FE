@@ -6,24 +6,59 @@ import {
   Pressable,
   KeyboardAvoidingView,
   ScrollView,
+  Platform,
+  TextInput,
 } from "react-native";
 import React, { useState } from "react";
 import IconInput from "../components/IconInput";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import colors from "../variables/colors/colors";
+import Dropdown from "../components/Profile/Dropdown";
+import DatePicker from "../components/Profile/DatePicker";
+import SelectDropdown from "react-native-select-dropdown";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const RegisterScreen = ({ navigation, route }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function handleChangeEmail(event) {
-    setEmail(event.target.value);
-  }
+  const [registerObj, setRegisterObj] = useState({
+    username: "",
+    password: "",
+    email: "",
+    fullName: "",
+    dateOfBirth: new Date(),
+    isMale: false,
+  });
+  const Genders = ["Male", "Female"];
 
-  function handleChangePassword(event) {
-    setPassword(event.target.value);
+  function handleChangeRegisterObj(event, type) {
+    console.log(event, type);
+    switch (type) {
+      case "username":
+        setRegisterObj({ ...registerObj, username: event });
+        break;
+      case "password":
+        setRegisterObj({ ...registerObj, password: event });
+        break;
+      case "email":
+        setRegisterObj({ ...registerObj, email: event });
+        break;
+      case "fullName":
+        setRegisterObj({ ...registerObj, fullName: event });
+        break;
+      case "dateOfBirth":
+        setRegisterObj({ ...registerObj, dateOfBirth: event });
+        break;
+      case "isMale":
+        setRegisterObj({ ...registerObj, isMale: event });
+        break;
+      default:
+    }
   }
 
   return (
@@ -57,46 +92,108 @@ const RegisterScreen = ({ navigation, route }) => {
           </View>
         </View>
 
-        <IconInput
-          value={email}
-          onChange={handleChangeEmail}
-          placeholder={"Email"}
-          icon={<AntDesign name="user" size={24} color="black" />}
-          inputStyle={styles.inputStyle}
-        />
+        <View style={{ width: "80%" }}>
+          <IconInput
+            value={registerObj.username}
+            onChangeText={(e) => handleChangeRegisterObj(e, "username")}
+            placeholder={"Username"}
+            icon={<AntDesign name="user" size={24} color="black" />}
+            inputStyle={styles.inputStyle}
+          />
 
-        <IconInput
-          value={email}
-          onChange={handleChangeEmail}
-          placeholder={"Full name"}
-          icon={<Ionicons name="information" size={24} color="black" />}
-          inputStyle={styles.inputStyle}
-        />
+          <IconInput
+            value={registerObj.email}
+            onChangeText={(e) => handleChangeRegisterObj(e, "email")}
+            placeholder={"Email"}
+            icon={<Entypo name="email" size={24} color="black" />}
+            inputStyle={styles.inputStyle}
+          />
 
-        <IconInput
-          value={email}
-          onChange={handleChangeEmail}
-          placeholder={"Date of birth"}
-          icon={<Fontisto name="date" size={24} color="black" />}
-          inputStyle={styles.inputStyle}
-        />
+          <IconInput
+            value={registerObj.password}
+            onChangeText={(e) => handleChangeRegisterObj(e, "password")}
+            placeholder={"Password"}
+            icon={<AntDesign name="key" size={24} color="black" />}
+            secureTextEntry={true}
+            inputStyle={styles.inputStyle}
+          />
 
-        <IconInput
-          value={password}
-          onChange={handleChangePassword}
-          placeholder={"Password"}
-          icon={<AntDesign name="key" size={24} color="black" />}
-          secureTextEntry={true}
-          inputStyle={styles.inputStyle}
-        />
+          <IconInput
+            value={registerObj.fullName}
+            onChangeText={(e) => handleChangeRegisterObj(e, "fullName")}
+            placeholder={"Full name"}
+            icon={<Ionicons name="information" size={24} color="black" />}
+            inputStyle={styles.inputStyle}
+          />
 
-        <IconInput
-          value={email}
-          onChange={handleChangeEmail}
-          placeholder={"Email"}
-          icon={<AntDesign name="user" size={24} color="black" />}
-          inputStyle={styles.inputStyle}
-        />
+          {/* <DatePicker
+          title={"Date of birth"}
+          value={registerObj.dateOfBirth}
+          onConfirm={(e) => handleChangeRegisterObj(e, "dateOfBirth")}
+        /> */}
+
+          <IconInput
+            icon={<Fontisto name="date" size={24} color="black" />}
+            customeInput={
+              <DatePicker
+                value={registerObj.dateOfBirth}
+                onConfirm={(e, selectedDate) =>
+                  handleChangeRegisterObj(selectedDate, "dateOfBirth")
+                }
+                inputStyle={styles.datePickerInput}
+              />
+            }
+          />
+
+          <IconInput
+            value={registerObj.isMale}
+            icon={
+              <FontAwesome
+                name="transgender"
+                size={24}
+                color="black"
+                style={{ paddingHorizontal: 2 }}
+              />
+            }
+            customeInput={
+              <SelectDropdown
+                data={Genders}
+                onSelect={(e) => handleChangeRegisterObj(e, "isMale")}
+                renderButton={(selectedItem, isOpened) => {
+                  return (
+                    <View style={styles.dropDownInputContainer}>
+                      <TextInput
+                        style={styles.dropDownInput}
+                        value={selectedItem || "Choose gender"}
+                        editable={false}
+                      />
+                      <Icon
+                        name={isOpened ? "chevron-up" : "chevron-down"}
+                        color={"black"}
+                        size={24}
+                        style={styles.dropDownIcon}
+                      />
+                    </View>
+                  );
+                }}
+                renderItem={(item, index, isSelected) => {
+                  return (
+                    <View
+                      style={{
+                        ...styles.dropDownItem,
+                        ...(isSelected && { backgroundColor: "#D2D9DF" }),
+                      }}
+                    >
+                      <Text style={styles.dropDownItemText}>{item}</Text>
+                    </View>
+                  );
+                }}
+                showsVerticalScrollIndicator={false}
+                dropdownStyle={styles.dropDownMenuStyle}
+              />
+            }
+          />
+        </View>
 
         <View>
           <Pressable
@@ -173,5 +270,73 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     paddingVertical: 4,
   },
-  inputStyle: {},
+
+  //dropdown
+  dropDownContainer: { paddingHorizontal: 30 },
+  dropDownInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderWidth: 1,
+    borderRadius: 1000,
+    flex: 1,
+  },
+  dropDownInput: {
+    paddingVertical: Platform.OS === "android" ? 6 : 12,
+    paddingHorizontal: 12,
+    fontSize: 16,
+    color: "black",
+    borderColor: colors.white,
+    borderRadius: 14,
+    flex: 1,
+  },
+  dropDownIcon: {
+    marginRight: 10,
+  },
+  dropDownButtonContainer: {
+    paddingVertical: Platform.OS === "android" ? 8 : 14,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: colors.white,
+    borderRadius: 14,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  dropDownButtonText: { fontSize: 16, color: colors.white },
+  dropDownMenuStyle: {
+    backgroundColor: "#E9ECEF",
+    borderRadius: 8,
+    paddingVertical: 12,
+  },
+  dropDownItem: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+  },
+  dropDownItemText: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: "500",
+    color: "black",
+  },
+  iconContainer: {
+    borderRadius: 100,
+    backgroundColor: colors.purple500,
+    padding: 6,
+    marginRight: 10,
+  },
+
+  //Date picker
+  datePickerInput: {
+    paddingVertical: Platform.OS === "android" ? 6 : 12,
+    borderWidth: 1,
+    fontSize: 16,
+    color: "black",
+    borderColor: colors.black,
+    borderRadius: 10000,
+    flex: 1,
+  },
 });

@@ -115,20 +115,22 @@ const LoginScreen = ({ navigation, route }) => {
         </View>
 
         {/* Form */}
-        <IconInput
-          value={username}
-          onChangeText={handleChangeUsername}
-          placeholder={"Username"}
-          icon={<AntDesign name="user" size={24} color="black" />}
-        />
+        <View style={{ width: "80%" }}>
+          <IconInput
+            value={username}
+            onChangeText={handleChangeUsername}
+            placeholder={"Username"}
+            icon={<AntDesign name="user" size={24} color="black" />}
+          />
 
-        <IconInput
-          value={password}
-          onChangeText={handleChangePassword}
-          placeholder={"Password"}
-          icon={<AntDesign name="key" size={24} color="black" />}
-          secureTextEntry={true}
-        />
+          <IconInput
+            value={password}
+            onChangeText={handleChangePassword}
+            placeholder={"Password"}
+            icon={<AntDesign name="key" size={24} color="black" />}
+            secureTextEntry={true}
+          />
+        </View>
 
         <View>
           <Pressable

@@ -12,7 +12,7 @@ import colors from "../../variables/colors/colors";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { formatDate } from "../../utils/DateUtil";
 
-const DatePicker = ({ title, value, onConfirm }) => {
+const DatePicker = ({ title, value, onConfirm, inputStyle }) => {
   const showDatePicker = () => {
     DateTimePickerAndroid.open({
       value: new Date(value),
@@ -23,7 +23,7 @@ const DatePicker = ({ title, value, onConfirm }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      {title && <Text style={styles.title}>{title}</Text>}
 
       <Pressable
         style={({ pressed }) => [
@@ -33,7 +33,7 @@ const DatePicker = ({ title, value, onConfirm }) => {
         onPress={showDatePicker}
       >
         <TextInput
-          style={styles.input}
+          style={[styles.input, inputStyle]}
           value={formatDate(value)}
           editable={false}
         />
@@ -45,7 +45,7 @@ const DatePicker = ({ title, value, onConfirm }) => {
 export default DatePicker;
 
 const styles = StyleSheet.create({
-  container: { paddingHorizontal: 30 },
+  container: { flex: 1 },
   title: {
     fontSize: 20,
     fontWeight: "600",
@@ -54,7 +54,10 @@ const styles = StyleSheet.create({
     letterSpacing: 1.8,
     marginTop: 40,
   },
-  inputContainer: { flexDirection: "row", alignItems: "center" },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   input: {
     paddingVertical: Platform.OS === "android" ? 6 : 12,
     paddingHorizontal: 12,
@@ -63,7 +66,6 @@ const styles = StyleSheet.create({
     color: colors.white,
     borderColor: colors.white,
     borderRadius: 14,
-    flex: 1,
   },
   pressed: {
     opacity: 0.8,
