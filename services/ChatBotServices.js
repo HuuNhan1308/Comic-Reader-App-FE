@@ -1,6 +1,5 @@
 import * as httpRequest from "../utils/httpRequest";
-
-const key = process.env.CHAT_GPT_KEY;
+import { CHAT_GPT_KEY } from "@env";
 
 // get chapter comments by chapterId
 export const gptFindComic = async (token, question) => {
@@ -15,7 +14,7 @@ export const gptFindComic = async (token, question) => {
       "/api/gpt/findComics",
       {
         question,
-        key,
+        key: CHAT_GPT_KEY,
       },
       config
     );

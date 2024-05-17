@@ -19,6 +19,7 @@ import ChatBox from "../components/Comments/ChatBox";
 import { UserContext } from "../store/UserContext";
 import { gptFindComic } from "../services/ChatBotServices";
 import { AuthContext } from "../store/AuthContext";
+import { CHAT_GPT_KEY } from "@env";
 
 const ChatGPTScreen = () => {
   const [question, setQuestion] = useState("");
@@ -40,8 +41,6 @@ const ChatGPTScreen = () => {
       setIsLoading(true);
       const gptResponse = await gptFindComic(authCtx.token, question);
       const answer = gptResponse.result;
-
-      console.log("GPT COMICS RESPONSE", gptResponse);
 
       setMessages((prev) => [
         ...prev,
