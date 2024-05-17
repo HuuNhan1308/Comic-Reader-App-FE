@@ -92,8 +92,7 @@ function Root() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        // initialRouteName={authCtx.isAuthenticated ? "App" : "Login"}
-        // initialRouteName="Register"
+        initialRouteName={authCtx.isAuthenticated ? "App" : "Login"}
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Login" component={LoginScreen} />

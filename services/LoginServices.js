@@ -15,3 +15,14 @@ export const login = async (username, password) => {
     console.log("Error at Login Service: ", e);
   }
 };
+
+export const register = async (data) => {
+  try {
+    const res = await http.post("/api/auth/register", data, {
+      withCredentials: true,
+    });
+    return res;
+  } catch (e) {
+    console.log("Error at Login Service: ", e);
+  }
+};

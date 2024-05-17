@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1.8,
     marginTop: 40,
   },
-  dropDownContainer: { paddingHorizontal: 30 },
+  dropDownContainer: {},
   inputContainer: { flexDirection: "row", alignItems: "center" },
   input: {
     paddingVertical: Platform.OS === "android" ? 6 : 12,

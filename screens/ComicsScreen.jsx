@@ -30,6 +30,10 @@ const ComicsScreen = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  function handleNavigateToFilter() {
+    navigation.navigate("Filter");
+  }
+
   function handleNavigateToComicDetail(comicId) {
     navigation.navigate("ComicDetail", { comicId });
   }
@@ -109,9 +113,7 @@ const ComicsScreen = ({ navigation, route }) => {
         />
 
         <Pressable
-          onPress={() => {
-            console.log("Navigate to filter screen");
-          }}
+          onPress={handleNavigateToFilter}
           style={({ pressed }) => [
             styles.settingIcon,
             pressed ? styles.pressed : null,

@@ -10,7 +10,6 @@ import BookmarkScreen from "../screens/BookmarkScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import colors from "../variables/colors/colors";
 
-const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const MainScreenNavigator = () => {

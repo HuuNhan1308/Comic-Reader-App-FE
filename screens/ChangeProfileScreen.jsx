@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   ScrollView,
+  View,
 } from "react-native";
 import React, { useContext, useState, useEffect } from "react";
 import colors from "../variables/colors/colors";
@@ -93,26 +94,28 @@ const ChangeProfileScreen = ({ navigation, route }) => {
         behavior="position"
         contentContainerStyle={styles.root}
       >
-        <InputField
-          title={"Full name"}
-          value={fullName}
-          onChangeText={(fullname) => {
-            setFullName(fullname);
-          }}
-        />
+        <View style={{ paddingHorizontal: 30 }}>
+          <InputField
+            title={"Full name"}
+            value={fullName}
+            onChangeText={(fullname) => {
+              setFullName(fullname);
+            }}
+          />
 
-        <DatePicker
-          title={"Date of birth"}
-          value={dateOfBirth}
-          onConfirm={handleSelectDate}
-        />
+          <DatePicker
+            title={"Date of birth"}
+            value={dateOfBirth}
+            onConfirm={handleSelectDate}
+          />
 
-        <Dropdown
-          title={"Gender"}
-          data={Genders}
-          onSelect={handleSelectGender}
-          gender={gender}
-        />
+          <Dropdown
+            title={"Gender"}
+            data={Genders}
+            onSelect={handleSelectGender}
+            gender={gender}
+          />
+        </View>
 
         <Pressable
           onPress={handleSubmitChangeProfile}

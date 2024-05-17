@@ -8,6 +8,8 @@ import {
   ScrollView,
   Platform,
   TextInput,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import IconInput from "../components/IconInput";
@@ -21,10 +23,11 @@ import Dropdown from "../components/Profile/Dropdown";
 import DatePicker from "../components/Profile/DatePicker";
 import SelectDropdown from "react-native-select-dropdown";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { formatDate } from "../utils/DateUtil";
+import { register } from "../services/LoginServices";
 
 const RegisterScreen = ({ navigation, route }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const [registerObj, setRegisterObj] = useState({
     username: "",
@@ -37,7 +40,6 @@ const RegisterScreen = ({ navigation, route }) => {
   const Genders = ["Male", "Female"];
 
   function handleChangeRegisterObj(event, type) {
-    console.log(event, type);
     switch (type) {
       case "username":
         setRegisterObj({ ...registerObj, username: event });
@@ -55,10 +57,43 @@ const RegisterScreen = ({ navigation, route }) => {
         setRegisterObj({ ...registerObj, dateOfBirth: event });
         break;
       case "isMale":
-        setRegisterObj({ ...registerObj, isMale: event });
+        setRegisterObj({
+          ...registerObj,
+          isMale: event === Genders[0] ? true : false,
+        });
         break;
       default:
     }
+  }
+
+  async function handleSubmitRegisterForm() {
+    const data = {
+      ...registerObj,
+      dateOfBirth: formatDate(registerObj.dateOfBirth),
+    };
+
+    try {
+      setIsLoading(true);
+      const registerResponse = await register(data);
+
+      //if login failed --> show alert
+      if (registerResponse.code === 4003) {
+        Alert.alert(registerResponse.message);
+        return;
+      }
+
+      //if login success ---> show alert
+      Alert.alert("Success", registerResponse.message);
+      navigation.replace("Login");
+    } catch (e) {
+      console.log("Error at Register Screen: ", e);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  if (isLoading) {
+    return <ActivityIndicator size="large" color="black" style={{ flex: 1 }} />;
   }
 
   return (
@@ -126,12 +161,6 @@ const RegisterScreen = ({ navigation, route }) => {
             inputStyle={styles.inputStyle}
           />
 
-          {/* <DatePicker
-          title={"Date of birth"}
-          value={registerObj.dateOfBirth}
-          onConfirm={(e) => handleChangeRegisterObj(e, "dateOfBirth")}
-        /> */}
-
           <IconInput
             icon={<Fontisto name="date" size={24} color="black" />}
             customeInput={
@@ -197,9 +226,7 @@ const RegisterScreen = ({ navigation, route }) => {
 
         <View>
           <Pressable
-            onPress={() => {
-              console.log("Press");
-            }}
+            onPress={handleSubmitRegisterForm}
             style={({ pressed }) => [
               styles.button,
               pressed ? styles.buttonPressed : null,
@@ -291,7 +318,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dropDownIcon: {
-    marginRight: 10,
+    paddingHorizontal: 10,
   },
   dropDownButtonContainer: {
     paddingVertical: Platform.OS === "android" ? 8 : 14,

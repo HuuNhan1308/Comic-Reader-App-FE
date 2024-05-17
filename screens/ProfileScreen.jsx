@@ -9,13 +9,15 @@ import { AuthContext } from "../store/AuthContext";
 import { UserContext } from "../store/UserContext";
 import colors from "../variables/colors/colors";
 import IconTextButton from "../components/Profile/IconTextButton";
+import { CLEAR_ALL } from "../store/UserReducer/constants";
 
 const ProfileScreen = ({ route, navigation }) => {
   const authCtx = useContext(AuthContext);
-  const { userState } = useContext(UserContext);
+  const { userState, userDispatch } = useContext(UserContext);
 
   function handleLogout() {
     authCtx.logout();
+    userDispatch({ type: CLEAR_ALL });
     navigation.replace("Login");
   }
 
@@ -96,7 +98,7 @@ const ProfileScreen = ({ route, navigation }) => {
             rootStyle={styles.IconTextButtonRoot}
             onPress={handleLogout}
           />
-        ) }
+        )}
       </View>
     </View>
   );

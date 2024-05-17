@@ -49,7 +49,7 @@ const InputField = ({
 export default InputField;
 
 const styles = StyleSheet.create({
-  inputFieldContainer: { paddingHorizontal: 30 },
+  inputFieldContainer: {},
   title: {
     fontSize: 20,
     fontWeight: "600",

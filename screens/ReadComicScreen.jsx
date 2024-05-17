@@ -144,6 +144,7 @@ const ReadComicScreen = ({ route, navigation }) => {
           </Text>
         </View>
 
+        {/* Read comic */}
         {isLoading ? (
           <ActivityIndicator size="large" color="grey" style={{ flex: 1 }} />
         ) : (

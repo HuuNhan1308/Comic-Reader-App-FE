@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   FlatList,
   ScrollView,
+  Platform,
 } from "react-native";
 import React, { useState, useRef, useContext, useEffect } from "react";
 import InputField from "../components/Profile/InputField";
@@ -35,7 +36,7 @@ const RowComicAnimated = ({
     }),
     onPanResponderRelease: () => {
       //remove bookmark
-      if (Math.abs(pan.x._value) > 200) {
+      if (Math.abs(pan.x._value) > Platform.OS === "android" ? 200 : 100) {
         handleRemoveItem(item.comicId);
       }
 
@@ -76,6 +77,10 @@ const BookmarkScreen = ({ navigation, route }) => {
   const { userState, userDispatch } = useContext(UserContext);
   const [bookmarks, setBookmarks] = useState([...userState.bookmarks]);
   const authCtx = useContext(AuthContext);
+
+  function handleNavigateToFilter() {
+    navigation.navigate("Filter");
+  }
 
   function handleNavigateToComicDetail(comicId) {
     navigation.navigate("ComicDetail", { comicId });
@@ -126,9 +131,7 @@ const BookmarkScreen = ({ navigation, route }) => {
         />
 
         <Pressable
-          onPress={() => {
-            console.log("Navigate to filter screen");
-          }}
+          onPress={handleNavigateToFilter}
           style={({ pressed }) => [
             styles.settingIcon,
             pressed ? styles.pressed : null,

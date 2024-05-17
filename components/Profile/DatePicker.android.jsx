@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
+    flex: 1,
   },
   input: {
     paddingVertical: Platform.OS === "android" ? 6 : 12,
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     borderColor: colors.white,
     borderRadius: 14,
+    flex: 1,
   },
   pressed: {
     opacity: 0.8,

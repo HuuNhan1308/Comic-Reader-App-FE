@@ -32,11 +32,11 @@ const DatePicker = ({ title, value, onConfirm, inputStyle }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title} on IOS</Text>
+      {title && <Text style={styles.title}>{title} on IOS</Text>}
 
       <View style={styles.inputContainer}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, inputStyle]}
           value={formatDate(value)}
           editable={false}
           onPressOut={showDatePicker}
@@ -55,7 +55,7 @@ const DatePicker = ({ title, value, onConfirm, inputStyle }) => {
             value={selectedDate}
             mode="date"
             display="spinner"
-            textColor="white"
+            textColor="black"
           />
           <View style={styles.pickerControllersContainer}>
             <Button title="Confirm" onPress={handleConfirmSelectedDate} />
@@ -70,7 +70,7 @@ const DatePicker = ({ title, value, onConfirm, inputStyle }) => {
 export default DatePicker;
 
 const styles = StyleSheet.create({
-  container: { paddingHorizontal: 30 },
+  container: { flex: 1 },
   title: {
     fontSize: 20,
     fontWeight: "600",

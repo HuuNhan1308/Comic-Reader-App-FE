@@ -9,6 +9,7 @@ import ComicDetailScreen from "../screens/ComicDetailScreen";
 import ReadComicScreen from "../screens/ReadComicScreen";
 import ChooseChaptersScreen from "../screens/ChooseChaptersScreen";
 import CommentsScreen from "../screens/CommentsScreen";
+import FilterScreen from "../screens/FilterScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -73,6 +74,20 @@ const AppScreenNavigator = () => {
           name="Comments"
           component={CommentsScreen}
           options={{ title: "Comments" }}
+        />
+        <Stack.Screen
+          name="Filter"
+          component={FilterScreen}
+          options={{
+            title: "Filter",
+            headerTintColor: "#231f20",
+            headerTitleStyle: {
+              color: colors.white,
+              fontSize: 28,
+              fontWeight: "600",
+              letterSpacing: 1.5,
+            },
+          }}
         />
       </Stack.Group>
     </Stack.Navigator>
