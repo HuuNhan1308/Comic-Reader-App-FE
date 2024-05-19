@@ -19,7 +19,7 @@ const FilterScreen = ({ route, navigation }) => {
   const [genres, setGeneres] = useState([]);
   const [activeGenres, setActiveGenres] = useState([]);
 
-  const { prevPage } = route.params;
+  // const { prevPage } = route.params;
 
   function handleToggleActiveGenres(id) {
     if (activeGenres.includes(id)) {
@@ -31,7 +31,7 @@ const FilterScreen = ({ route, navigation }) => {
 
   function handleApplyFilter() {
     navigation.navigate({
-      name: prevPage,
+      name: route.params?.prevPage || "Comics",
       params: { activeGenres },
       merge: true,
     });

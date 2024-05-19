@@ -37,7 +37,7 @@ const ComicsScreen = ({ navigation, route }) => {
   }
 
   function handleNavigateToFilter() {
-    navigation.navigate("Filter", { prevPage: "Comics" });
+    navigation.navigate("Filter");
   }
 
   function handleNavigateToComicDetail(comicId) {

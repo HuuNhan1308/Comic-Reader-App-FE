@@ -25,6 +25,10 @@ const HomeScreen = ({ navigation, route }) => {
     navigation.navigate("ComicDetail", { comicId });
   }
 
+  function handleNavigateToComics() {
+    navigation.navigate("Comics");
+  }
+
   useEffect(() => {
     const fetchApi = async () => {
       const result = await getAllComics();
@@ -57,9 +61,7 @@ const HomeScreen = ({ navigation, route }) => {
         <Header
           title={"New comics"}
           textButton={"See all"}
-          onPress={() => {
-            console.log("see all");
-          }}
+          onPress={handleNavigateToComics}
         />
 
         {/* Render comic */}
@@ -100,9 +102,7 @@ const HomeScreen = ({ navigation, route }) => {
         <Header
           title={"Recommended"}
           textButton={"See all"}
-          onPress={() => {
-            console.log("see all");
-          }}
+          onPress={handleNavigateToComics}
         />
 
         {/* Render comic */}
@@ -141,32 +141,54 @@ const HomeScreen = ({ navigation, route }) => {
         <Header
           title={"Categories"}
           textButton={"See all"}
-          onPress={() => {
-            console.log("see all");
-          }}
+          onPress={handleNavigateToComics}
         />
 
         {/* Categories */}
         <View style={styles.categoriesListContainer}>
           <RectangleCategory
-            category={"Romance"}
-            imageSrc={require("../assets/test1.jpg")}
+            category={"Action"}
+            imageSrc={require("../assets/RectangleCategory-4.jpg")}
             containerStyle={styles.categoryContainer}
+            linearColors={[
+              "rgba(0,212,255,0.8)",
+              "rgba(9,121,108,0.7)",
+              "rgba(255,255,255,0)",
+            ]}
+            onPress={() => navigation.navigate("Comics", { activeGenres: [1] })}
           />
           <RectangleCategory
-            category={"Romance"}
-            imageSrc={require("../assets/test1.jpg")}
+            category={"Adventure"}
+            imageSrc={require("../assets/RectangleCategory-1.jpg")}
             containerStyle={styles.categoryContainer}
+            linearColors={[
+              "rgba(255,0,0,0.6)",
+              "rgba(148,57,175,0.7)",
+              "rgba(255,255,255,0)",
+            ]}
+            onPress={() => navigation.navigate("Comics", { activeGenres: [2] })}
           />
           <RectangleCategory
-            category={"Romance"}
-            imageSrc={require("../assets/test1.jpg")}
+            category={"Comedy"}
+            imageSrc={require("../assets/RectangleCategory-3.jpg")}
             containerStyle={styles.categoryContainer}
+            linearColors={[
+              "rgba(0,255,46,0.7)",
+              "rgba(57,175,128,0.7)",
+              "rgba(255,255,255,0)",
+            ]}
+            onPress={() => navigation.navigate("Comics", { activeGenres: [3] })}
           />
           <RectangleCategory
-            category={"Romance"}
-            imageSrc={require("../assets/test1.jpg")}
+            category={"Drama"}
+            imageSrc={require("../assets/RectangleCategory-2.jpg")}
             containerStyle={styles.categoryContainer}
+            linearColors={[
+              "rgba(89,0,255,0.8)",
+              "rgba(120,57,175,0.7)",
+              "rgba(255,255,255,0)",
+            ]}
+            onPress={() => navigation.navigate("Comics", { activeGenres: [4] })}
           />
         </View>
       </View>
@@ -176,9 +198,7 @@ const HomeScreen = ({ navigation, route }) => {
         <Header
           title={"Hot ranking"}
           textButton={"See all"}
-          onPress={() => {
-            console.log("see all");
-          }}
+          onPress={handleNavigateToComics}
         />
 
         {/* Render Row comic */}

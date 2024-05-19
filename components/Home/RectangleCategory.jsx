@@ -14,6 +14,11 @@ const RectangleCategory = ({
   containerStyle,
   imageStyle,
   imageSrc,
+  linearColors = [
+    "rgba(0,212,255,0.7)",
+    "rgba(9,121,108,0.5)",
+    "rgba(255,255,255,0)",
+  ],
 }) => {
   return (
     <View style={[styles.categoryContainer, containerStyle ?? null]}>
@@ -28,11 +33,7 @@ const RectangleCategory = ({
           style={[styles.categoryImageBackground, imageStyle ?? null]}
         >
           <LinearGradient
-            colors={[
-              "rgba(0,212,255,0.7)",
-              "rgba(9,121,108,0.5)",
-              "rgba(255,255,255,0)",
-            ]}
+            colors={linearColors}
             locations={[0.1, 0.4, 0.9]}
             start={{ x: 1, y: 1 }}
             end={{ x: 0, y: 0 }}
