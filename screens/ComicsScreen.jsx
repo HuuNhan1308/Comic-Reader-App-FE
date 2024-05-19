@@ -22,6 +22,7 @@ import RowComic from "../components/Home/RowComic";
 import { FILTER_PROGRESS } from "../variables/filters/filter_progress";
 import useDebounce from "../hooks/useDebounce";
 import ErrorMessage from "../components/ui/ErrorMessage";
+import { getComicsByGenres } from "../services/FilterServices";
 
 const ComicsScreen = ({ navigation, route }) => {
   const [activeFilter, setActiveFilter] = useState(FILTER_PROGRESS.ALL);
@@ -36,7 +37,7 @@ const ComicsScreen = ({ navigation, route }) => {
   }
 
   function handleNavigateToFilter() {
-    navigation.navigate("Filter");
+    navigation.navigate("Filter", { prevPage: "Comics" });
   }
 
   function handleNavigateToComicDetail(comicId) {
@@ -57,33 +58,31 @@ const ComicsScreen = ({ navigation, route }) => {
     }
   });
 
+  //Search engine + handle filter
   useEffect(() => {
-    async function fetchAllComics() {
+    async function fetchComics() {
       try {
         setIsLoading(true);
         let comicsResponse;
 
-        if (!debouncedValue.trim()) {
-          comicsResponse = await getAllComics();
-          setComics(comicsResponse.result);
-        } else {
+        if (route.params?.activeGenres) {
+          // genres filter available --> call api filter comics
+          comicsResponse = await getComicsByGenres(route.params.activeGenres);
+        } else if (debouncedValue.trim()) {
           // call api search by debounced value
           comicsResponse = await searchComics(debouncedValue);
-          if (comicsResponse.code === 4002) {
+          if (comicsResponse.code === 4002 || comicsResponse.code === 4004) {
             setErrorMessage(comicsResponse.message);
             setComics([]);
             return;
           }
-
-          if (comicsResponse.code === 4004) {
-            setErrorMessage(comicsResponse.message);
-            setComics([]);
-            return;
-          }
-
-          setComics(comicsResponse.result);
-          setErrorMessage("");
+        } else {
+          // call api get all comics if search value empty
+          comicsResponse = await getAllComics();
         }
+
+        setComics(comicsResponse.result);
+        setErrorMessage("");
       } catch (e) {
         console.log(e);
       } finally {
@@ -91,9 +90,10 @@ const ComicsScreen = ({ navigation, route }) => {
       }
     }
 
-    fetchAllComics();
-  }, [debouncedValue]);
+    fetchComics();
+  }, [debouncedValue, route.params?.activeGenres]);
 
+  // handle when search value dont match with any comics
   useEffect(() => {
     if (filteredComics.length === 0 && !errorMessage) {
       setErrorMessage("Comic not found");
@@ -174,7 +174,14 @@ const ComicsScreen = ({ navigation, route }) => {
 
       {/* Result of comics */}
       <View style={styles.comicsContainer}>
-        <Header title={"New comics"} />
+        <Header
+          title={route.params?.activeGenres ? "Filtered Comics" : "New Comics"}
+          textButton={route.params?.activeGenres ? "Refresh" : ""}
+          onPress={() => {
+            // Clear the activeGenres parameter
+            navigation.setParams({ activeGenres: null });
+          }}
+        />
 
         {/* Render comic */}
         {isLoading ? (

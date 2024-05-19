@@ -79,7 +79,7 @@ const BookmarkScreen = ({ navigation, route }) => {
   const authCtx = useContext(AuthContext);
 
   function handleNavigateToFilter() {
-    navigation.navigate("Filter");
+    navigation.navigate("Filter", { prevPage: "Bookmark" });
   }
 
   function handleNavigateToComicDetail(comicId) {
@@ -99,6 +99,7 @@ const BookmarkScreen = ({ navigation, route }) => {
     }
   }
 
+  //init bookmarks from user context
   useEffect(() => {
     setBookmarks([...userState.bookmarks]);
   }, [userState.bookmarks]);
@@ -130,7 +131,8 @@ const BookmarkScreen = ({ navigation, route }) => {
           iconStyle={{ color: "#0f090b" }}
         />
 
-        <Pressable
+        {/* FILTER */}
+        {/* <Pressable
           onPress={handleNavigateToFilter}
           style={({ pressed }) => [
             styles.settingIcon,
@@ -138,7 +140,7 @@ const BookmarkScreen = ({ navigation, route }) => {
           ]}
         >
           <Feather name="settings" size={30} color="black" />
-        </Pressable>
+        </Pressable> */}
       </View>
 
       {/* Render comic */}

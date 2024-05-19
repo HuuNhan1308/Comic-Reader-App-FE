@@ -14,10 +14,12 @@ import ChapterHeader from "../components/Comics/ChapterHeader";
 import colors from "../variables/colors/colors";
 import { getAllGenres } from "../services/FilterServices";
 
-const FilterScreen = () => {
+const FilterScreen = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [genres, setGeneres] = useState([]);
   const [activeGenres, setActiveGenres] = useState([]);
+
+  const { prevPage } = route.params;
 
   function handleToggleActiveGenres(id) {
     if (activeGenres.includes(id)) {
@@ -25,6 +27,14 @@ const FilterScreen = () => {
     } else {
       setActiveGenres([...activeGenres, id]);
     }
+  }
+
+  function handleApplyFilter() {
+    navigation.navigate({
+      name: prevPage,
+      params: { activeGenres },
+      merge: true,
+    });
   }
 
   //Fetch the list of genres from the server
@@ -79,42 +89,42 @@ const FilterScreen = () => {
             numColumns={Platform.OS === "android" ? 3 : 3}
           />
 
-          <View style={styles.controllerContainer}>
-            <View style={styles.controllerButtonContainer}>
-              <Pressable
-                android_ripple={{ color: "#FFF" }}
-                style={({ pressed }) => [pressed ? styles.pressed : null]}
-              >
-                <Text style={[styles.controllerButtonText]}>Cancel</Text>
-              </Pressable>
-            </View>
-
-            <View style={[styles.controllerButtonContainer, ,]}>
-              <Pressable
-                android_ripple={{ color: "black" }}
-                style={({ pressed }) => [
-                  { backgroundColor: colors.white },
-                  pressed ? styles.pressed : null,
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.controllerButtonText,
-                    {
-                      color: colors.black,
-                      paddingHorizontal: 40,
-                      paddingVertical: 10,
-                      fontSize: 24,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    },
-                  ]}
+          {/* Controller */}
+          {activeGenres.length > 0 && (
+            <View style={styles.controllerContainer}>
+              <View style={styles.controllerButtonContainer}>
+                <Pressable
+                  android_ripple={{ color: "#FFF" }}
+                  style={({ pressed }) => [pressed ? styles.pressed : null]}
+                  onPress={() => setActiveGenres([])}
                 >
-                  Apply
-                </Text>
-              </Pressable>
+                  <Text style={[styles.controllerButtonText]}>Cancel</Text>
+                </Pressable>
+              </View>
+
+              <View style={[styles.controllerButtonContainer]}>
+                <Pressable
+                  android_ripple={{ color: "black" }}
+                  style={({ pressed }) => [
+                    { backgroundColor: colors.white },
+                    pressed ? styles.pressed : null,
+                  ]}
+                  onPress={handleApplyFilter}
+                >
+                  <Text
+                    style={[
+                      styles.controllerButtonText,
+                      {
+                        color: colors.black,
+                      },
+                    ]}
+                  >
+                    Apply
+                  </Text>
+                </Pressable>
+              </View>
             </View>
-          </View>
+          )}
         </View>
       )}
     </View>
