@@ -12,10 +12,12 @@ import {
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
+
 import colors from "../variables/colors/colors";
 import {
   getComicChaptersById,
   getComicInformation,
+  rateComic,
 } from "../services/ComicServices";
 import ChapterHeader from "../components/Comics/ChapterHeader";
 import ComicInfor from "../components/Comics/ComicInfor";
@@ -39,6 +41,8 @@ const ComicDetailScreen = ({ route, navigation }) => {
     thumbnailUrl: "",
     view: 0,
     lastestChapter: 0,
+    averageRatingScore: 0,
+    ratingScore: null ?? 0,
     genres: [],
     chapters: [],
     deleted: false,
@@ -55,7 +59,10 @@ const ComicDetailScreen = ({ route, navigation }) => {
         setIsLoading(true);
 
         const chaptersResponse = await getComicChaptersById(comicId);
-        const comicResponse = await getComicInformation(comicId);
+        const comicResponse = await getComicInformation(
+          comicId,
+          authCtx.isAuthenticated && authCtx.token
+        );
 
         setComic({
           ...comicResponse.result,
@@ -107,6 +114,44 @@ const ComicDetailScreen = ({ route, navigation }) => {
         };
       });
     }
+  }
+
+  function handleSetRatingPoints(score) {
+    async function handleSendRating() {
+      try {
+        await rateComic(comicId, score, authCtx.token);
+        setComic({ ...comic, ratingScore: score });
+      } catch (e) {
+        console.log("Error at rating score: ", e);
+      }
+    }
+
+    function handleNavigateToLogin() {
+      navigation.navigate("Login");
+    }
+
+    if (!authCtx.isAuthenticated) {
+      Alert.alert("Failed", "You need to login to rate this comic", [
+        { text: "Login", onPress: handleNavigateToLogin },
+        { text: "Cancel", style: "cancel" },
+      ]);
+      return;
+    }
+
+    Alert.alert(
+      "Rating",
+      `Do you want to rate this comic with ${score} stars ?`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: handleSendRating,
+        },
+      ]
+    );
   }
 
   async function handleToggleBookmark() {
@@ -165,9 +210,29 @@ const ComicDetailScreen = ({ route, navigation }) => {
           author={comic.author}
           description={comic.description}
           genres={comic.genres}
-          onPressIcon={handleToggleBookmark}
           isBookmarked={isBookmarked}
+          averageRatingScore={comic.averageRatingScore}
+          onPressIcon={handleToggleBookmark}
         />
+
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            marginTop: 10,
+          }}
+        >
+          {Array.from({ length: 5 }).map((_, index) => (
+            <AntDesign
+              key={index}
+              name={index < comic.ratingScore ? "star" : "staro"}
+              size={26}
+              style={{ color: "yellow", padding: 6 }}
+              color="yellow"
+              onPress={() => handleSetRatingPoints(index + 1)}
+            />
+          ))}
+        </View>
 
         <View style={styles.chapterContainer}>
           <ChapterHeader

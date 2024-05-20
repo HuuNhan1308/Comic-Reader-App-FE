@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   },
   container: { alignItems: "center" },
   buttonContainer: {
-    alignItems: "flex-start",
+    alignItems: "center",
     marginTop: Platform.OS === "ios" ? 20 : 10,
   },
   button: {

@@ -71,7 +71,9 @@ function Root() {
               email: myInformationResponse.result.email,
               dateOfBirth: myInformationResponse.result.dateOfBirth,
               isMale: myInformationResponse.result.male,
-              bookmarks: myBookmarksResponse.result,
+              bookmarks: myBookmarksResponse.result
+                ? myBookmarksResponse.result
+                : [],
             },
           });
         } else console.log("No token in local device");

@@ -11,6 +11,7 @@ const ComicInfor = ({
   description,
   onPressIcon,
   isBookmarked,
+  averageRatingScore,
 }) => {
   const [showMore, setShowMore] = useState(false);
 
@@ -44,6 +45,7 @@ const ComicInfor = ({
       </View>
       <Text style={styles.comicText}>Author: {author}</Text>
       <Text style={styles.comicText}>View: {view}</Text>
+      <Text style={styles.comicText}>Ratings: {averageRatingScore}</Text>
 
       {/* Genre Container */}
       <View style={styles.genreContainer}>
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 30,
   },
-  comicName: {},
+  comicName: { maxWidth: "85%" },
   comicText: { color: colors.white, textAlign: "justify" },
   comicSeeMoreButtonContainer: {
     borderRadius: 10,

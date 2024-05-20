@@ -29,7 +29,7 @@ export const changePassword = async (token, oldPassword, newPassword) => {
   };
 
   try {
-    const res = await http.post("/api/user/changePassword", data, {
+    const res = await http.put("/api/user/changePassword", data, {
       ...headers,
     });
 
@@ -47,7 +47,7 @@ export const changeUserProfile = async (token, data) => {
   };
 
   try {
-    const res = await http.post("/api/user/changeInformation", data, headers);
+    const res = await http.put("/api/user/changeInformation", data, headers);
 
     return res;
   } catch (e) {

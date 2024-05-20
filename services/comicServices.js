@@ -10,11 +10,17 @@ export const getAllComics = async () => {
 };
 
 //get comic informmation
+export const getComicInformation = async (comicId, token) => {
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
 
-export const getComicInformation = async (comicId) => {
   try {
     const res = await httpRequest.get(
-      "/api/comic/getComicInformation/" + comicId
+      "/api/comic/getComicInformation/" + comicId,
+      token && config
     );
 
     return res;
@@ -47,4 +53,22 @@ export const getComicChaptersById = async (comicId) => {
   }
 };
 
+export const rateComic = async (comicId, score, token) => {
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
 
+  try {
+    const res = await httpRequest.post(
+      "/api/rating/rateComic",
+      { comicId, score },
+      config
+    );
+
+    return res;
+  } catch (e) {
+    console.log("Error at rate comic: " + e);
+  }
+};

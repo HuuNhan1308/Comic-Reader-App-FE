@@ -9,7 +9,7 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useContext } from "react";
 import { StatusBar } from "expo-status-bar";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
@@ -20,6 +20,7 @@ import { getComicChapter } from "../services/ChapterServices";
 import colors from "../variables/colors/colors";
 import IconButton from "../components/ui/IconButton";
 import ComicImage from "../components/ui/ComicImage";
+import { AuthContext } from "../store/AuthContext";
 
 const windowDimension = Dimensions.get("window");
 
@@ -34,6 +35,7 @@ const ReadComicScreen = ({ route, navigation }) => {
     imageUrls: [],
   });
   const [comicChapters, setComicChapters] = useState([]);
+  const authCtx = useContext(AuthContext);
 
   function handleChangeChapter(type) {
     // get index of chapterId in the chapters array
@@ -88,9 +90,11 @@ const ReadComicScreen = ({ route, navigation }) => {
   }
 
   function handleShowComments() {
-    navigation.navigate("Comments", {
-      chapterId: chapterId,
-    });
+    if (authCtx.token && authCtx.isAuthenticated)
+      navigation.navigate("Comments", {
+        chapterId: chapterId,
+      });
+    else Alert.alert("Opps...", "You need to login to see comments");
   }
 
   //get chatper list
