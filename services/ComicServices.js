@@ -5,7 +5,25 @@ export const getAllComics = async () => {
     const res = await httpRequest.get("/api/comic/getAllComics");
     return res;
   } catch (e) {
-    console.log(e);
+    throw e;
+  }
+};
+
+export const get6LastComics = async () => {
+  try {
+    const res = await httpRequest.get("/api/comic/get3MostViewComics");
+    return res;
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const get3MostViewComics = async () => {
+  try {
+    const res = await httpRequest.get("/api/comic/get3MostViewComics");
+    return res;
+  } catch (e) {
+    throw e;
   }
 };
 

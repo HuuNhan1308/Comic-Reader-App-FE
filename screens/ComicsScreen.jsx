@@ -9,6 +9,7 @@ import {
   FlatList,
   Platform,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import InputField from "../components/Profile/InputField";
@@ -85,6 +86,7 @@ const ComicsScreen = ({ navigation, route }) => {
         setErrorMessage("");
       } catch (e) {
         console.log(e);
+        Alert.alert("Error", "Unexpected error");
       } finally {
         setIsLoading(false);
       }

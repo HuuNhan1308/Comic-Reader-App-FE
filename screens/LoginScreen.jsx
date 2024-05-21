@@ -71,7 +71,10 @@ const LoginScreen = ({ navigation, route }) => {
       handleNavigateToHome();
       setIsTryingLogin(false);
     } catch (error) {
-      Alert.alert("Failed", `Login failed with error ${error}`);
+      Alert.alert(
+        "Failed",
+        `Login failed with unexpected error, try again later`
+      );
       console.log("Fetc failed ", error);
     } finally {
       setIsTryingLogin(false);

@@ -5,20 +5,36 @@ import {
   View,
   FlatList,
   ActivityIndicator,
+  Text,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import Header from "../components/Home/Header";
 import SquareComic from "../components/Home/SquareComic";
-import { getAllComics } from "../services/ComicServices";
+import {
+  get3MostViewComics,
+  get6LastComics,
+  getAllComics,
+} from "../services/ComicServices";
 import RectangleCategory from "../components/Home/RectangleCategory";
 import RowComic from "../components/Home/RowComic";
 import { UserContext } from "../store/UserContext";
 
 const HomeScreen = ({ navigation, route }) => {
-  const [comics, setComics] = useState([]);
-  const [newComics, setNewComics] = useState([]);
-  const [recommendedComics, setRecommendedComics] = useState([]);
-  const [hotComics, setHotComics] = useState([]);
+  const [comics, setComics] = useState({
+    isLoading: true,
+    message: "",
+    data: [],
+  });
+  const [newComics, setNewComics] = useState({
+    isLoading: true,
+    message: "",
+    data: [],
+  });
+  const [recommendedComics, setRecommendedComics] = useState({
+    isLoading: true,
+    message: "",
+    data: [],
+  });
   const { userState } = useContext(UserContext);
 
   function handleNavigateToComicDetail(comicId) {
@@ -30,16 +46,36 @@ const HomeScreen = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    const fetchApi = async () => {
-      const result = await getAllComics();
-
-      setComics(result.result);
-      setNewComics(result.result.slice(0, 3));
-      setRecommendedComics(result.result.slice(0, 6));
-      setHotComics(result.result.slice(0, 8));
+    const fetchData = async (fetchFunction, setData, errorMessage) => {
+      try {
+        const response = await fetchFunction();
+        if (response && response.result) {
+          setData((prev) => ({
+            ...prev,
+            data: response.result,
+            isLoading: false,
+          }));
+        }
+      } catch (e) {
+        setData({
+          data: [],
+          isLoading: false,
+          message: errorMessage,
+        });
+      }
     };
 
-    fetchApi();
+    fetchData(getAllComics, setComics, "Unexpected error when load all comics");
+    fetchData(
+      get3MostViewComics,
+      setRecommendedComics,
+      "Unexpected error when load recommended comics"
+    );
+    fetchData(
+      get6LastComics,
+      setNewComics,
+      "Unexpected error when load new comics"
+    );
   }, [userState.bookmarks]);
 
   return (
@@ -65,33 +101,39 @@ const HomeScreen = ({ navigation, route }) => {
         />
 
         {/* Render comic */}
-        {newComics.length ? (
-          <FlatList
-            data={newComics}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <SquareComic
-                imageSrc={
-                  comics.length > 0
-                    ? {
-                        uri: item.thumbnailUrl + "?time=" + new Date(),
-                      }
-                    : require("../assets/book-icon.png")
-                }
-                containerStyle={styles.comicContainer}
-                onPressIcon={() => console.log("pressicon")}
-                onPressComic={() => handleNavigateToComicDetail(item.id)}
-                title={item.name ? item.name : "fallback"}
-                chapter={`Chapter ${item.lastChapter?.chapterNumber}`}
-                isBookmarked={userState.bookmarks.some(
-                  (bookmark) => bookmark.comicId === item.id
-                )}
-              />
-            )}
-            numColumns={3}
-            scrollEnabled={false}
-            contentContainerStyle={styles.listComicsContainer}
-          />
+        {!newComics.isLoading ? (
+          newComics.data.length > 0 ? (
+            <FlatList
+              data={newComics.data}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <SquareComic
+                  imageSrc={
+                    item.thumbnailUrl
+                      ? {
+                          uri: item.thumbnailUrl + "?time=" + new Date(),
+                        }
+                      : require("../assets/book-icon.png")
+                  }
+                  containerStyle={styles.comicContainer}
+                  onPressIcon={() => console.log("pressicon")}
+                  onPressComic={() => handleNavigateToComicDetail(item.id)}
+                  title={item.name ? item.name : "fallback"}
+                  chapter={`Chapter ${item.lastChapter?.chapterNumber}`}
+                  isBookmarked={userState.bookmarks.some(
+                    (bookmark) => bookmark.comicId === item.id
+                  )}
+                />
+              )}
+              numColumns={3}
+              scrollEnabled={false}
+              contentContainerStyle={styles.listComicsContainer}
+            />
+          ) : (
+            <Text style={{ textAlign: "center", marginVertical: 10 }}>
+              {newComics.message || "Comic not found"}
+            </Text>
+          )
         ) : (
           <ActivityIndicator size="large" color="grey" />
         )}
@@ -106,31 +148,37 @@ const HomeScreen = ({ navigation, route }) => {
         />
 
         {/* Render comic */}
-        {recommendedComics.length ? (
-          <FlatList
-            data={recommendedComics}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item, index }) => (
-              <SquareComic
-                imageSrc={
-                  comics.length > 0
-                    ? { uri: item.thumbnailUrl + "?time=" + new Date() }
-                    : require("../assets/book-icon.png")
-                }
-                containerStyle={styles.comicContainer}
-                onPressIcon={() => console.log("pressicon")}
-                onPressComic={() => handleNavigateToComicDetail(item.id)}
-                title={item.name ? item.name : "fallbacks"}
-                chapter={`Chapter ${item.lastChapter?.chapterNumber}`}
-                isBookmarked={userState.bookmarks.some(
-                  (bookmark) => bookmark.comicId === item.id
-                )}
-              />
-            )}
-            numColumns={3}
-            scrollEnabled={false}
-            contentContainerStyle={styles.listComicsContainer}
-          />
+        {!recommendedComics.isLoading ? (
+          recommendedComics.data.length > 0 ? (
+            <FlatList
+              data={recommendedComics.data}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item, index }) => (
+                <SquareComic
+                  imageSrc={
+                    item.thumbnailUrl
+                      ? { uri: item.thumbnailUrl + "?time=" + new Date() }
+                      : require("../assets/book-icon.png")
+                  }
+                  containerStyle={styles.comicContainer}
+                  onPressIcon={() => console.log("pressicon")}
+                  onPressComic={() => handleNavigateToComicDetail(item.id)}
+                  title={item.name ? item.name : "fallbacks"}
+                  chapter={`Chapter ${item.lastChapter?.chapterNumber}`}
+                  isBookmarked={userState.bookmarks.some(
+                    (bookmark) => bookmark.comicId === item.id
+                  )}
+                />
+              )}
+              numColumns={3}
+              scrollEnabled={false}
+              contentContainerStyle={styles.listComicsContainer}
+            />
+          ) : (
+            <Text style={{ textAlign: "center", marginVertical: 10 }}>
+              {recommendedComics.message || "Comic not found"}
+            </Text>
+          )
         ) : (
           <ActivityIndicator size="large" color="grey" />
         )}
@@ -202,25 +250,31 @@ const HomeScreen = ({ navigation, route }) => {
         />
 
         {/* Render Row comic */}
-        {comics.length >= 0 ? (
-          <FlatList
-            data={hotComics}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item, index }) => (
-              <RowComic
-                imageSrc={{ uri: item.thumbnailUrl }}
-                comicName={item.name}
-                comicChapter={`Chapter ${item.lastChapter?.chapterNumber}`}
-                genres={item.genres}
-                comicLastestUpdate={
-                  item.lastChapter ? item.lastChapter.createdAt : "N/A"
-                }
-                onPress={() => handleNavigateToComicDetail(item.id)}
-              />
-            )}
-            scrollEnabled={false}
-            contentContainerStyle={styles.listComicsContainer}
-          />
+        {!comics.isLoading ? (
+          comics.data.length > 0 ? (
+            <FlatList
+              data={comics.data}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item, index }) => (
+                <RowComic
+                  imageSrc={{ uri: item.thumbnailUrl }}
+                  comicName={item.name}
+                  comicChapter={`Chapter ${item.lastChapter?.chapterNumber}`}
+                  genres={item.genres}
+                  comicLastestUpdate={
+                    item.lastChapter ? item.lastChapter.createdAt : "N/A"
+                  }
+                  onPress={() => handleNavigateToComicDetail(item.id)}
+                />
+              )}
+              scrollEnabled={false}
+              contentContainerStyle={styles.listComicsContainer}
+            />
+          ) : (
+            <Text style={{ textAlign: "center", marginVertical: 10 }}>
+              {comics.message || "Comic not found"}
+            </Text>
+          )
         ) : (
           <ActivityIndicator size="large" color="grey" />
         )}
