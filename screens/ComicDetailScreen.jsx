@@ -42,7 +42,7 @@ const ComicDetailScreen = ({ route, navigation }) => {
     view: 0,
     lastestChapter: 0,
     averageRatingScore: 0,
-    ratingScore: null ?? 0,
+    userRatingScore: null ?? 0,
     genres: [],
     chapters: [],
     deleted: false,
@@ -120,7 +120,7 @@ const ComicDetailScreen = ({ route, navigation }) => {
     async function handleSendRating() {
       try {
         await rateComic(comicId, score, authCtx.token);
-        setComic({ ...comic, ratingScore: score });
+        setComic({ ...comic, userRatingScore: score });
       } catch (e) {
         console.log("Error at rating score: ", e);
       }
@@ -225,7 +225,7 @@ const ComicDetailScreen = ({ route, navigation }) => {
           {Array.from({ length: 5 }).map((_, index) => (
             <AntDesign
               key={index}
-              name={index < comic.ratingScore ? "star" : "staro"}
+              name={index < comic.userRatingScore ? "star" : "staro"}
               size={26}
               style={{ color: "yellow", padding: 6 }}
               color="yellow"
