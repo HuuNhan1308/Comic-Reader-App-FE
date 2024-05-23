@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, useState } from "react";
+import { logOut } from "../services/LoginServices";
 
 export const AuthContext = createContext({
   token: "",
@@ -21,9 +22,10 @@ const AuthContextProvider = ({ children }) => {
   }
 
   async function logout() {
-    setToken("");
     try {
       await AsyncStorage.removeItem("token");
+      await logOut(token);
+      setToken("");
     } catch (error) {
       console.log("Couldn't remove token from local storage: ", error);
     }
