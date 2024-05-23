@@ -9,6 +9,7 @@ import {
   FlatList,
   ScrollView,
   Platform,
+  Dimensions,
 } from "react-native";
 import React, { useState, useRef, useContext, useEffect } from "react";
 import InputField from "../components/Profile/InputField";
@@ -36,7 +37,12 @@ const RowComicAnimated = ({
     }),
     onPanResponderRelease: () => {
       //remove bookmark
-      if (Math.abs(pan.x._value) > Platform.OS === "android" ? 200 : 100) {
+      if (
+        (Platform.OS === "android" &&
+          Math.abs(pan.x._value) >= Dimensions.get("window").width / 2) ||
+        (Platform.OS === "ios" && Math.abs(pan.x._value) >= 100)
+      ) {
+        // console.log("trigger");
         handleRemoveItem(item.comicId);
       }
 
