@@ -24,6 +24,7 @@ const AuthContextProvider = ({ children }) => {
   async function logout() {
     try {
       await AsyncStorage.removeItem("token");
+      console.log(token);
       await logOut(token);
       setToken("");
     } catch (error) {

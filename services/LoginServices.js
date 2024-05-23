@@ -17,14 +17,8 @@ export const login = async (username, password) => {
 };
 
 export const logOut = async (token) => {
-  const config = {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  };
-
   try {
-    const res = await http.post("/api/auth/login", {}, config);
+    const res = await http.post("/api/auth/logout", { token });
     return res;
   } catch (e) {
     console.log("Error at logOut Service: ", e);
