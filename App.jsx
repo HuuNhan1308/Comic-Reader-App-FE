@@ -16,6 +16,7 @@ import UserContextProvider, { UserContext } from "./store/UserContext";
 import { getMyInformation } from "./services/UserServices";
 import { SET_ALL } from "./store/UserReducer/constants";
 import { getMyBookmakrs } from "./services/BookmarkServices";
+import ForgetPasswordScreen from "./screens/ForgetPasswordScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -99,6 +100,7 @@ function Root() {
       >
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
         <Stack.Screen name="App" component={AppScreenNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
@@ -116,12 +118,3 @@ export default function App() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import React, { useState, useContext } from "react";
 import IconInput from "../components/IconInput";
@@ -38,6 +39,10 @@ const LoginScreen = ({ navigation, route }) => {
 
   function handleNavigateToHome() {
     navigation.replace("App", { screen: "Home" });
+  }
+
+  function handleNavigateToForgetPW() {
+    navigation.navigate("ForgetPassword");
   }
 
   async function handleLogin() {
@@ -86,12 +91,11 @@ const LoginScreen = ({ navigation, route }) => {
   }
 
   return (
-    <ScrollView style={styles.screen}>
-      <KeyboardAvoidingView
-        behavior="position"
-        style={styles.screen}
-        contentContainerStyle={styles.rootContainer}
-      >
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <ScrollView style={styles.screen} showsVerticalScrollIndicator={false}>
         <Pressable
           style={({ pressed }) => [
             styles.skipButton,
@@ -118,7 +122,7 @@ const LoginScreen = ({ navigation, route }) => {
         </View>
 
         {/* Form */}
-        <View style={{ width: "80%" }}>
+        <View>
           <IconInput
             value={username}
             onChangeText={handleChangeUsername}
@@ -135,7 +139,7 @@ const LoginScreen = ({ navigation, route }) => {
           />
         </View>
 
-        <View>
+        <View style={{ alignItems: "center" }}>
           <Pressable
             onPress={handleLogin}
             style={({ pressed }) => [
@@ -147,10 +151,10 @@ const LoginScreen = ({ navigation, route }) => {
           </Pressable>
         </View>
 
-        <View style={styles.registerTextContainer}>
+        <View style={styles.bottomTextContainer}>
           <Text>Dont have account? </Text>
           <Text
-            style={styles.registerText}
+            style={styles.controllerText}
             onPress={() => {
               navigation.navigate("Register");
             }}
@@ -159,8 +163,17 @@ const LoginScreen = ({ navigation, route }) => {
             Register
           </Text>
         </View>
-      </KeyboardAvoidingView>
-    </ScrollView>
+        <View style={styles.bottomTextContainer}>
+          <Text
+            style={styles.controllerText}
+            onPress={handleNavigateToForgetPW}
+            suppressHighlighting={false}
+          >
+            Forget your password?
+          </Text>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -169,18 +182,17 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    paddingHorizontal: 30,
   },
   rootContainer: { flex: 1, alignItems: "center" },
   imageContainer: {
     marginTop: 40,
     alignItems: "center",
     justifyContent: "center",
-    width: 150,
-    height: 150,
   },
   image: {
-    width: "100%",
-    height: "100%",
+    width: 150,
+    height: 150,
   },
   textContainer: {
     alignItems: "center",
@@ -205,20 +217,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50,
     backgroundColor: "#BCA2D2",
     borderRadius: 100,
+    width: Platform.OS === "android" ? 160 : 180,
   },
   buttonText: {
     fontSize: 18,
+    textAlign: "center",
     fontWeight: "500",
   },
   buttonPressed: {
     opacity: 0.7,
   },
-  registerTextContainer: {
+  bottomTextContainer: {
     flexDirection: "row",
     marginBottom: 20,
     alignItems: "center",
+    justifyContent: "center",
   },
-  registerText: {
+  controllerText: {
     color: "#877099",
     fontWeight: "600",
     paddingVertical: 4,
@@ -226,7 +241,9 @@ const styles = StyleSheet.create({
   skipButton: {
     position: "absolute",
     top: 60,
-    right: 40,
+    right: 0,
+    padding: 4,
+    zIndex: 100,
   },
   pressed: {
     opacity: 0.5,

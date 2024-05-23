@@ -97,12 +97,11 @@ const RegisterScreen = ({ navigation, route }) => {
   }
 
   return (
-    <ScrollView>
-      <KeyboardAvoidingView
-        behavior="position"
-        style={styles.screen}
-        contentContainerStyle={styles.rootContainer}
-      >
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <ScrollView style={styles.rootContainer}>
         <View style={styles.imageContainer}>
           <Image
             source={require("../assets/book-icon.png")}
@@ -127,7 +126,7 @@ const RegisterScreen = ({ navigation, route }) => {
           </View>
         </View>
 
-        <View style={{ width: "80%" }}>
+        <View>
           <IconInput
             value={registerObj.username}
             onChangeText={(e) => handleChangeRegisterObj(e, "username")}
@@ -163,7 +162,7 @@ const RegisterScreen = ({ navigation, route }) => {
 
           <IconInput
             icon={<Fontisto name="date" size={24} color="black" />}
-            customeInput={
+            customInput={
               <DatePicker
                 value={registerObj.dateOfBirth}
                 onConfirm={(e, selectedDate) =>
@@ -184,7 +183,7 @@ const RegisterScreen = ({ navigation, route }) => {
                 style={{ paddingHorizontal: 2 }}
               />
             }
-            customeInput={
+            customInput={
               <SelectDropdown
                 data={Genders}
                 onSelect={(e) => handleChangeRegisterObj(e, "isMale")}
@@ -235,25 +234,23 @@ const RegisterScreen = ({ navigation, route }) => {
             <Text style={styles.buttonText}>Register</Text>
           </Pressable>
         </View>
-      </KeyboardAvoidingView>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 export default RegisterScreen;
 
 const styles = StyleSheet.create({
-  rootContainer: { alignItems: "center" },
+  rootContainer: { flex: 1, paddingHorizontal: 30 },
   imageContainer: {
     marginTop: 40,
     alignItems: "center",
     justifyContent: "center",
-    width: 150,
-    height: 150,
   },
   image: {
-    width: "100%",
-    height: "100%",
+    width: 150,
+    height: 150,
   },
   textContainer: {
     alignItems: "center",
@@ -274,15 +271,18 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 30,
-    marginBottom: 30,
+    marginBottom: 80,
     paddingVertical: 10,
     paddingHorizontal: 50,
     backgroundColor: "#BCA2D2",
     borderRadius: 100,
+    width: Platform.OS === "android" ? 180 : 200,
+    alignSelf: "center",
   },
   buttonText: {
     fontSize: 18,
     fontWeight: "500",
+    textAlign: "center",
   },
   buttonPressed: {
     opacity: 0.7,

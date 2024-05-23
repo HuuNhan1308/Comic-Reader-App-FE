@@ -288,7 +288,6 @@ const styles = StyleSheet.create({
     padding: 8,
     zIndex: 100,
     backgroundColor: Platform.OS === "android" ? "#53535396" : undefined,
-    borderRadius: 100,
   },
   comicThumpnail: {
     width: "100%",

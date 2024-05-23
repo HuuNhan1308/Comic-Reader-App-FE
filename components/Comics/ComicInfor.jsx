@@ -30,18 +30,19 @@ const ComicInfor = ({
       >
         <Text style={[styles.comicName, styles.title]}>{name}</Text>
 
-        <AntDesign
-          name="hearto"
-          size={20}
-          color="black"
-          onPress={onPressIcon}
-          suppressHighlighting={true}
-          style={{
-            padding: 6,
-            backgroundColor: isBookmarked ? "#F0B357" : "white",
-            borderRadius: 100,
-          }}
-        />
+        <View style={{ borderRadius: 100, overflow: "hidden" }}>
+          <AntDesign
+            name="hearto"
+            size={20}
+            color="black"
+            onPress={onPressIcon}
+            suppressHighlighting={true}
+            style={{
+              padding: 6,
+              backgroundColor: isBookmarked ? "#F0B357" : "white",
+            }}
+          />
+        </View>
       </View>
       <Text style={styles.comicText}>Author: {author}</Text>
       <Text style={styles.comicText}>View: {view}</Text>

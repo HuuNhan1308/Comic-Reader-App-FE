@@ -41,7 +41,6 @@ const SquareComic = ({
               style={{
                 padding: 4,
                 backgroundColor: isBookmarked ? "#F0B357" : "white",
-                borderRadius: 100,
               }}
             />
           </View>
@@ -72,7 +71,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 4,
     right: 4,
-    padding: 4,
+    borderRadius: 10000,
+    overflow: "hidden",
   },
   contentContainer: {
     alignItems: "center",

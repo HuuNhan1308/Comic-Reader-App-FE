@@ -26,3 +26,29 @@ export const register = async (data) => {
     console.log("Error at Login Service: ", e);
   }
 };
+
+export const sendOTP = async (email, token) => {
+  try {
+    const res = await http.post(
+      "/api/auth/resetPassword",
+      { email },
+      { withCredentials: true }
+    );
+    return res;
+  } catch (e) {
+    console.log("Error at Login Service - sendOTP: ", e);
+  }
+};
+
+export const verifyOTP = async (email, otp) => {
+  try {
+    const res = await http.post(
+      "/api/auth/verifyOtp",
+      { email, otp },
+      { withCredentials: true }
+    );
+    return res;
+  } catch (e) {
+    console.log("Error at Login Service - verifyOTP: ", e);
+  }
+};

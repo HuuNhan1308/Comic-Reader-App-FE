@@ -10,13 +10,13 @@ const IconInput = ({
   icon,
   secureTextEntry = false,
   inputStyle = null,
-  customeInput = null,
+  customInput = null,
 }) => {
   return (
     <View style={styles.inputContainer}>
       <View style={styles.iconContainer}>{icon ?? <></>}</View>
 
-      {customeInput || (
+      {customInput || (
         <TextInput
           style={[styles.input, inputStyle]}
           value={value}
@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "android" ? 20 : 30,
     flexDirection: "row",
     alignItems: "center",
-    flex: 1,
   },
   iconContainer: {
     borderRadius: 100,
