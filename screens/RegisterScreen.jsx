@@ -19,7 +19,6 @@ import { Fontisto } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import colors from "../variables/colors/colors";
-import Dropdown from "../components/Profile/Dropdown";
 import DatePicker from "../components/Profile/DatePicker";
 import SelectDropdown from "react-native-select-dropdown";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";

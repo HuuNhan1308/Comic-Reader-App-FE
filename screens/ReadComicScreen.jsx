@@ -158,6 +158,9 @@ const ReadComicScreen = ({ route, navigation }) => {
             renderItem={({ item, index }) => (
               <ComicImage uri={item} width={windowDimension.width} />
             )}
+            contentContainerStyle={{
+              paddingBottom: 100,
+            }}
           />
         )}
 
