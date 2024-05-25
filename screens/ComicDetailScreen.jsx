@@ -264,7 +264,7 @@ const ComicDetailScreen = ({ route, navigation }) => {
                 </Pressable>
               </View>
             )}
-            contentContainerStyle={styles.listComicsContainer}
+            contentContainerStyle={{ paddingBottom: 30 }}
           />
         </View>
       </View>

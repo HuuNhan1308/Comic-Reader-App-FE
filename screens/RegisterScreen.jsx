@@ -76,8 +76,8 @@ const RegisterScreen = ({ navigation, route }) => {
       const registerResponse = await register(data);
 
       //if login failed --> show alert
-      if (registerResponse.code === 4003) {
-        Alert.alert(registerResponse.message);
+      if (registerResponse.code !== 200) {
+        Alert.alert("Failed", registerResponse.message);
         return;
       }
 
