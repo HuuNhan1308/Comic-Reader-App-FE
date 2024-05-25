@@ -10,7 +10,7 @@ import ReadComicScreen from "../screens/ReadComicScreen";
 import ChooseChaptersScreen from "../screens/ChooseChaptersScreen";
 import CommentsScreen from "../screens/CommentsScreen";
 import FilterScreen from "../screens/FilterScreen";
-import ChatGPTScreen from "../screens/ChatGPTScreen";
+import ChatBotScreen from "../screens/ChatBotScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -64,10 +64,10 @@ const AppScreenNavigator = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="ChatGPT"
-          component={ChatGPTScreen}
+          name="ChatBot"
+          component={ChatBotScreen}
           options={{
-            title: "Chat GPT",
+            title: "Chat with AI",
             headerTitleStyle: {
               color: colors.white,
               fontSize: 28,

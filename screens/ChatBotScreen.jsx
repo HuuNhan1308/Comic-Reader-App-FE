@@ -7,23 +7,33 @@ import {
   Pressable,
   Platform,
   FlatList,
-  TouchableWithoutFeedback,
   Keyboard,
   ActivityIndicator,
+  Button,
+  Alert,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 import React, { useContext, useEffect, useRef, useState } from "react";
 import colors from "../variables/colors/colors";
 import ChatBox from "../components/Comments/ChatBox";
 import { UserContext } from "../store/UserContext";
-import { gptFindComic } from "../services/ChatBotServices";
+import { AI_LM_Asking, gptFindComic } from "../services/ChatBotServices";
 import { AuthContext } from "../store/AuthContext";
-import { CHAT_GPT_KEY } from "@env";
 
-const ChatGPTScreen = () => {
+const COMIC_AI = "COMIC_AI";
+const LM_AI = "LM_AI";
+
+const AIs = [
+  { name: "Comic AI", value: COMIC_AI },
+  { name: "LM AI", value: LM_AI },
+];
+
+const ChatBoxScreen = ({ navigation }) => {
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState([]);
+  const [currentAI, setCurrentAI] = useState(AIs[0]);
   const [isLoading, setIsLoading] = useState(false);
   const { userState } = useContext(UserContext);
   const authCtx = useContext(AuthContext);
@@ -33,20 +43,49 @@ const ChatGPTScreen = () => {
     setQuestion(e);
   }
 
+  function handleChangeCurrentAI() {
+    setCurrentAI((prevAI) => {
+      const currentIndex = AIs.indexOf(prevAI);
+      const nextIndex = (currentIndex + 1) % AIs.length;
+      return AIs[nextIndex];
+    });
+  }
+
   async function handleSendMessage() {
     if (question === "") return;
     //call api to get asnwer and assign to answer constant
+    if (!authCtx.isAuthenticated) {
+      Alert.alert(
+        "Failed",
+        "You must be authenticated before using this function"
+      );
+      return;
+    }
 
     try {
       setIsLoading(true);
-      const gptResponse = await gptFindComic(authCtx.token, question);
-      const answer = gptResponse.result;
+      let AIResponse;
 
+      if (currentAI.value == COMIC_AI) {
+        console.log("Ask comic AI");
+        AIResponse = await gptFindComic(authCtx.token, question);
+      } else if (currentAI.value == LM_AI) {
+        console.log("Ask LM AI");
+        AIResponse = await AI_LM_Asking(authCtx.token, question);
+      }
+
+      const message =
+        AIResponse && AIResponse.code !== 200
+          ? "Cannot answer now... please try again"
+          : AIResponse.result;
+
+      //Vương Đình Quý là ai?
       setMessages((prev) => [
         ...prev,
-        { message: question, sender: userState.fullName || "Guess" },
-        { message: answer, sender: "Chat GPT" },
+        { message: question, sender: userState.fullName || "Guest" },
+        { message, sender: currentAI.name },
       ]);
+
       setQuestion("");
       Keyboard.dismiss();
     } catch (e) {
@@ -72,6 +111,30 @@ const ChatGPTScreen = () => {
     };
   }, []);
 
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () =>
+        Platform.OS === "android" ? (
+          <Pressable
+            onPress={handleChangeCurrentAI}
+            android_ripple={{ color: colors.lightgrey }}
+          >
+            <Text
+              style={{ fontSize: 16, color: colors.white, fontWeight: "700" }}
+            >
+              {currentAI.name}
+            </Text>
+          </Pressable>
+        ) : (
+          <Button
+            style={{ fontSize: 16, color: colors.white, fontWeight: "700" }}
+            onPress={handleChangeCurrentAI}
+            title={currentAI.name}
+          />
+        ),
+    });
+  }, [navigation, currentAI]);
+
   return (
     <View
       style={{
@@ -96,7 +159,10 @@ const ChatGPTScreen = () => {
                 <ChatBox
                   owner={item.sender}
                   text={item.message}
-                  isQuestion={item.sender !== "Chat GPT"}
+                  isQuestion={
+                    item.sender === userState.fullName ||
+                    item.sender === "Guest"
+                  }
                 />
               )}
               showsVerticalScrollIndicator={false}
@@ -152,7 +218,7 @@ const ChatGPTScreen = () => {
   );
 };
 
-export default ChatGPTScreen;
+export default ChatBoxScreen;
 
 const styles = StyleSheet.create({
   inputContainer: {

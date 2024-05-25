@@ -34,7 +34,7 @@ const ComicsScreen = ({ navigation, route }) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   function handleNavigateToChatScreen() {
-    navigation.navigate("ChatGPT");
+    navigation.navigate("ChatBot");
   }
 
   function handleNavigateToFilter() {
