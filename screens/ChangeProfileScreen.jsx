@@ -126,16 +126,6 @@ const ChangeProfileScreen = ({ navigation, route }) => {
         >
           <Text style={styles.buttonText}>SAVE CHANGES</Text>
         </Pressable>
-
-        <Pressable
-          onPress={() => navigation.navigate("Register")}
-          style={({ pressed }) => [
-            styles.button,
-            pressed ? styles.pressed : null,
-          ]}
-        >
-          <Text style={styles.buttonText}>Go to register</Text>
-        </Pressable>
       </KeyboardAvoidingView>
     </ScrollView>
   );
