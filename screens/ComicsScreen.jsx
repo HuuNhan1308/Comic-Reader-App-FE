@@ -1,10 +1,7 @@
 import {
   StyleSheet,
-  Text,
   View,
   ScrollView,
-  KeyboardAvoidingView,
-  SafeAreaView,
   Pressable,
   FlatList,
   Platform,

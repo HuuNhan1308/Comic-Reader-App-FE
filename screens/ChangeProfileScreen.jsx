@@ -19,13 +19,12 @@ import { formatDate, reverseDate } from "../utils/DateUtil";
 import { changeUserProfile } from "../services/UserServices";
 import { SET_ALL } from "../store/UserReducer/constants";
 
+const Genders = ["Male", "Female"];
 const ChangeProfileScreen = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false);
-
   const [fullName, setFullName] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState(new Date());
   const [gender, setGender] = useState("");
-  const Genders = ["Male", "Female"];
 
   const authCtx = useContext(AuthContext);
   const { userState, userDispatch } = useContext(UserContext);
@@ -43,6 +42,10 @@ const ChangeProfileScreen = ({ navigation, route }) => {
 
   function handleSelectDate(event, selectedDate) {
     setDateOfBirth(selectedDate);
+  }
+
+  function handleChangeFullName(value) {
+    setFullName(value);
   }
 
   async function handleSubmitChangeProfile() {
@@ -98,9 +101,7 @@ const ChangeProfileScreen = ({ navigation, route }) => {
           <InputField
             title={"Full name"}
             value={fullName}
-            onChangeText={(fullname) => {
-              setFullName(fullname);
-            }}
+            onChangeText={handleChangeFullName}
           />
 
           <DatePicker
