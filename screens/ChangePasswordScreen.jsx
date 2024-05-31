@@ -13,6 +13,8 @@ import InputField from "../components/Profile/InputField";
 import { changePassword } from "../services/UserServices";
 import { AuthContext } from "../store/AuthContext";
 
+// RESPONSIBILITY BY: DIEP HOAI AN
+
 /**
  * Represents the screen for changing the user's password.
  *

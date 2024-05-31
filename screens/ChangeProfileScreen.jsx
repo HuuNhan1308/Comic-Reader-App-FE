@@ -19,6 +19,8 @@ import { formatDate, reverseDate } from "../utils/DateUtil";
 import { changeUserProfile } from "../services/UserServices";
 import { SET_ALL } from "../store/UserReducer/constants";
 
+// RESPONSIBILITY BY: DIEP HOAI AN
+
 const Genders = ["Male", "Female"];
 /**
  * Represents the screen for changing the user's profile.

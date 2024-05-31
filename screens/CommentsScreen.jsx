@@ -24,6 +24,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { UserContext } from "../store/UserContext";
 import { formatDate } from "../utils/DateUtil";
 
+// RESPONSIBILITY BY: HO HUU NHAN
+
 /**
  * Represents the screen component for displaying and posting comments.
  *

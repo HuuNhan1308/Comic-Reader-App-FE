@@ -27,6 +27,8 @@ import { bookmarkComic, getMyBookmakrs } from "../services/BookmarkServices";
 import { AuthContext } from "../store/AuthContext";
 import { SET_BOOKMARKS } from "../store/UserReducer/constants";
 
+// RESPONSIBILITY BY: HO HUU NHAN
+
 /**
  * Represents the screen that displays the details of a comic.
  *

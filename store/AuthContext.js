@@ -2,6 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, useState } from "react";
 import { logOut } from "../services/LoginServices";
 
+// RESPONSIBILITY BY: DIEP HOAI AN
+
 /**
  * `AuthContext` is a React context object for managing authentication.
  *

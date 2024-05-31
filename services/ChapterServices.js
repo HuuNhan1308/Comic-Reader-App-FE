@@ -1,5 +1,7 @@
 import * as httpRequest from "../utils/httpRequest";
 
+// RESPONSIBILITY BY: HO HUU NHAN
+
 /**
  * Fetches the images and information for a comic chapter.
  *

@@ -9,6 +9,8 @@ import {
   SET_BOOKMARKS,
 } from "./constants";
 
+// RESPONSIBILITY BY: DIEP HOAI AN
+
 export const initUserState = {
   id: null,
   fullName: null,

@@ -14,7 +14,6 @@ import {
 import React, { useState, useRef, useContext, useEffect } from "react";
 import InputField from "../components/Profile/InputField";
 import useDebounce from "../hooks/useDebounce";
-import { Feather } from "@expo/vector-icons";
 import colors from "../variables/colors/colors";
 import ErrorMessage from "../components/ui/ErrorMessage";
 import RowComic from "../components/Home/RowComic";
@@ -22,6 +21,8 @@ import { UserContext } from "../store/UserContext";
 import { bookmarkComic } from "../services/BookmarkServices";
 import { AuthContext } from "../store/AuthContext";
 import { SET_BOOKMARKS } from "../store/UserReducer/constants";
+
+// RESPONSIBILITY BY: HO HUU NHAN
 
 /**
  * Animated row component for displaying a comic item in the bookmark screen.

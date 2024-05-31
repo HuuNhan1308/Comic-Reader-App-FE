@@ -21,6 +21,8 @@ import { SET_ALL } from "../store/UserReducer/constants";
 import { getMyInformation } from "../services/UserServices";
 import { getMyBookmakrs } from "../services/BookmarkServices";
 
+// RESPONSIBILITY BY: DIEP HOAI AN
+
 /**
  * Represents the login screen component.
  *

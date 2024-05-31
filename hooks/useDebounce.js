@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+// RESPONSIBILITY BY: HO HUU NHAN
+
 /**
  * `useDebounce` is a custom React hook that debounces a value.
  *

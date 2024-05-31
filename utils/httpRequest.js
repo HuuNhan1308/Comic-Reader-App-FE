@@ -1,5 +1,7 @@
 import axios from "axios";
 
+// RESPONSIBILITY BY: HO HUU NHAN
+
 const BASE_URL = "http://103.116.52.147:8080";
 // const BASE_URL = "http://192.168.21.140:8080";
 

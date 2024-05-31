@@ -15,6 +15,8 @@ import IconInput from "../components/IconInput";
 import { AntDesign } from "@expo/vector-icons";
 import { sendOTP, verifyOTP } from "../services/LoginServices";
 
+// RESPONSIBILITY BY: HOANG LONG VU
+
 /**
  * Renders the Forget Password screen.
  *

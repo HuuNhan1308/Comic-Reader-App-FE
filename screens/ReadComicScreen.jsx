@@ -1,6 +1,5 @@
 import {
   FlatList,
-  Image,
   StyleSheet,
   View,
   Text,
@@ -21,6 +20,8 @@ import colors from "../variables/colors/colors";
 import IconButton from "../components/ui/IconButton";
 import ComicImage from "../components/ui/ComicImage";
 import { AuthContext } from "../store/AuthContext";
+
+// RESPONSIBILITY BY: HO HUU NHAN
 
 const windowDimension = Dimensions.get("window");
 

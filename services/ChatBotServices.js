@@ -1,5 +1,7 @@
 import * as httpRequest from "../utils/httpRequest";
 
+// RESPONSIBILITY BY: HOANG LONG VU
+
 /**
  * Finds comics using GPT-3.
  *

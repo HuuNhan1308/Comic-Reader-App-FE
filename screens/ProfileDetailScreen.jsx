@@ -5,6 +5,8 @@ import RowText from "../components/Profile/RowText";
 import { UserContext } from "../store/UserContext";
 import { AntDesign } from "@expo/vector-icons";
 
+// RESPONSIBILITY BY: DIEP HOAI AN
+
 /**
  * Renders the profile detail screen.
  *

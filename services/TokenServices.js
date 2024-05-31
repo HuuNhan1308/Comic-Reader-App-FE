@@ -1,5 +1,7 @@
 import * as http from "../utils/httpRequest";
 
+// RESPONSIBILITY BY: DIEP HOAI AN
+
 /**
  * Refreshes a token.
  *

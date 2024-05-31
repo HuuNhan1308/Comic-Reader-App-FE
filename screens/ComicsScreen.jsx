@@ -22,6 +22,8 @@ import useDebounce from "../hooks/useDebounce";
 import ErrorMessage from "../components/ui/ErrorMessage";
 import { getComicsByGenres } from "../services/FilterServices";
 
+// RESPONSIBILITY BY: HO HUU NHAN
+
 /**
  * Represents the screen that displays a list of comics.
  *

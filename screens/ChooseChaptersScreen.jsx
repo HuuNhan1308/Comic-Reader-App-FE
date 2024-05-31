@@ -15,6 +15,8 @@ import { getComicChaptersById } from "../services/ComicServices";
 import ChapterHeader from "../components/Comics/ChapterHeader";
 import { FILTER_CHAPTER } from "../variables/filters/filter_chapter";
 
+// RESPONSIBILITY BY: HO HUU NHAN
+
 /**
  * Represents the screen for choosing chapters of a comic.
  *

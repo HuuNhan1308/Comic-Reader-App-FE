@@ -10,6 +10,8 @@ import colors from "../variables/colors/colors";
 import IconTextButton from "../components/Profile/IconTextButton";
 import { CLEAR_ALL } from "../store/UserReducer/constants";
 
+// RESPONSIBILITY BY: DIEP HOAI AN
+
 /**
  * Represents the profile screen of the application.
  *

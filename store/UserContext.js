@@ -1,6 +1,8 @@
 import { createContext, useReducer } from "react";
 import UserReducer, { initUserState } from "./UserReducer/reducer";
 
+// RESPONSIBILITY BY: DIEP HOAI AN
+
 /**
  * `UserContext` is a React context object for managing user state.
  *

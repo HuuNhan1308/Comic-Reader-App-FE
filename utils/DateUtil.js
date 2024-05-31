@@ -1,3 +1,5 @@
+// RESPONSIBILITY BY: HO HUU NHAN
+
 /**
  * Formats a date object into a string in the format "dd-mm-yyyy".
  *

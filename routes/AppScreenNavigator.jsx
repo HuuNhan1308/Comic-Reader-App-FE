@@ -11,6 +11,8 @@ import CommentsScreen from "../screens/CommentsScreen";
 import FilterScreen from "../screens/FilterScreen";
 import ChatBotScreen from "../screens/ChatBotScreen";
 
+// RESPONSIBILITY BY: HO HUU NHAN
+
 const Stack = createNativeStackNavigator();
 
 /**
@@ -20,12 +22,12 @@ const Stack = createNativeStackNavigator();
  *
  * The stack navigator has two groups of screens:
  *
- * - The first group includes the main screens of the app, such as the main screen, 
- * profile detail screen, change password screen, change profile screen, 
- * comic detail screen, read comic screen, and chat bot screen. These screens are navigated to in a stack format, 
+ * - The first group includes the main screens of the app, such as the main screen,
+ * profile detail screen, change password screen, change profile screen,
+ * comic detail screen, read comic screen, and chat bot screen. These screens are navigated to in a stack format,
  * meaning that each new screen is placed on top of the stack and the user can navigate back to the previous screen.
  *
- * - The second group includes the choose chapter screen, comments screen, and filter screen. These screens are presented modally, 
+ * - The second group includes the choose chapter screen, comments screen, and filter screen. These screens are presented modally,
  * meaning that they slide up from the bottom of the screen and the user can dismiss them by swiping down.
  *
  * The stack navigator has some default screen options, such as the alignment of the header title, the style of the header, the color of the header tint, the style of the header title, and whether the back title is visible.

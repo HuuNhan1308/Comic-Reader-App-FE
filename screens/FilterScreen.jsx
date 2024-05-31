@@ -8,11 +8,11 @@ import {
   Platform,
   Pressable,
 } from "react-native";
-ChapterHeader;
 import React, { useEffect, useState } from "react";
-import ChapterHeader from "../components/Comics/ChapterHeader";
 import colors from "../variables/colors/colors";
 import { getAllGenres } from "../services/FilterServices";
+
+// RESPONSIBILITY BY: HO HUU NHAN
 
 /**
  * Represents the filter screen component.

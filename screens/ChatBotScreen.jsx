@@ -29,6 +29,8 @@ const AIs = [
   { name: "LM AI", value: LM_AI },
 ];
 
+// RESPONSIBILITY BY: HOANG LONG VU
+
 /**
  * Represents the chat box screen component.
  *

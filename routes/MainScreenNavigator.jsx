@@ -9,6 +9,8 @@ import BookmarkScreen from "../screens/BookmarkScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import colors from "../variables/colors/colors";
 
+// RESPONSIBILITY BY: HO HUU NHAN
+
 const Tab = createBottomTabNavigator();
 
 /**

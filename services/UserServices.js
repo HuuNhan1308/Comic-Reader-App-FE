@@ -1,5 +1,7 @@
 import * as http from "../utils/httpRequest";
 
+// RESPONSIBILITY BY: DIEP HOAI AN
+
 /**
  * Fetches the information of the current user.
  *

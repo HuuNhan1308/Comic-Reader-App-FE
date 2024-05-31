@@ -25,6 +25,8 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { formatDate } from "../utils/DateUtil";
 import { register } from "../services/LoginServices";
 
+// RESPONSIBILITY BY: DIEP HOAI AN
+
 /**
  * RegisterScreen component displays a form for user registration.
  * It allows users to enter their username, password, email, full name, date of birth, and gender.

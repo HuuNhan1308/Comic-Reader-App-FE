@@ -9,6 +9,8 @@ if (!global.atob) {
   global.atob = atob;
 }
 
+// RESPONSIBILITY BY: HO HUU NHAN
+
 /**
  * Checks if a JWT token is expired.
  *

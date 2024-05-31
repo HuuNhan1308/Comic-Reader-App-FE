@@ -19,6 +19,8 @@ import RectangleCategory from "../components/Home/RectangleCategory";
 import RowComic from "../components/Home/RowComic";
 import { UserContext } from "../store/UserContext";
 
+// RESPONSIBILITY BY: HO HUU NHAN
+
 /**
  * Represents the home screen of the Comic Reader app.
  *

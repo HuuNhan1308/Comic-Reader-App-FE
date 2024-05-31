@@ -1,5 +1,7 @@
 import * as http from "../utils/httpRequest";
 
+// RESPONSIBILITY BY: DIEP HOAI AN & HOANG LONG VU
+
 /**
  * Logs in a user.
  *
