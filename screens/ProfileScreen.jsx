@@ -1,24 +1,57 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
-import { getMyInformation } from "../services/UserServices";
 import { AuthContext } from "../store/AuthContext";
 import { UserContext } from "../store/UserContext";
 import colors from "../variables/colors/colors";
 import IconTextButton from "../components/Profile/IconTextButton";
 import { CLEAR_ALL } from "../store/UserReducer/constants";
 
-const ProfileScreen = ({ route, navigation }) => {
+/**
+ * Represents the profile screen of the application.
+ *
+ * @param {object} navigation - The navigation prop provided by React Navigation.
+ * @returns {JSX.Element} The profile screen component.
+ */
+const ProfileScreen = ({ navigation }) => {
   const authCtx = useContext(AuthContext);
   const { userState, userDispatch } = useContext(UserContext);
 
+  /**
+   * Logs the user out.
+   *
+   * This function is typically used to log the user out when the logout button is pressed.
+   * It calls the logout function from the auth context to remove the user's token.
+   * It dispatches the CLEAR_ALL action to the user reducer to clear the user's information and bookmarks.
+   * It uses the replace function from the navigation prop to replace the current screen with the Login screen.
+   */
   function handleLogout() {
     authCtx.logout();
     userDispatch({ type: CLEAR_ALL });
     navigation.replace("Login");
+  }
+
+  /**
+   * Navigates to the Login screen.
+   *
+   * This function is typically used to navigate to the Login screen when the navigate to login button is pressed.
+   * It uses the navigate function from the navigation prop to navigate to the Login screen.
+   */
+  function handleNavigateToLogin() {
+    navigation.navigate("Login");
+  }
+
+  /**
+   * Navigates to the ProfileDetail screen.
+   *
+   * This function is typically used to navigate to the ProfileDetail screen when the navigate to profile detail button is pressed.
+   * It uses the navigate function from the navigation prop to navigate to the ProfileDetail screen.
+   */
+  function handleNavigateToProfileDetail() {
+    navigation.navigate("ProfileDetail");
   }
 
   return (
@@ -33,9 +66,7 @@ const ProfileScreen = ({ route, navigation }) => {
               title={"Profile & Security"}
               icon={<AntDesign name="user" size={24} color="black" />}
               rootStyle={styles.IconTextButtonRoot}
-              onPress={() => {
-                navigation.navigate("ProfileDetail");
-              }}
+              onPress={handleNavigateToProfileDetail}
             />
           </>
         ) : (
@@ -45,9 +76,7 @@ const ProfileScreen = ({ route, navigation }) => {
               title={"Login"}
               icon={<AntDesign name="user" size={24} color="black" />}
               rootStyle={styles.IconTextButtonRoot}
-              onPress={() => {
-                navigation.navigate("Login");
-              }}
+              onPress={handleNavigateToLogin}
             />
           </>
         )}

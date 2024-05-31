@@ -27,6 +27,14 @@ import { bookmarkComic, getMyBookmakrs } from "../services/BookmarkServices";
 import { AuthContext } from "../store/AuthContext";
 import { SET_BOOKMARKS } from "../store/UserReducer/constants";
 
+/**
+ * Represents the screen that displays the details of a comic.
+ *
+ * @component
+ * @param {object} route - The route object containing the parameters passed to the screen.
+ * @param {object} navigation - The navigation object used for navigating between screens.
+ * @returns {JSX.Element} The JSX element representing the ComicDetailScreen.
+ */
 const ComicDetailScreen = ({ route, navigation }) => {
   const { comicId } = route.params;
 
@@ -52,7 +60,17 @@ const ComicDetailScreen = ({ route, navigation }) => {
   const { userState, userDispatch } = useContext(UserContext);
   const authCtx = useContext(AuthContext);
 
-  // Fetch comic chapter
+  /**
+   * This useEffect hook is used to fetch the chapters of the comic when the component mounts.
+   *
+   * It defines an asynchronous function fetchChapters that fetches the chapters of the comic with the given comic ID.
+   * It sets the loading state to true before fetching the chapters, and to false after the chapters have been fetched.
+   * It sets the chapters state to the result of the fetch.
+   *
+   * It then calls the fetchChapters function with the comic ID.
+   *
+   * This hook has an empty dependency array, so it only runs once when the component mounts.
+   */
   useEffect(() => {
     async function fetchComicChapters(comicId) {
       try {
@@ -81,10 +99,32 @@ const ComicDetailScreen = ({ route, navigation }) => {
     );
   }, []);
 
+  /**
+   * This useEffect hook is used to fetch the chapters of the comic when the component mounts.
+   *
+   * It defines an asynchronous function fetchChapters that fetches the chapters of the comic with the given comic ID.
+   * It sets the loading state to true before fetching the chapters, and to false after the chapters have been fetched.
+   * It sets the chapters state to the result of the fetch.
+   *
+   * It then calls the fetchChapters function with the comic ID.
+   *
+   * This hook has an empty dependency array, so it only runs once when the component mounts.
+   */
   function handleGoBack() {
     navigation.goBack();
   }
 
+  /**
+   * This useEffect hook is used to fetch the chapters of the comic when the component mounts.
+   *
+   * It defines an asynchronous function fetchChapters that fetches the chapters of the comic with the given comic ID.
+   * It sets the loading state to true before fetching the chapters, and to false after the chapters have been fetched.
+   * It sets the chapters state to the result of the fetch.
+   *
+   * It then calls the fetchChapters function with the comic ID.
+   *
+   * This hook has an empty dependency array, so it only runs once when the component mounts.
+   */
   function handleNavigateToReadComicScreen(chapterId) {
     navigation.navigate("ReadComic", {
       chapterId,
@@ -92,6 +132,17 @@ const ComicDetailScreen = ({ route, navigation }) => {
     });
   }
 
+  /**
+   * Filters the chapters based on the given filter type.
+   *
+   * @param {string} filterType - The type of filter to apply.
+   *
+   * This function is typically used to filter the chapters when a filter type is selected.
+   * It checks the filter type and sorts the comic's chapters state accordingly.
+   * If the filter type is "newest", it sorts the chapters in descending order of chapter number.
+   * If the filter type is "oldest", it sorts the chapters in ascending order of chapter number.
+   * It also sets the filterChapter state to the selected filter type.
+   */
   function handleFilterChapter(filterType) {
     if (filterType === FILTER_CHAPTER.NEWEST) {
       setFilterChapter(FILTER_CHAPTER.NEWEST);
@@ -116,6 +167,17 @@ const ComicDetailScreen = ({ route, navigation }) => {
     }
   }
 
+  /**
+   * Sets the rating points for the comic.
+   *
+   * @param {number} score - The score to set.
+   *
+   * This function is typically used to set the rating points for the comic when the user rates the comic.
+   * It first checks if the user is authenticated. If the user is not authenticated, it shows an alert and returns early.
+   * If the user is authenticated, it shows an alert asking the user to confirm their rating.
+   * If the user confirms, it calls the `rateComic` API with the comic ID, the score, and the user's token.
+   * It then sets the userRatingScore of the comic state to the score.
+   */
   function handleSetRatingPoints(score) {
     async function handleSendRating() {
       try {
@@ -154,6 +216,13 @@ const ComicDetailScreen = ({ route, navigation }) => {
     );
   }
 
+  /**
+   * Toggles the bookmark status of the comic.
+   *
+   * This function is asynchronous. It first checks if the user is authenticated. If the user is not authenticated, it shows an alert and returns early.
+   * If the user is authenticated, it toggles the isBookmarked state and calls the `bookmarkComic` API with the comic ID and the user's token.
+   * It then fetches the user's bookmarks and dispatches an action to the user context to update the user's bookmarks.
+   */
   async function handleToggleBookmark() {
     try {
       if (userState.id === null) {

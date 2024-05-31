@@ -19,7 +19,14 @@ import RectangleCategory from "../components/Home/RectangleCategory";
 import RowComic from "../components/Home/RowComic";
 import { UserContext } from "../store/UserContext";
 
-const HomeScreen = ({ navigation, route }) => {
+/**
+ * Represents the home screen of the Comic Reader app.
+ *
+ * @component
+ * @param {object} navigation - The navigation object provided by React Navigation.
+ * @returns {JSX.Element} The rendered home screen component.
+ */
+const HomeScreen = ({ navigation }) => {
   const [comics, setComics] = useState({
     isLoading: true,
     message: "",
@@ -37,14 +44,43 @@ const HomeScreen = ({ navigation, route }) => {
   });
   const { userState } = useContext(UserContext);
 
+  /**
+   * Navigates to the ComicDetail screen with the given comic ID.
+   *
+   * @param {string} comicId - The ID of the comic to view.
+   *
+   * This function is typically used to navigate to the ComicDetail screen when a comic is selected.
+   * It uses the navigate function from the navigation prop to navigate to the ComicDetail screen.
+   * It passes the comic ID as a parameter to the ComicDetail screen.
+   */
   function handleNavigateToComicDetail(comicId) {
     navigation.navigate("ComicDetail", { comicId });
   }
 
+  /**
+   * Navigates to the Comics screen.
+   *
+   * This function is typically used to navigate to the Comics screen when the view all comics button is pressed.
+   * It uses the navigate function from the navigation prop to navigate to the Comics screen.
+   */
   function handleNavigateToComics() {
     navigation.navigate("Comics");
   }
 
+  /**
+   * This useEffect hook is used to fetch the comics, recommended comics, and new comics when the component mounts or the user's bookmarks change.
+   *
+   * It defines an asynchronous function fetchData that fetches data from the server using the given fetch function, sets the data using the given set data function, and handles errors with the given error message.
+   * It sets the loading state to true before fetching the data, and to false after the data has been fetched.
+   * It sets the data state to the result of the fetch.
+   * If an error occurs during the fetch, it sets the data state to an empty array, the loading state to false, and the message state to the error message.
+   *
+   * It then calls the fetchData function with the getAllComics function, the setComics function, and an error message.
+   * It also calls the fetchData function with the get3MostViewComics function, the setRecommendedComics function, and an error message.
+   * It also calls the fetchData function with the get6LastComics function, the setNewComics function, and an error message.
+   *
+   * This hook has a dependency array with the userState.bookmarks, so it runs whenever the user's bookmarks change.
+   */
   useEffect(() => {
     const fetchData = async (fetchFunction, setData, errorMessage) => {
       try {

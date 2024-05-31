@@ -21,7 +21,14 @@ import { SET_ALL } from "../store/UserReducer/constants";
 import { getMyInformation } from "../services/UserServices";
 import { getMyBookmakrs } from "../services/BookmarkServices";
 
-const LoginScreen = ({ navigation, route }) => {
+/**
+ * Represents the login screen component.
+ *
+ * @component
+ * @param {object} navigation - The navigation object used for screen navigation.
+ * @returns {JSX.Element} The login screen component.
+ */
+const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isTryingLogin, setIsTryingLogin] = useState(false);
@@ -29,22 +36,66 @@ const LoginScreen = ({ navigation, route }) => {
   const authCtx = useContext(AuthContext);
   const { userDispatch } = useContext(UserContext);
 
+  /**
+   * Handles the change of the username input value.
+   *
+   * @param {string} username - The username entered by the user.
+   *
+   * This function is typically used to update the username state when the user types in the username input field.
+   */
   function handleChangeUsername(username) {
     setUsername(username);
   }
 
+  /**
+   * Handles the change of the password input value.
+   *
+   * @param {string} password - The password entered by the user.
+   *
+   * This function is typically used to update the password state when the user types in the password input field.
+   */
   function handleChangePassword(password) {
     setPassword(password);
   }
 
+  /**
+   * Navigates to the Home screen.
+   *
+   * This function is typically used to navigate to the Home screen when the user successfully logs in.
+   * It uses the replace function from the navigation prop to replace the current screen with the Home screen.
+   */
   function handleNavigateToHome() {
     navigation.replace("App", { screen: "Home" });
   }
 
+  /**
+   * Navigates to the ForgetPassword screen.
+   *
+   * This function is typically used to navigate to the ForgetPassword screen when the forget password button is pressed.
+   * It uses the navigate function from the navigation prop to navigate to the ForgetPassword screen.
+   */
   function handleNavigateToForgetPW() {
     navigation.navigate("ForgetPassword");
   }
 
+  /**
+   * Logs the user in.
+   *
+   * This function is asynchronous. It first sets the isTryingLogin state to true.
+   * It then calls the `login` API with the username and password.
+   *
+   * If the response code from the API is 4000, it shows an alert with the response message and returns early.
+   *
+   * It then stores the token from the response in the auth context.
+   *
+   * It then fetches the user's information and bookmarks from the server using the token, and stores them in the user context and reducer.
+   *
+   * It then navigates to the Home screen.
+   *
+   * If an error occurs during the process, it shows an alert with a generic error message and logs the error.
+   *
+   * Regardless of the outcome, it finally sets the isTryingLogin state to false.
+   */
   async function handleLogin() {
     try {
       setIsTryingLogin(true);

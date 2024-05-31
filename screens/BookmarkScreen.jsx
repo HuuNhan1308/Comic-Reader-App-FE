@@ -23,6 +23,16 @@ import { bookmarkComic } from "../services/BookmarkServices";
 import { AuthContext } from "../store/AuthContext";
 import { SET_BOOKMARKS } from "../store/UserReducer/constants";
 
+/**
+ * Animated row component for displaying a comic item in the bookmark screen.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Object} props.item - The comic item to display.
+ * @param {Function} props.handleNavigateToComicDetail - The function to handle navigation to comic detail screen.
+ * @param {Function} props.handleRemoveItem - The function to handle removing the comic item.
+ * @returns {JSX.Element} The rendered component.
+ */
 const RowComicAnimated = ({
   item,
   handleNavigateToComicDetail,
@@ -30,6 +40,11 @@ const RowComicAnimated = ({
 }) => {
   const pan = useRef(new Animated.ValueXY()).current;
 
+  /**
+   * PanResponder for handling touch gestures.
+   *
+   * @type {PanResponder}
+   */
   const panResponder = PanResponder.create({
     onMoveShouldSetPanResponder: () => true,
     onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
@@ -75,6 +90,13 @@ const RowComicAnimated = ({
   );
 };
 
+/**
+ * Represents the screen that displays the bookmarks.
+ *
+ * @param {object} navigation - The navigation object provided by React Navigation.
+ * @param {object} route - The route object provided by React Navigation.
+ * @returns {JSX.Element} - The JSX element representing the BookmarkScreen component.
+ */
 const BookmarkScreen = ({ navigation, route }) => {
   const [searchValue, setSearchValue] = useState("");
   const debouncedValue = useDebounce(searchValue, 500);
@@ -84,14 +106,21 @@ const BookmarkScreen = ({ navigation, route }) => {
   const [bookmarks, setBookmarks] = useState([...userState.bookmarks]);
   const authCtx = useContext(AuthContext);
 
-  function handleNavigateToFilter() {
-    navigation.navigate("Filter", { prevPage: "Bookmark" });
-  }
-
+  /**
+   * Navigates to the ComicDetail screen with the specified comicId.
+   *
+   * @param {string} comicId - The ID of the comic to navigate to.
+   */
   function handleNavigateToComicDetail(comicId) {
     navigation.navigate("ComicDetail", { comicId });
   }
 
+  /**
+   * Handles the removal of an item from the list of bookmarks.
+   *
+   * @param {string} comicId - The ID of the comic to be removed.
+   * @returns {Promise<void>} - A promise that resolves when the item is removed successfully.
+   */
   async function handleRemoveItem(comicId) {
     //remove the item from the list
     try {
@@ -105,12 +134,29 @@ const BookmarkScreen = ({ navigation, route }) => {
     }
   }
 
-  //init bookmarks from user context
+  /**
+   * This useEffect hook is used to synchronize the local bookmarks state with the bookmarks in the user state.
+   * It is triggered every time the bookmarks in the user state change.
+   *
+   * When the bookmarks in the user state change, it sets the local bookmarks state to the new bookmarks.
+   * This is done by creating a new array that contains all the bookmarks from the user state.
+   * This ensures that the local bookmarks state always reflects the current bookmarks in the user state.
+   */
   useEffect(() => {
     setBookmarks([...userState.bookmarks]);
   }, [userState.bookmarks]);
 
-  //Search handle
+  /**
+   * This useEffect hook is used to filter the bookmarks based on the debounced search value.
+   * It is triggered every time the debouncedValue changes.
+   *
+   * If the debouncedValue is an empty string, it sets the bookmarks state to the current bookmarks in the user state.
+   * This is done to reset the bookmarks list when the search field is cleared.
+   *
+   * If the debouncedValue is not an empty string, it filters the bookmarks in the user state.
+   * It includes only those bookmarks whose name includes the debouncedValue (case-insensitive).
+   * The filtered list is then set to the bookmarks state.
+   */
   useEffect(() => {
     if (debouncedValue === "") {
       setBookmarks([...userState.bookmarks]);

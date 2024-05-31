@@ -18,6 +18,25 @@ export const initUserState = {
   bookmarks: [],
 };
 
+/**
+ * UserReducer is a reducer function for managing the state of a user.
+ *
+ * @param {Object} state - The current state of the user.
+ * @param {Object} action - An action object that contains a type and a payload.
+ *
+ * The function uses a switch statement to handle different types of actions:
+ *
+ * - SET_FULLNAME: Sets the fullName property of the state to the payload of the action.
+ * - SET_EMAIL: Sets the email property of the state to the payload of the action.
+ * - SET_DATE_OF_BIRTH: Sets the dateOfBirth property of the state to the payload of the action.
+ * - SET_IS_MALE: Sets the isMale property of the state to the payload of the action.
+ * - SET_ALL: Merges the payload of the action with the current state.
+ * - SET_ALL_EXCEPT_EMAIL: Sets the fullName, dateOfBirth, and isMale properties of the state to the corresponding properties of the action's payload.
+ * - SET_BOOKMARKS: Sets the bookmarks property of the state to the payload of the action.
+ * - CLEAR_ALL: Resets the state to the initial user state.
+ *
+ * If the action type does not match any of the cases, the function returns the current state.
+ */
 const UserReducer = (state, action) => {
   switch (action.type) {
     case SET_FULLNAME:

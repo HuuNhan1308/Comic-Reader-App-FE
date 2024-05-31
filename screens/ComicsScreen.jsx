@@ -22,6 +22,14 @@ import useDebounce from "../hooks/useDebounce";
 import ErrorMessage from "../components/ui/ErrorMessage";
 import { getComicsByGenres } from "../services/FilterServices";
 
+/**
+ * Represents the screen that displays a list of comics.
+ *
+ * @component
+ * @param {object} navigation - The navigation object provided by React Navigation.
+ * @param {object} route - The route object provided by React Navigation.
+ * @returns {JSX.Element} - The JSX element representing the ComicsScreen.
+ */
 const ComicsScreen = ({ navigation, route }) => {
   const [activeFilter, setActiveFilter] = useState(FILTER_PROGRESS.ALL);
   const [searchValue, setSearchValue] = useState("");
@@ -30,22 +38,45 @@ const ComicsScreen = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  /**
+   * Navigates to the ChatBot screen.
+   */
   function handleNavigateToChatScreen() {
     navigation.navigate("ChatBot");
   }
 
+  /**
+   * Navigates to the "Filter" screen.
+   */
   function handleNavigateToFilter() {
     navigation.navigate("Filter");
   }
 
+  /**
+   * Navigates to the ComicDetail screen with the specified comicId.
+   *
+   * @param {number} comicId - The ID of the comic to navigate to.
+   */
   function handleNavigateToComicDetail(comicId) {
     navigation.navigate("ComicDetail", { comicId });
   }
 
+  /**
+   * Sets the active filter.
+   *
+   * @param {string} filter - The filter to set as active.
+   */
   function handleSetActiveFilter(filter) {
     setActiveFilter(filter);
   }
 
+  /**
+   * Filters the comics based on the active filter.
+   *
+   * @param {Array} comics - The array of comics to filter.
+   * @param {string} activeFilter - The active filter value.
+   * @returns {Array} - The filtered array of comics.
+   */
   const filteredComics = comics.filter((comic) => {
     if (activeFilter === FILTER_PROGRESS.ALL) {
       return true;
@@ -56,8 +87,13 @@ const ComicsScreen = ({ navigation, route }) => {
     }
   });
 
-  //Search engine + handle filter
   useEffect(() => {
+    /**
+     * Fetches comics based on the provided parameters.
+     * If activeGenres is available, it calls the API to filter comics by genres.
+     * If debouncedValue is provided, it calls the API to search comics by the debounced value.
+     * If neither activeGenres nor debouncedValue is available, it calls the API to get all comics.
+     */
     async function fetchComics() {
       try {
         setIsLoading(true);
@@ -92,7 +128,6 @@ const ComicsScreen = ({ navigation, route }) => {
     fetchComics();
   }, [debouncedValue, route.params?.activeGenres]);
 
-  // handle when search value dont match with any comics
   useEffect(() => {
     if (filteredComics.length === 0 && !errorMessage) {
       setErrorMessage("Comic not found");

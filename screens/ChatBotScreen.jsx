@@ -13,7 +13,6 @@ import {
   Alert,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
 
 import React, { useContext, useEffect, useRef, useState } from "react";
 import colors from "../variables/colors/colors";
@@ -30,6 +29,13 @@ const AIs = [
   { name: "LM AI", value: LM_AI },
 ];
 
+/**
+ * Represents the chat box screen component.
+ *
+ * @component
+ * @param {object} navigation - The navigation object provided by React Navigation.
+ * @returns {JSX.Element} The chat box screen component.
+ */
 const ChatBoxScreen = ({ navigation }) => {
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState([]);
@@ -39,10 +45,27 @@ const ChatBoxScreen = ({ navigation }) => {
   const authCtx = useContext(AuthContext);
   const flatListRef = useRef(null);
 
+  /**
+   * Handles the change of the question input field.
+   *
+   * @param {string} e - The question entered by the user.
+   *
+   * This function is typically used to update the question state when the user types in the question input field.
+   */
   function handleChangeQuestion(e) {
     setQuestion(e);
   }
 
+  /**
+   * Handles the change of the current AI.
+   *
+   * This function is typically used to update the currentAI state when the user wants to switch to the next AI.
+   *
+   * It first finds the index of the current AI in the AIs array.
+   * Then, it calculates the index of the next AI by adding 1 to the current index and finding the remainder when divided by the length of the AIs array.
+   * This ensures that the next index is always within the bounds of the AIs array, and wraps around to 0 when it reaches the end of the array.
+   * Finally, it sets the currentAI state to the AI at the next index.
+   */
   function handleChangeCurrentAI() {
     setCurrentAI((prevAI) => {
       const currentIndex = AIs.indexOf(prevAI);
@@ -51,6 +74,31 @@ const ChatBoxScreen = ({ navigation }) => {
     });
   }
 
+  /**
+   * Handles the sending of a message.
+   *
+   * This function is asynchronous. It first checks if the question state is empty, and returns early if it is.
+   * Then, it checks if the user is authenticated. If the user is not authenticated, it shows an alert and returns early.
+   *
+   * If the user is authenticated, it sets the loading state to true.
+   * It then checks the value of the currentAI state.
+   * If the current AI is the comic AI, it calls the `gptFindComic` API with the user's token and the question.
+   * If the current AI is the LM AI, it calls the `AI_LM_Asking` API with the user's token and the question.
+   *
+   * It then checks the response from the API.
+   * If the response is not null and the response code is not 200, it sets the message to a default error message.
+   * Otherwise, it sets the message to the result from the API response.
+   *
+   * It then updates the messages state with the question and the message.
+   * The sender of the question is the user's full name if it exists, or "Guest" if it does not.
+   * The sender of the message is the name of the current AI.
+   *
+   * It then resets the question state to an empty string and dismisses the keyboard.
+   *
+   * If an error occurs during the process, it logs the error.
+   *
+   * Regardless of the outcome, it finally sets the loading state to false.
+   */
   async function handleSendMessage() {
     if (question === "") return;
     //call api to get asnwer and assign to answer constant
@@ -79,7 +127,6 @@ const ChatBoxScreen = ({ navigation }) => {
           ? "Cannot answer now... please try again"
           : AIResponse.result;
 
-      //Vương Đình Quý là ai?
       setMessages((prev) => [
         ...prev,
         { message: question, sender: userState.fullName || "Guest" },
@@ -95,7 +142,16 @@ const ChatBoxScreen = ({ navigation }) => {
     }
   }
 
-  //scroll flat list down when keyboard up
+  /**
+   * This useEffect hook is used to add a listener for the "keyboardDidShow" event when the component mounts.
+   *
+   * When the keyboard is shown, it scrolls the FlatList referenced by flatListRef to the end.
+   * This is typically used to keep the latest messages in view when the user is typing a message.
+   *
+   * The listener is removed when the component unmounts to prevent memory leaks.
+   *
+   * This hook has an empty dependency array, so it only runs once when the component mounts and once when it unmounts.
+   */
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
@@ -111,6 +167,16 @@ const ChatBoxScreen = ({ navigation }) => {
     };
   }, []);
 
+  /**
+   * Handles the change of the current AI.
+   *
+   * This function is typically used to update the currentAI state when the user wants to switch to the next AI.
+   *
+   * It first finds the index of the current AI in the AIs array.
+   * Then, it calculates the index of the next AI by adding 1 to the current index and finding the remainder when divided by the length of the AIs array.
+   * This ensures that the next index is always within the bounds of the AIs array, and wraps around to 0 when it reaches the end of the array.
+   * Finally, it sets the currentAI state to the AI at the next index.
+   */
   useEffect(() => {
     navigation.setOptions({
       headerRight: () =>

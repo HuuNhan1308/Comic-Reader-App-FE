@@ -25,7 +25,16 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { formatDate } from "../utils/DateUtil";
 import { register } from "../services/LoginServices";
 
-const RegisterScreen = ({ navigation, route }) => {
+/**
+ * RegisterScreen component displays a form for user registration.
+ * It allows users to enter their username, password, email, full name, date of birth, and gender.
+ * Users can submit the form to register a new account.
+ *
+ * @component
+ * @param {object} navigation - The navigation object provided by React Navigation.
+ * @returns {JSX.Element} The rendered RegisterScreen component.
+ */
+const RegisterScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [registerObj, setRegisterObj] = useState({
@@ -38,6 +47,16 @@ const RegisterScreen = ({ navigation, route }) => {
   });
   const Genders = ["Male", "Female"];
 
+  /**
+   * Handles the change of the registration object.
+   *
+   * @param {string} event - The value entered by the user.
+   * @param {string} type - The type of the value, one of "username", "password", "email", "fullName", "dateOfBirth", "isMale".
+   *
+   * This function is typically used to update the registration object when the user types in an input field.
+   * It uses a switch statement to determine which property of the registration object to update based on the type.
+   * It then sets the registration object to a new object with all the old properties and the updated property.
+   */
   function handleChangeRegisterObj(event, type) {
     switch (type) {
       case "username":
@@ -65,6 +84,21 @@ const RegisterScreen = ({ navigation, route }) => {
     }
   }
 
+  /**
+   * Submits the registration form.
+   *
+   * This function is asynchronous. It first formats the date of birth in the registration object.
+   * It then sets the isLoading state to true.
+   * It then calls the `register` API with the registration object.
+   *
+   * If the response code from the API is not 200, it shows an alert with the response message and returns early.
+   *
+   * If the response code from the API is 200, it shows an alert with the response message and navigates to the Login screen.
+   *
+   * If an error occurs during the process, it logs the error.
+   *
+   * Regardless of the outcome, it finally sets the isLoading state to false.
+   */
   async function handleSubmitRegisterForm() {
     const data = {
       ...registerObj,

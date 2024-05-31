@@ -5,13 +5,31 @@ import RowText from "../components/Profile/RowText";
 import { UserContext } from "../store/UserContext";
 import { AntDesign } from "@expo/vector-icons";
 
-const ProfileDetailScreen = ({ route, navigation }) => {
+/**
+ * Renders the profile detail screen.
+ *
+ * @param {object} navigation - The navigation prop provided by React Navigation.
+ * @returns {JSX.Element} The rendered profile detail screen.
+ */
+const ProfileDetailScreen = ({ navigation }) => {
   const { userState } = useContext(UserContext);
 
+  /**
+   * Navigates to the ChangePassword screen.
+   *
+   * This function is typically used to navigate to the ChangePassword screen when the change password button is pressed.
+   * It uses the navigate function from the navigation prop to navigate to the ChangePassword screen.
+   */
   function handleNavigateToChangePassword() {
     navigation.navigate("ChangePassword");
   }
 
+  /**
+   * Navigates to the ChangeProfile screen.
+   *
+   * This function is typically used to navigate to the ChangeProfile screen when the change profile button is pressed.
+   * It uses the navigate function from the navigation prop to navigate to the ChangeProfile screen.
+   */
   function handleNavigateToChangeProfile() {
     navigation.navigate("ChangeProfile");
   }

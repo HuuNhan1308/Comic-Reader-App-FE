@@ -1,4 +1,3 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Platform } from "react-native";
 import { Entypo } from "@expo/vector-icons";
@@ -12,6 +11,24 @@ import colors from "../variables/colors/colors";
 
 const Tab = createBottomTabNavigator();
 
+/**
+ * `MainScreenNavigator` is a React component that sets up the bottom tab navigation for the main screens of the app.
+ *
+ * It uses the `createBottomTabNavigator` function from `@react-navigation/bottom-tabs` to create a bottom tab navigator.
+ *
+ * The bottom tab navigator has four screens: Home, Comics, Bookmark, and Profile. Each screen is associated
+ * with a component and has a tab bar icon. The Home and Bookmark screens use icons from `@expo/vector-icons/Entypo`,
+ * while the Comics and Profile screens use icons from `@expo/vector-icons/AntDesign`.
+ *
+ * The bottom tab navigator has some default screen options, such as the height and background color of the tab bar,
+ * the bottom margin of the tab bar item (which is different for Android and iOS), the active tint color of the tab bar,
+ * the top margin of the tab bar icon, the alignment of the header title, the font size, weight, and letter spacing of the header title.
+ *
+ * Each screen in the bottom tab navigator can also have its own options, such as the tab bar icon, whether the header is shown,
+ * the label of the tab bar, the title of the header, the background color of the header, and the tint color of the header.
+ *
+ * @returns {ReactElement} The bottom tab navigator.
+ */
 const MainScreenNavigator = () => {
   return (
     <Tab.Navigator

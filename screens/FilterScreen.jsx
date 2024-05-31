@@ -14,6 +14,14 @@ import ChapterHeader from "../components/Comics/ChapterHeader";
 import colors from "../variables/colors/colors";
 import { getAllGenres } from "../services/FilterServices";
 
+/**
+ * Represents the filter screen component.
+ *
+ * @component
+ * @param {object} route - The route object containing the navigation information.
+ * @param {object} navigation - The navigation object used for navigating between screens.
+ * @returns {JSX.Element} The filter screen component.
+ */
 const FilterScreen = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [genres, setGeneres] = useState([]);
@@ -21,6 +29,16 @@ const FilterScreen = ({ route, navigation }) => {
 
   // const { prevPage } = route.params;
 
+  /**
+   * Toggles the active genres based on the given genre ID.
+   *
+   * @param {string} id - The ID of the genre to toggle.
+   *
+   * This function is typically used to add or remove a genre from the active genres when a genre is selected or deselected.
+   * It first checks if the activeGenres state includes the genre ID.
+   * If it does, it removes the genre ID from the activeGenres state.
+   * If it does not, it adds the genre ID to the activeGenres state.
+   */
   function handleToggleActiveGenres(id) {
     if (activeGenres.includes(id)) {
       setActiveGenres((prev) => prev.filter((item) => item !== id));
@@ -29,6 +47,14 @@ const FilterScreen = ({ route, navigation }) => {
     }
   }
 
+  /**
+   * Applies the filter and navigates to the previous page or the Comics page.
+   *
+   * This function is typically used to apply the filter and navigate back when the apply filter button is pressed.
+   * It uses the navigate function from the navigation prop to navigate to the previous page or the Comics page.
+   * It passes the activeGenres state as a parameter to the destination page.
+   * The merge option is set to true to merge the new params with the existing params.
+   */
   function handleApplyFilter() {
     navigation.navigate({
       name: route.params?.prevPage || "Comics",
@@ -37,7 +63,17 @@ const FilterScreen = ({ route, navigation }) => {
     });
   }
 
-  //Fetch the list of genres from the server
+  /**
+   * This useEffect hook is used to fetch the genres from the server when the component mounts.
+   *
+   * It defines an asynchronous function fetchGenres that fetches the genres from the server.
+   * It sets the loading state to true before fetching the genres, and to false after the genres have been fetched.
+   * It sets the genres state to the result of the fetch.
+   *
+   * It then calls the fetchGenres function.
+   *
+   * This hook has an empty dependency array, so it only runs once when the component mounts.
+   */
   useEffect(() => {
     async function fetchGenres() {
       try {

@@ -24,7 +24,14 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { UserContext } from "../store/UserContext";
 import { formatDate } from "../utils/DateUtil";
 
-const CommentsScreen = ({ navigation, route }) => {
+/**
+ * Represents the screen component for displaying and posting comments.
+ *
+ * @component
+ * @param {object} route - The route object containing the parameters passed to the screen.
+ * @returns {JSX.Element} The CommentsScreen component.
+ */
+const CommentsScreen = ({ route }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [commentInputValue, setCommentInputValue] = useState("");
   const [comments, setComments] = useState([]);
@@ -32,6 +39,17 @@ const CommentsScreen = ({ navigation, route }) => {
   const { userState } = useContext(UserContext);
   const { chapterId } = route.params;
 
+  /**
+   * This useEffect hook is used to fetch the comments of the chapter when the component mounts.
+   *
+   * It defines an asynchronous function fetchChapterComments that fetches the comments of the chapter with the given chapter ID.
+   * It sets the loading state to true before fetching the comments, and to false after the comments have been fetched.
+   * It sets the comments state to the result of the fetch.
+   *
+   * It then calls the fetchChapterComments function.
+   *
+   * This hook has an empty dependency array, so it only runs once when the component mounts.
+   */
   useEffect(() => {
     async function fetchChapterComments() {
       try {
@@ -51,10 +69,36 @@ const CommentsScreen = ({ navigation, route }) => {
     fetchChapterComments();
   }, []);
 
+  /**
+   * Handles the change of the comment input value.
+   *
+   * @param {string} text - The text entered by the user.
+   *
+   * This function is typically used to update the commentInputValue state when the user types in the comment input field.
+   */
   function handleChangeCommentInputValue(text) {
     setCommentInputValue(text);
   }
 
+  /**
+   * Handles the posting of a comment.
+   *
+   * This function is asynchronous. It first checks if the commentInputValue state is empty, and returns early if it is.
+   * It then sets the loading state to true and calls the `postChapterComment` API with the chapter ID, the comment input value, and the user's token.
+   *
+   * It then updates the comments state with the new comment.
+   * The new comment includes the user's full name, the comment input value, and the current date.
+   * If the comments state is not null and has a length greater than 0, it adds the new comment to the beginning of the comments array.
+   * Otherwise, it sets the comments state to an array with the new comment.
+   *
+   * It then resets the commentInputValue state to an empty string.
+   *
+   * If the response code from the API is 4002, it shows an alert with the response message.
+   *
+   * If an error occurs during the process, it logs the error.
+   *
+   * Regardless of the outcome, it finally sets the loading state to false.
+   */
   async function handlePostComment() {
     if (commentInputValue.trim() === "") return;
 

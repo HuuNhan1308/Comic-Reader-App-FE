@@ -24,6 +24,14 @@ import { AuthContext } from "../store/AuthContext";
 
 const windowDimension = Dimensions.get("window");
 
+/**
+ * Represents the screen for reading a comic.
+ *
+ * @component
+ * @param {object} route - The route object containing the parameters passed to the screen.
+ * @param {object} navigation - The navigation object used for navigating between screens.
+ * @returns {JSX.Element} The ReadComicScreen component.
+ */
 const ReadComicScreen = ({ route, navigation }) => {
   const { comicId, chapterId } = route.params;
 
@@ -37,6 +45,22 @@ const ReadComicScreen = ({ route, navigation }) => {
   const [comicChapters, setComicChapters] = useState([]);
   const authCtx = useContext(AuthContext);
 
+  /**
+   * Handles the change of the chapter.
+   *
+   * @param {string} type - The type of change, either "prev" for the previous chapter or "next" for the next chapter.
+   *
+   * This function is typically used to change the chapter when the previous or next button is pressed.
+   * It first finds the index of the current chapter in the comicChapters array.
+   * It then sets the isLoading state to true.
+   *
+   * If the type is "prev", it gets the ID of the previous chapter and sets it as the chapterId parameter of the navigation if it exists.
+   * If the type is "next", it gets the ID of the next chapter and sets it as the chapterId parameter of the navigation if it exists.
+   *
+   * If an error occurs during the process, it shows an alert with a message depending on the type.
+   *
+   * Regardless of the outcome, it finally sets the isLoading state to false.
+   */
   function handleChangeChapter(type) {
     // get index of chapterId in the chapters array
     const chapterIndex = comicChapters.findIndex(
@@ -78,10 +102,23 @@ const ReadComicScreen = ({ route, navigation }) => {
     setIsLoading(false);
   }
 
+  /**
+   * Navigates to the previous screen.
+   *
+   * This function is typically used to navigate to the previous screen when the go back button is pressed.
+   * It uses the goBack function from the navigation prop to navigate to the previous screen.
+   */
   function handleGoBack() {
     navigation.goBack();
   }
 
+  /**
+   * Navigates to the ChooseChapter screen.
+   *
+   * This function is typically used to navigate to the ChooseChapter screen when the show chapters list button is pressed.
+   * It uses the navigate function from the navigation prop to navigate to the ChooseChapter screen.
+   * It passes the comicId and chapterId as parameters to the ChooseChapter screen.
+   */
   function handleShowChaptersList() {
     navigation.navigate("ChooseChapter", {
       comicId: comicId,
@@ -89,6 +126,14 @@ const ReadComicScreen = ({ route, navigation }) => {
     });
   }
 
+  /**
+   * Navigates to the Comments screen or shows an alert if the user is not logged in.
+   *
+   * This function is typically used to navigate to the Comments screen when the show comments button is pressed.
+   * If the user is logged in, it uses the navigate function from the navigation prop to navigate to the Comments screen.
+   * It passes the chapterId as a parameter to the Comments screen.
+   * If the user is not logged in, it shows an alert with a message.
+   */
   function handleShowComments() {
     if (authCtx.token && authCtx.isAuthenticated)
       navigation.navigate("Comments", {
@@ -97,7 +142,16 @@ const ReadComicScreen = ({ route, navigation }) => {
     else Alert.alert("Opps...", "You need to login to see comments");
   }
 
-  //get chatper list
+  /**
+   * This useLayoutEffect hook is used to fetch the comic chapters when the component mounts.
+   *
+   * It defines an asynchronous function fetchComicChapter that fetches the comic chapters from the server using the comicId and sets the comicChapters state to the result.
+   * If an error occurs during the fetch, it logs the error.
+   *
+   * It then calls the fetchComicChapter function.
+   *
+   * This hook has an empty dependency array, so it only runs once when the component mounts.
+   */
   useLayoutEffect(() => {
     async function fetchComicChapter() {
       try {
@@ -111,7 +165,17 @@ const ReadComicScreen = ({ route, navigation }) => {
     fetchComicChapter();
   }, []);
 
-  //get chapter images
+  /**
+   * This useLayoutEffect hook is used to fetch the chapter images when the chapterId changes.
+   *
+   * It defines an asynchronous function fetchComicChapterIMGs that fetches the chapter images from the server using the chapterId and sets the chapter state to the result.
+   * It sets the isLoading state to true before fetching the images, and to false after the images have been fetched.
+   * If an error occurs during the fetch, it logs the error.
+   *
+   * It then calls the fetchComicChapterIMGs function.
+   *
+   * This hook has a dependency array with the chapterId, so it runs whenever the chapterId changes.
+   */
   useLayoutEffect(() => {
     async function fetchComicChapterIMGs() {
       try {

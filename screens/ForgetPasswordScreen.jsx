@@ -15,6 +15,13 @@ import IconInput from "../components/IconInput";
 import { AntDesign } from "@expo/vector-icons";
 import { sendOTP, verifyOTP } from "../services/LoginServices";
 
+/**
+ * Renders the Forget Password screen.
+ *
+ * @component
+ * @param {object} navigation - The navigation object provided by React Navigation.
+ * @returns {JSX.Element} The Forget Password screen component.
+ */
 const ForgetPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [OTP, setOTP] = useState("");
@@ -24,14 +31,40 @@ const ForgetPasswordScreen = ({ navigation }) => {
   });
   const [message, setMessage] = useState("");
 
+  /**
+   * Handles the change of the email input value.
+   *
+   * @param {string} text - The text entered by the user.
+   *
+   * This function is typically used to update the email state when the user types in the email input field.
+   */
   function handleChangeEmail(text) {
     setEmail(text);
   }
 
+  /**
+   * Handles the change of the OTP input value.
+   *
+   * @param {string} text - The text entered by the user.
+   *
+   * This function is typically used to update the OTP state when the user types in the OTP input field.
+   */
   function handleChangeOTP(text) {
     setOTP(text);
   }
 
+  /**
+   * Sends an OTP to the user's email.
+   *
+   * This function is asynchronous. It first checks if the email state is empty, and returns early with a message if it is.
+   * It then sets the sending property of the isLoading state to true and calls the `sendOTP` API with the email.
+   *
+   * If the response from the API includes a message, it sets the message state to the response message.
+   *
+   * If an error occurs during the process, it logs the error.
+   *
+   * Regardless of the outcome, it finally sets the sending property of the isLoading state to false.
+   */
   async function handleSendOTP() {
     if (email === "") return setMessage("Please enter your email.");
 
@@ -47,6 +80,18 @@ const ForgetPasswordScreen = ({ navigation }) => {
     }
   }
 
+  /**
+   * Verifies the OTP entered by the user.
+   *
+   * This function is asynchronous. It first checks if the email state is empty, and returns early with a message if it is.
+   * It then sets the verifying property of the isLoading state to true and calls the `verifyOTP` API with the email and the OTP.
+   *
+   * If the response from the API includes a message, it sets the message state to the response message.
+   *
+   * If an error occurs during the process, it logs the error.
+   *
+   * Regardless of the outcome, it finally sets the verifying property of the isLoading state to false.
+   */
   async function handleVerifyOTP() {
     if (email === "") return setMessage("Please enter your email and OTP.");
 
@@ -63,6 +108,12 @@ const ForgetPasswordScreen = ({ navigation }) => {
     }
   }
 
+  /**
+   * Navigates to the Login screen.
+   *
+   * This function is typically used to navigate to the Login screen when the navigate to login button is pressed.
+   * It uses the navigate function from the navigation prop to navigate to the Login screen.
+   */
   function handleNavigateToLogin() {
     navigation.navigate("Login");
   }

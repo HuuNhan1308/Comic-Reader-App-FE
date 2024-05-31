@@ -15,6 +15,14 @@ import { getComicChaptersById } from "../services/ComicServices";
 import ChapterHeader from "../components/Comics/ChapterHeader";
 import { FILTER_CHAPTER } from "../variables/filters/filter_chapter";
 
+/**
+ * Represents the screen for choosing chapters of a comic.
+ *
+ * @component
+ * @param {object} navigation - The navigation object provided by React Navigation.
+ * @param {object} route - The route object provided by React Navigation.
+ * @returns {JSX.Element} The ChooseChaptersScreen component.
+ */
 const ChooseChaptersScreen = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [chapters, setChapters] = useState([]);
@@ -22,6 +30,16 @@ const ChooseChaptersScreen = ({ navigation, route }) => {
 
   const { comicId, chapterId } = route.params;
 
+  /**
+   * Navigates to the ReadComic screen with the given chapter ID.
+   *
+   * @param {string} chapterId - The ID of the chapter to read.
+   *
+   * This function is typically used to navigate to the ReadComic screen when a chapter is selected.
+   * It uses the navigate function from the navigation prop to navigate to the ReadComic screen.
+   * It passes the chapter ID as a parameter to the ReadComic screen.
+   * The merge option is set to true to merge the new params with the existing params.
+   */
   function handleNavigateToReadComicScreen(chapterId) {
     navigation.navigate({
       name: "ReadComic",
@@ -30,6 +48,17 @@ const ChooseChaptersScreen = ({ navigation, route }) => {
     });
   }
 
+  /**
+   * Filters the chapters based on the given filter type.
+   *
+   * @param {string} filterType - The type of filter to apply.
+   *
+   * This function is typically used to filter the chapters when a filter type is selected.
+   * It checks the filter type and sorts the chapters state accordingly.
+   * If the filter type is "newest", it sorts the chapters in descending order of chapter number.
+   * If the filter type is "oldest", it sorts the chapters in ascending order of chapter number.
+   * It also sets the filterChapter state to the selected filter type.
+   */
   function handleFilterChapter(filterType) {
     if (filterType === FILTER_CHAPTER.NEWEST) {
       setFilterChapter(FILTER_CHAPTER.NEWEST);
@@ -44,6 +73,17 @@ const ChooseChaptersScreen = ({ navigation, route }) => {
     }
   }
 
+  /**
+   * This useEffect hook is used to fetch the chapters of the comic when the component mounts.
+   *
+   * It defines an asynchronous function fetchChapters that fetches the chapters of the comic with the given comic ID.
+   * It sets the loading state to true before fetching the chapters, and to false after the chapters have been fetched.
+   * It sets the chapters state to the result of the fetch.
+   *
+   * It then calls the fetchChapters function with the comic ID.
+   *
+   * This hook has an empty dependency array, so it only runs once when the component mounts.
+   */
   useEffect(() => {
     async function fetchChapters(comicId) {
       try {
