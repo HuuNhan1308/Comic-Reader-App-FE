@@ -101,17 +101,20 @@ const ComicsScreen = ({ navigation, route }) => {
         setIsLoading(true);
         let comicsResponse;
 
-        if (route.params?.activeGenres) {
-          // genres filter available --> call api filter comics
-          comicsResponse = await getComicsByGenres(route.params.activeGenres);
-        } else if (debouncedValue.trim()) {
+        if (debouncedValue.trim()) {
+          // Clear the activeGenres parameter
+          navigation.setParams({ activeGenres: null });
+
           // call api search by debounced value
           comicsResponse = await searchComics(debouncedValue);
-          if (comicsResponse.code === 4002 || comicsResponse.code === 4004) {
+          if (comicsResponse.code !== 200) {
             setErrorMessage(comicsResponse.message);
             setComics([]);
             return;
           }
+        } else if (route.params?.activeGenres) {
+          // genres filter available --> call api filter comics
+          comicsResponse = await getComicsByGenres(route.params.activeGenres);
         } else {
           // call api get all comics if search value empty
           comicsResponse = await getAllComics();

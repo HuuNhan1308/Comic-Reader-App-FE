@@ -102,30 +102,16 @@ const ComicDetailScreen = ({ route, navigation }) => {
   }, []);
 
   /**
-   * This useEffect hook is used to fetch the chapters of the comic when the component mounts.
-   *
-   * It defines an asynchronous function fetchChapters that fetches the chapters of the comic with the given comic ID.
-   * It sets the loading state to true before fetching the chapters, and to false after the chapters have been fetched.
-   * It sets the chapters state to the result of the fetch.
-   *
-   * It then calls the fetchChapters function with the comic ID.
-   *
-   * This hook has an empty dependency array, so it only runs once when the component mounts.
+   * Navigates back to the previous screen in the stack.
    */
   function handleGoBack() {
     navigation.goBack();
   }
 
   /**
-   * This useEffect hook is used to fetch the chapters of the comic when the component mounts.
+   * Navigates to the ReadComic screen with the specified chapterId and comicId.
    *
-   * It defines an asynchronous function fetchChapters that fetches the chapters of the comic with the given comic ID.
-   * It sets the loading state to true before fetching the chapters, and to false after the chapters have been fetched.
-   * It sets the chapters state to the result of the fetch.
-   *
-   * It then calls the fetchChapters function with the comic ID.
-   *
-   * This hook has an empty dependency array, so it only runs once when the component mounts.
+   * @param {string} chapterId - The ID of the chapter to navigate to.
    */
   function handleNavigateToReadComicScreen(chapterId) {
     navigation.navigate("ReadComic", {
@@ -227,7 +213,7 @@ const ComicDetailScreen = ({ route, navigation }) => {
    */
   async function handleToggleBookmark() {
     try {
-      if (userState.id === null) {
+      if (!authCtx.isAuthenticated) {
         Alert.alert("Failed", "You need to login to bookmark this comic");
         return;
       }
