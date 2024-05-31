@@ -11,7 +11,6 @@ import * as httpRequest from "../utils/httpRequest";
  * If the request is successful, it returns the response.
  * If an error occurs during the request, it logs the error.
  */
-expor;
 export const getMyBookmakrs = async (token) => {
   const config = {
     headers: {
